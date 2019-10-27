@@ -1,6 +1,7 @@
 from flask_restful import Resource
 from services.users import UserService
 from core.errors import Errors
+from core.video.hls import Hls
 from datetime import datetime
 from core.auth import Token
 from flask import request
@@ -15,7 +16,8 @@ def init(api):
 class Upload(Resource):
 	def post(self):
 		if 'filetoupload' in request.files:
-			hls = utils.Hls('konosuba/hls/')
+			hls = Hls('konosuba/hls/')
+			# Return True here and start processing video in separate thread
 			hls.save(request.files['filetoupload'])
 			hls.ffmpeg()
 			hls.process()
