@@ -2,21 +2,6 @@ from boto3.s3.transfer import S3Transfer
 import config
 import boto3
 
-def progress(bytes_amount):
-	print('TEST', bytes_amount)
-
-# @classmethod
-# def upload_obj(cls, file, path):
-# 	session = boto3.session.Session()
-# 	client = session.client('s3',
-# 							region_name=REGION,
-# 							endpoint_url=ENDPOING,
-# 							aws_access_key_id=ACCESS_ID,
-# 							aws_secret_access_key=SECRET_KEY)
-	
-# 	client.upload_fileobj(file, SPACE, path, Callback=progress)
-# 	return client.put_object_acl(ACL='public-read', Bucket=SPACE, Key=path)
-
 class Spaces():
 	def __init__(self):
 		self.ACCESS_ID = config.spaces['app']

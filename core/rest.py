@@ -5,6 +5,7 @@ from datetime import datetime
 from core.auth import Token
 from flask import request
 from core import utils
+import config
 
 def init(api):
 	api.add_resource(Upload, '/api/upload')
@@ -35,10 +36,11 @@ class Join(Resource):
 				if account_email is None:
 					account = UserService.signup(body['username'], body['email'], body['password'])
 					result['data'] = {
-						'username': account.username,
-						# ToDo: Send this token to email!
-						'email': Token.create('activation', account.username)
+						'username': account.username
 					}
+
+					if config.debug:
+						result['data']['email'] = Token.create('activation', account.username)
 				else:
 					result['error'] = Errors.get('account-email-exist')
 
