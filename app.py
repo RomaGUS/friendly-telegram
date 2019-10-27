@@ -18,7 +18,7 @@ rest.init(api)
 
 @app.route('/')
 def root():
-	return open('index.html').read()
+	return open('frontend/index.html').read()
 
 if __name__ == '__main__':
 	dbmongo.global_init()
