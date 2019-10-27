@@ -35,14 +35,6 @@ errors = {
 		'code': 6,
 		'message': 'User already activated'
 	},
-	'event-create-failed': {
-		'code': 7,
-		'message': 'Event creation failed'
-	},
-	'ticker-not-found': {
-		'code': 8,
-		'message': 'Ticker not found'
-	},
 	'account-not-admin': {
 		'code': 9,
 		'message': 'User must be admin'
@@ -54,21 +46,5 @@ errors = {
 	'pagination-error': {
 		'code': 11,
 		'message': 'Pagination is out of range'
-	},
-	'event-not-found': {
-		'code': 13,
-		'message': 'Event not found'
-	},
-	'ticker-exist': {
-		'code': 14,
-		'message': 'Coin with this ticker already exists'
-	},
-	'account-already-clicked': {
-		'code': 15,
-		'message': 'User already clicked'
-	},
-	'event-is-finished': {
-		'code': 16,
-		'message': 'Event is finished'
 	}
 }
