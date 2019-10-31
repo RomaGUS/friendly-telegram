@@ -16,7 +16,7 @@ def init(api):
 class Upload(Resource):
 	def post(self):
 		if 'filetoupload' in request.files:
-			hls = Hls('konosuba/hls/')
+			hls = Hls('hikka/konosuba/hls/')
 			# Return True here and start processing video in separate thread
 			hls.save(request.files['filetoupload'])
 			hls.ffmpeg()
