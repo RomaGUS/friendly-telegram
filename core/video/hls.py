@@ -1,9 +1,7 @@
-# from core.spaces import Spaces
 from core import utils
+from core import spaces
 import ffmpeg
 import shutil
-import config
-import s3fs
 import os
 
 class Hls():
@@ -13,12 +11,7 @@ class Hls():
 		self.tmp_dir = '/tmp/hikka-{}/'.format(utils.pebble())
 		self.tmp_file = self.tmp_dir + '{}.mp4'.format(utils.pebble())
 		self.tmp_hls_dir = self.tmp_dir + 'hls/'
-		# self.spaces = Spaces()
-		self.fs = s3fs.S3FileSystem(anon=False,
-						key=config.spaces['app'],
-						secret=config.spaces['secret'],
-						client_kwargs={'endpoint_url': config.spaces['endpoint'],
-										'region_name': config.spaces['region']})
+		self.fs = spaces.init_fs()
 		self.spaces_path = path
 
 		if not os.path.exists(self.tmp_dir):
@@ -36,12 +29,12 @@ class Hls():
 		input_stream = ffmpeg.input(self.tmp_file, f='mp4')
 		output_stream = ffmpeg.output(input_stream, self.tmp_hls_dir + 'watch.m3u8', vcodec="copy", acodec="copy", format='hls', start_number=0, hls_time=10, hls_list_size=0)
 		ffmpeg.run(output_stream)
+		os.remove(self.tmp_file)
 
 	def process(self):
 		files = [f for f in os.listdir(self.tmp_hls_dir) if os.path.isfile(os.path.join(self.tmp_hls_dir, f))]
 
 		for file in files:
-			# self.spaces.upload_file(self.tmp_hls_dir + file, self.spaces_path + file)
 			self.fs.put(self.tmp_hls_dir + file, self.spaces_path + file)
 			self.fs.chmod(self.spaces_path + file, 'public-read')
 			os.remove(self.tmp_hls_dir + file)
