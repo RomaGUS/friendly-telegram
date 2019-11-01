@@ -1,4 +1,8 @@
-# Example config file
+# Config file
+
+To start running hikka website you have to create `config.py` file in root of project folder:
+
+```python
 debug = True
 secret = "Lorem ipsum dolor sit."
 host = '0.0.0.0'
@@ -18,3 +22,4 @@ db = {
 	'port': 27017,
 	'name': 'DB_NAME'
 }
+```
