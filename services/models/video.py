@@ -4,7 +4,7 @@ from datetime import datetime
 class Video(mongoengine.Document):
 	created = mongoengine.DateTimeField(default=datetime.now)
 	uploaded = mongoengine.BooleanField(required=True, default=False)
-	path = mongoengine.StringField(required=True)
+	name = mongoengine.StringField(required=True)
 
 	meta = {
 		'alias': 'default',

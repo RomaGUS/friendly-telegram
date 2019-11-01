@@ -1,6 +1,5 @@
 from flask_restful import Resource
 from services.users import UserService
-from core.errors import errors
 from datetime import datetime
 from core.auth import Token
 from flask import request
@@ -11,6 +10,7 @@ import os
 def init(api):
 	api.add_resource(Upload, '/api/upload')
 	api.add_resource(Join, '/api/join')
+	api.add_resource(Login, '/api/login')
 	api.add_resource(Activate, '/api/activate/<string:token>')
 
 class Upload(Resource):
@@ -60,10 +60,10 @@ class Join(Resource):
 					if config.debug:
 						result['data']['email'] = Token.create('activation', account.username)
 				else:
-					result['error'] = errors['account-email-exist']
+					result['error'] = utils.errors['account-email-exist']
 
 			else:
-				result['error'] = errors['account-username-exist']
+				result['error'] = utils.errors['account-username-exist']
 
 		return result
 
@@ -89,10 +89,10 @@ class Login(Resource):
 					}
 
 				else:
-					result['error'] = errors['login-failed']
+					result['error'] = utils.errors['login-failed']
 
 			else:
-				result['error'] = errors['account-not-found']
+				result['error'] = utils.errors['account-not-found']
 
 		return result
 
@@ -112,12 +112,12 @@ class Activate(Resource):
 							'activated': account.activated
 						}
 				else:
-					result['error'] = errors['account-activated']
+					result['error'] = utils.errors['account-activated']
 					
 			else:
-				result['error'] = errors['account-not-found']
+				result['error'] = utils.errors['account-not-found']
 
 		else:
-			result['error'] = errors['token-invalid-type']
+			result['error'] = utils.errors['token-invalid-type']
 
 		return result

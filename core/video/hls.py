@@ -14,8 +14,8 @@ class Hls():
 		self.fs = spaces.init_fs()
 		self.spaces_path = path
 
-		if not os.path.exists(self.tmp_dir):
-			os.makedirs(self.tmp_dir)
+		# if not os.path.exists(self.tmp_dir):
+		# 	os.makedirs(self.tmp_dir)
 
 		if not os.path.exists(self.tmp_hls_dir):
 			os.makedirs(self.tmp_hls_dir)
