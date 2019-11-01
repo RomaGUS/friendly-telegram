@@ -4,3 +4,4 @@
 	</a>
 </p>
 <h3 align="center">Hikka - аніме українською</h3>
+<a href="docs/" align="center">Documentation</a>
