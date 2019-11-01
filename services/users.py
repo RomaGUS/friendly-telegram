@@ -20,18 +20,18 @@ class UserService:
 		user.save()
 
 	@classmethod
-	def get_by_id(cls, uid: str, banned=False):
-		user = User.objects().filter(id=uid, banned=banned).first()
+	def get_by_id(cls, uid: str):
+		user = User.objects().filter(id=uid).first()
 		return user
 
 	@classmethod
-	def get_by_email(cls, email: str, banned=False):
-		user = User.objects().filter(email=email, banned=banned).first()
+	def get_by_email(cls, email: str):
+		user = User.objects().filter(email=email).first()
 		return user
 
 	@classmethod
-	def get_by_username(cls, username: str, banned=False):
-		user = User.objects().filter(username=username, banned=banned).first()
+	def get_by_username(cls, username: str):
+		user = User.objects().filter(username=username).first()
 		return user
 
 	@classmethod

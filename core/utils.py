@@ -20,6 +20,7 @@ def check_fields(fields: list, data: dict):
 errors = {
 	'account-email-exist': 'Account with this email already exists',
 	'account-username-exist': 'Account with this username already exists',
+	'account-activated': 'Account already activated',
 	'login-failed': 'Login failed',
 	'account-not-found': 'User not found',
 	'user-activated': 'User already activated',

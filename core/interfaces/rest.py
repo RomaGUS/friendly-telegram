@@ -1,4 +1,5 @@
 from flask_restful import Resource
+from services.permissions import PermissionsService
 from services.users import UserService
 from datetime import datetime
 from core.auth import Token
@@ -44,80 +45,79 @@ class Upload(Resource):
 class Join(Resource):
 	def post(self):
 		body = request.get_json()
-		result = {'error': None, 'data': {}}
-		result['error'] = utils.check_fields(['username', 'password'], body)
+		error = utils.check_fields(['username', 'password'], body)
+		result = {'error': error, 'data': {}}
 
 		if not result['error']:
+			result['error'] = utils.errors['account-username-exist']
 			account = UserService.get_by_username(body['username'])
+
 			if account is None:
+				result['error'] = utils.errors['account-email-exist']
 				account_email = UserService.get_by_email(body['email'])
+
 				if account_email is None:
 					account = UserService.signup(body['username'], body['email'], body['password'])
+
+					result['error'] = None
 					result['data'] = {
 						'username': account.username
 					}
 
 					if config.debug:
-						result['data']['email'] = Token.create('activation', account.username)
-				else:
-					result['error'] = utils.errors['account-email-exist']
-
-			else:
-				result['error'] = utils.errors['account-username-exist']
+						# Display activation code in debug mode
+						result['data']['code'] = Token.create('activation', account.username)
 
 		return result
 
 class Login(Resource):
 	def post(self):
 		body = request.get_json()
-		result = {'error': None, 'data': {}}
-		result['error'] = utils.check_fields(['email', 'password'], body)
+		error = utils.check_fields(['email', 'password'], body)
+		result = {'error': error, 'data': {}}
 
 		if not result['error']:
+			result['error'] = utils.errors['account-not-found']
 			account = UserService.get_by_email(body['email'])
+
 			if account is not None:
-				if UserService.login(body['password'], account.password):
+				result['error'] = utils.errors['login-failed']
+				login = UserService.login(body['password'], account.password)
+
+				if login:
 					UserService.update(account, login=datetime.now)
 					token = Token.create('login', account.username)
 					data = Token.validate(token)
 
+					result['error'] = None
 					result['data'] = {
 						'token': token,
 						'expire': data['payload']['expire'],
-						'username': data['payload']['username'],
-						'role': 'admin' if account.admin else 'user'
+						'username': data['payload']['username']
 					}
-
-				else:
-					result['error'] = utils.errors['login-failed']
-
-			else:
-				result['error'] = utils.errors['account-not-found']
 
 		return result
 
 class Activate(Resource):
 	def get(self, token):
 		data = Token.validate(token)
-		result = {'error': None, 'data': {}}
+		result = {'error': utils.errors['token-invalid-type'], 'data': {}}
 
 		if data['valid']:
+			result['error'] = utils.errors['account-not-found']
 			account = UserService.get_by_username(data['payload']['username'])
-			if account is not None:
-				if not account.activated:
-					if data['payload']['action'] == 'activation':
-						UserService.update(account, activated=True)
-						result['data'] = {
-							'username': account.username,
-							'activated': account.activated
-						}
-				else:
-					result['error'] = utils.errors['account-activated']
-					
-			else:
-				result['error'] = utils.errors['account-not-found']
 
-		else:
-			result['error'] = utils.errors['token-invalid-type']
+			if account is not None:
+				result['error'] = utils.errors['account-activated']
+				activated = PermissionsService.check(account, 'accounts', 'activated')
+
+				if not activated and data['payload']['action'] == 'activation':
+					PermissionsService.add(account, 'accounts', 'activated')
+
+					result['error'] = None
+					result['data'] = {
+						'username': account.username,
+						'activated': True
+					}
 
 		return result

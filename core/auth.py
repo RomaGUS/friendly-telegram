@@ -36,7 +36,7 @@ class JWT():
 		return token
 
 	@classmethod
-	def verify_signed_token(key, token):
+	def verify_signed_token(cls, key, token):
 		"""
 		Decodes the payload in the token and returns a tuple
 		whose first value is a boolean indicating whether the

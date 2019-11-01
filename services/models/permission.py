@@ -1,6 +1,6 @@
 import mongoengine
 
-class UserPermission(mongoengine.Document):
+class Permission(mongoengine.Document):
 	scope = mongoengine.StringField(required=True)
 	name = mongoengine.StringField(required=True)
 

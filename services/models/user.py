@@ -1,16 +1,14 @@
 import mongoengine
 from datetime import datetime
+from services.models.permission import Permission
 
 class User(mongoengine.Document):
+	permissions = mongoengine.ListField(mongoengine.ReferenceField(Permission))
 	created = mongoengine.DateTimeField(default=datetime.now)
+	login = mongoengine.DateTimeField(default=datetime.now)
 	username = mongoengine.StringField(required=True)
 	password = mongoengine.StringField(required=True, max_length=64)
 	email = mongoengine.StringField(required=True)
-	banned = mongoengine.BooleanField(required=True, default=False)
-	activated = mongoengine.BooleanField(required=True, default=True)
-	admin = mongoengine.BooleanField(required=True, default=False)
-	role = mongoengine.StringField(required=True, default='user')
-	login = mongoengine.DateTimeField(default=datetime.now)
 
 	meta = {
 		'alias': 'default',
