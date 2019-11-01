@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 from core import utils
 import bcrypt
 import config
-import base64
+import base58
 import hmac
 import json
 
@@ -21,16 +21,16 @@ class JWT():
 		HMAC.
 		"""
 		header = json.dumps({'typ': 'JWT', 'alg': 'HS256'}).encode('utf-8')
-		henc = base64.urlsafe_b64encode(header).decode().strip('=')
+		henc = base58.b58encode_check(header).decode()
 
 		payload = json.dumps(data).encode('utf-8')
-		penc = base64.urlsafe_b64encode(payload).decode().strip('=')
+		penc = base58.b58encode_check(payload).decode()
 
 		hdata = henc + '.' + penc
 
 		d = hmac.new(key, hdata.encode('utf-8'), 'sha256')
 		dig = d.digest()
-		denc = base64.urlsafe_b64encode(dig).decode().strip('=')
+		denc = base58.b58encode_check(dig).decode()
 
 		token = hdata + '.' + denc
 		return token
@@ -49,11 +49,10 @@ class JWT():
 
 			d = hmac.new(key, hdata.encode('utf-8'), 'sha256')
 			dig = d.digest()
-			denc = base64.urlsafe_b64encode(dig).decode().strip('=')
+			denc = base58.b58encode_check(dig).decode()
 
 			verified = hmac.compare_digest(sig, denc)
-			payload += '=' * (-len(payload) % 4)
-			payload_data = json.loads(base64.urlsafe_b64decode(payload).decode())
+			payload_data = json.loads(base58.b58decode_check(payload).decode())
 			return {
 				'valid': verified,
 				'payload': payload_data
