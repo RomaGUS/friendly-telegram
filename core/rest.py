@@ -1,12 +1,12 @@
 from flask_restful import Resource
 from services.users import UserService
-from core.errors import Errors
-from core.video.hls import Hls
+from core.errors import errors
 from datetime import datetime
 from core.auth import Token
 from flask import request
 from core import utils
 import config
+import os
 
 def init(api):
 	api.add_resource(Upload, '/api/upload')
@@ -15,13 +15,29 @@ def init(api):
 
 class Upload(Resource):
 	def post(self):
-		if 'filetoupload' in request.files:
-			hls = Hls('hikka/konosuba/hls/')
+		if 'upload' in request.files:
+			# hls = Hls('hikka/konosuba/hls/')
 			# Return True here and start processing video in separate thread
-			hls.save(request.files['filetoupload'])
-			hls.ffmpeg()
-			hls.process()
-			return True
+			# hls.ffmpeg()
+			# hls.process()
+
+			# ToDo: support different file types
+			# Only mp4 for now
+			file = request.files['upload']
+			if file.mimetype in ['video/mp4']:
+				name = utils.pebble()
+				tmp_dir = '/tmp/hikka-{}/'.format(name)
+				tmp_file = tmp_dir + '{}.mp4'.format(name)
+
+				if not os.path.exists(tmp_dir):
+					os.makedirs(tmp_dir)
+
+				with open(tmp_file, 'wb') as file_local:
+					file_local.write(file.read())
+
+				return True
+
+			return False
 		else:
 			return False
 
@@ -44,10 +60,10 @@ class Join(Resource):
 					if config.debug:
 						result['data']['email'] = Token.create('activation', account.username)
 				else:
-					result['error'] = Errors.get('account-email-exist')
+					result['error'] = errors['account-email-exist']
 
 			else:
-				result['error'] = Errors.get('account-username-exist')
+				result['error'] = errors['account-username-exist']
 
 		return result
 
@@ -73,10 +89,10 @@ class Login(Resource):
 					}
 
 				else:
-					result['error'] = Errors.get('login-failed')
+					result['error'] = errors['login-failed']
 
 			else:
-				result['error'] = Errors.get('account-not-found')
+				result['error'] = errors['account-not-found']
 
 		return result
 
@@ -96,12 +112,12 @@ class Activate(Resource):
 							'activated': account.activated
 						}
 				else:
-					result['error'] = Errors.get('account-activated')
+					result['error'] = errors['account-activated']
 					
 			else:
-				result['error'] = Errors.get('account-not-found')
+				result['error'] = errors['account-not-found']
 
 		else:
-			result['error'] = Errors.get('token-invalid-type')
+			result['error'] = errors['token-invalid-type']
 
 		return result
