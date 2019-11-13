@@ -7,11 +7,13 @@ class Team(mongoengine.Document):
 	slug = mongoengine.StringField(required=True)
 	members = mongoengine.ListField(mongoengine.ReferenceField(User))
 	hidden = mongoengine.BooleanField(required=True, default=False)
+	# ToDo: cover image with files
 
 	meta = {
 		'alias': 'default',
 		'collection': 'teams',
 		'indexes': [
 			'name',
+			'slug',
 		]
 	}
