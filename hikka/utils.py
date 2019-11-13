@@ -6,7 +6,7 @@ def sha256(password: str):
 	return hashlib.sha256(encoded_password).digest()
 
 def pebble():
-	"""Generate random 32 characters string"""
+	'''Generate random 32 characters string'''
 	return os.urandom(16).hex()
 
 def check_fields(fields: list, data: dict):

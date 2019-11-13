@@ -1,5 +1,5 @@
-from services.models.permission import Permission
-from services.models.user import User
+from hikka.services.models.permission import Permission
+from hikka.services.models.user import User
 
 class PermissionsService:
 	@classmethod

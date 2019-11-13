@@ -1,5 +1,5 @@
 import mongoengine
-from services.models.user import User
+from hikka.services.models.user import User
 
 class Team(mongoengine.Document):
 	name = mongoengine.StringField(required=True)

@@ -1,6 +1,6 @@
-from services.func import update_document
-from services.models.user import User
-import core.auth as auth
+from hikka.services.func import update_document
+from hikka.services.models.user import User
+import hikka.auth as auth
 from typing import List
 
 class UserService:

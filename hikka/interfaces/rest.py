@@ -1,18 +1,13 @@
+from hikka.services.permissions import PermissionsService
+from hikka.services.users import UserService
 from flask_restful import Resource
-from services.permissions import PermissionsService
-from services.users import UserService
 from datetime import datetime
-from core.auth import Token
+from hikka.auth import Token
 from flask import request
-from core import utils
+from hikka import utils
+from hikka import api
 import config
 import os
-
-def init(api):
-	api.add_resource(Upload, '/api/upload')
-	api.add_resource(Join, '/api/join')
-	api.add_resource(Login, '/api/login')
-	api.add_resource(Activate, '/api/activate/<string:token>')
 
 class Upload(Resource):
 	def post(self):
@@ -121,3 +116,8 @@ class Activate(Resource):
 					}
 
 		return result
+
+api.add_resource(Upload, '/api/upload')
+api.add_resource(Join, '/api/join')
+api.add_resource(Login, '/api/login')
+api.add_resource(Activate, '/api/activate/<string:token>')

@@ -1,5 +1,5 @@
-from core import utils
-from core import spaces
+from hikka import spaces
+from hikka import utils
 import ffmpeg
 import shutil
 import os

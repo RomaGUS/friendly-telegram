@@ -1,6 +1,6 @@
-from services.func import update_document
-from services.models.user import User
-from services.models.team import Team
+from hikka.services.func import update_document
+from hikka.services.models.user import User
+from hikka.services.models.team import Team
 from typing import List
 
 class TeamService:
