@@ -7,35 +7,6 @@ from flask import request
 from hikka import utils
 from hikka import api
 import config
-import os
-
-class Upload(Resource):
-	def post(self):
-		if 'upload' in request.files:
-			# hls = Hls('hikka/konosuba/hls/')
-			# Return True here and start processing video in separate thread
-			# hls.ffmpeg()
-			# hls.process()
-
-			# ToDo: support different file types
-			# Only mp4 for now
-			file = request.files['upload']
-			if file.mimetype in ['video/mp4']:
-				name = utils.pebble()
-				tmp_dir = '/tmp/hikka-{}/'.format(name)
-				tmp_file = tmp_dir + '{}.mp4'.format(name)
-
-				if not os.path.exists(tmp_dir):
-					os.makedirs(tmp_dir)
-
-				with open(tmp_file, 'wb') as file_local:
-					file_local.write(file.read())
-
-				return True
-
-			return False
-		else:
-			return False
 
 class Join(Resource):
 	def post(self):
@@ -117,7 +88,6 @@ class Activate(Resource):
 
 		return result
 
-api.add_resource(Upload, '/api/upload')
 api.add_resource(Join, '/api/join')
 api.add_resource(Login, '/api/login')
 api.add_resource(Activate, '/api/activate/<string:token>')
