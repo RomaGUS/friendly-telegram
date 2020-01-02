@@ -32,6 +32,7 @@ class Join(Resource):
 				account = UserService.signup(args['username'], args['email'], args['password'])
 
 				if admin:
+					# Make first registered user admin
 					PermissionsService.add(account, 'global', 'admin')
 
 				result['error'] = None
