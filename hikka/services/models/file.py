@@ -1,14 +1,17 @@
 import mongoengine
 from datetime import datetime
 
-class Video(mongoengine.Document):
+class File(mongoengine.Document):
 	created = mongoengine.DateTimeField(default=datetime.now)
 	uploaded = mongoengine.BooleanField(required=True, default=False)
-	name = mongoengine.StringField(required=True)
+	name = mongoengine.StringField()
+	path = mongoengine.StringField()
+	mime = mongoengine.StringField()
+	tmp = mongoengine.StringField()
 
 	meta = {
 		'alias': 'default',
-		'collection': 'videos',
+		'collection': 'files',
 		'indexes': [
 			'created',
 		],
