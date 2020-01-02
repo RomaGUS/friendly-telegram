@@ -28,7 +28,11 @@ class Join(Resource):
 			account_email = UserService.get_by_email(args['email'])
 
 			if account_email is None:
+				admin = len(UserService.list()) == 0
 				account = UserService.signup(args['username'], args['email'], args['password'])
+
+				if admin:
+					PermissionsService.add(account, 'global', 'admin')
 
 				result['error'] = None
 				result['data'] = {

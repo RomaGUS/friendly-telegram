@@ -35,7 +35,7 @@ class UserService:
 		return user
 
 	@classmethod
-	def list(cls, page=1, limit=10) -> List[User]:
+	def list(cls, page=0, limit=10) -> List[User]:
 		offset = page * limit
 		accounts = User.objects().filter().limit(limit).skip(offset)
 		return list(accounts)
