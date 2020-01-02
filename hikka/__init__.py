@@ -8,7 +8,8 @@ app.config['SECRET_KEY'] = config.secret
 api = Api(app)
 CORS(app)
 
-from hikka.interfaces import rest
+from hikka.modules import auth
+from hikka.modules import files
 
 @app.route('/')
 def root():
