@@ -1,66 +1,75 @@
 from hikka.services.permissions import PermissionsService
 from hikka.services.users import UserService
 from flask_restful import Resource
+from flask_restful import reqparse
 from datetime import datetime
 from hikka.auth import Token
-from flask import request
 from hikka import utils
 from hikka import api
 import config
 
 class Join(Resource):
 	def post(self):
-		body = request.get_json()
-		error = utils.check_fields(['username', 'password'], body)
-		result = {'error': error, 'data': {}}
+		parser = reqparse.RequestParser()
+		parser.add_argument('username', type=str, default=None)
+		parser.add_argument('password', type=str, default=None)
+		parser.add_argument('email', type=str, default=None)
+		args = parser.parse_args()
 
-		if not result['error']:
-			result['error'] = utils.errors['account-username-exist']
-			account = UserService.get_by_username(body['username'])
+		result = {
+			'error': utils.errors['account-username-exist'],
+			'data': {}
+		}
 
-			if account is None:
-				result['error'] = utils.errors['account-email-exist']
-				account_email = UserService.get_by_email(body['email'])
+		account = UserService.get_by_username(args['username'])
 
-				if account_email is None:
-					account = UserService.signup(body['username'], body['email'], body['password'])
+		if account is None:
+			result['error'] = utils.errors['account-email-exist']
+			account_email = UserService.get_by_email(args['email'])
 
-					result['error'] = None
-					result['data'] = {
-						'username': account.username
-					}
+			if account_email is None:
+				account = UserService.signup(args['username'], args['email'], args['password'])
 
-					if config.debug:
-						# Display activation code in debug mode
-						result['data']['code'] = Token.create('activation', account.username)
+				result['error'] = None
+				result['data'] = {
+					'username': account.username
+				}
+
+				if config.debug:
+					# Display activation code only in debug mode
+					result['data']['code'] = Token.create('activation', account.username)
 
 		return result
 
 class Login(Resource):
 	def post(self):
-		body = request.get_json()
-		error = utils.check_fields(['email', 'password'], body)
-		result = {'error': error, 'data': {}}
+		parser = reqparse.RequestParser()
+		parser.add_argument('password', type=str, default=None)
+		parser.add_argument('email', type=str, default=None)
+		args = parser.parse_args()
 
-		if not result['error']:
-			result['error'] = utils.errors['account-not-found']
-			account = UserService.get_by_email(body['email'])
+		result = {
+			'error': utils.errors['account-not-found'],
+			'data': {}
+		}
 
-			if account is not None:
-				result['error'] = utils.errors['login-failed']
-				login = UserService.login(body['password'], account.password)
+		account = UserService.get_by_email(args['email'])
 
-				if login:
-					UserService.update(account, login=datetime.now)
-					token = Token.create('login', account.username)
-					data = Token.validate(token)
+		if account is not None:
+			result['error'] = utils.errors['login-failed']
+			login = UserService.login(args['password'], account.password)
 
-					result['error'] = None
-					result['data'] = {
-						'token': token,
-						'expire': data['payload']['expire'],
-						'username': data['payload']['username']
-					}
+			if login:
+				UserService.update(account, login=datetime.now)
+				token = Token.create('login', account.username)
+				data = Token.validate(token)
+
+				result['error'] = None
+				result['data'] = {
+					'token': token,
+					'expire': data['payload']['expire'],
+					'username': data['payload']['username']
+				}
 
 		return result
 
