@@ -12,5 +12,9 @@ from hikka.modules import auth
 from hikka.modules import files
 
 @app.route("/")
-def root():
-    return render_template("index.html")
+def home():
+    return render_template("home.html", title="Home page")
+
+@app.route("/about")
+def about():
+    return render_template("about.html")
