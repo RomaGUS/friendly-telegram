@@ -26,8 +26,20 @@ class NewTeam(Resource):
             result["error"] = utils.errors["account-permission"]
 
             if PermissionsService.check(account, "global", "teams"):
-                # ToDo: Add check if slug is exists
-                team = TeamService.create(args["name"], args["description"], args["slug"])
+                result["error"] = utils.errors["team-slug-exists"]
+                team_check = TeamService.get_by_slug(args["slug"])
+
+                if team_check is None:
+                    team = TeamService.create(args["name"], args["description"], args["slug"])
+                    PermissionsService.add(account, f"team-{team.slug}", "admin")
+                    TeamService.add_member(team, account)
+
+                    result["error"] = None
+                    result["data"] = {
+                        "description": team.description,
+                        "name": team.name,
+                        "slug": team.slug
+                    }
 
         return result
 

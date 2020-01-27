@@ -32,4 +32,8 @@ class PermissionsService:
         if permission in user.permissions:
             return True
 
+        admin = cls.get("global", "admin")
+        if admin in user.permissions:
+            return True
+
         return False

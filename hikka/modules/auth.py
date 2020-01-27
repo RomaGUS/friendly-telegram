@@ -25,9 +25,9 @@ class Join(Resource):
 
         if account is None:
             result["error"] = utils.errors["account-email-exist"]
-            account_email = UserService.get_by_email(args["email"])
+            account_check = UserService.get_by_email(args["email"])
 
-            if account_email is None:
+            if account_check is None:
                 admin = len(UserService.list()) == 0
                 account = UserService.signup(args["username"], args["email"], args["password"])
 
