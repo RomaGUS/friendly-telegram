@@ -21,6 +21,17 @@ def check_fields(fields: list, data: dict):
 
     return None
 
+def filter_dict(data, keys):
+    """
+    Filter dict by given keys
+    """
+    result = {}
+    for key in keys:
+        if key in data:
+            result[key] = data[key]
+
+    return result
+
 
 errors = {
     "account-email-exist": "Account with this email already exists",
@@ -34,5 +45,6 @@ errors = {
     "token-invalid-type": "Invalid token type",
     "pagination-error": "Pagination is out of range",
     "team-slug-exists": "Team with this slug already exists",
-    "genre-slug-exists": "Genre with this slug already exists"
+    "genre-slug-exists": "Genre with this slug already exists",
+    "genre-not-found": "Genre not found"
 }

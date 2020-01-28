@@ -13,3 +13,4 @@ api.add_resource(teams.NewTeam, "/api/teams/new")
 
 # Genre routes
 api.add_resource(genres.NewGenre, "/api/genres/new")
+api.add_resource(genres.UpdateGenre, "/api/genres/update")
