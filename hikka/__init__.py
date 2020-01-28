@@ -11,6 +11,7 @@ CORS(app)
 from hikka.modules import auth
 from hikka.modules import files
 from hikka.modules import teams
+from hikka.modules import genres
 
 @app.route("/")
 def root():

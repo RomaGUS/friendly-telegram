@@ -1,12 +1,12 @@
 from hikka.services.permissions import PermissionsService
-from hikka.services.teams import TeamService
+from hikka.services.genres import GenresService
 from hikka.services.users import UserService
 from flask_restful import Resource
 from flask_restful import reqparse
 from hikka import utils
 from hikka import api
 
-class NewTeam(Resource):
+class NewGenre(Resource):
     def post(self):
         parser = reqparse.RequestParser()
         parser.add_argument("description", type=str, default=None, required=True)
@@ -25,23 +25,21 @@ class NewTeam(Resource):
         if account is not None:
             result["error"] = utils.errors["account-permission"]
 
-            if PermissionsService.check(account, "global", "teams"):
-                result["error"] = utils.errors["team-slug-exists"]
-                team_check = TeamService.get_by_slug(args["slug"])
+            if PermissionsService.check(account, "global", "admin"):
+                result["error"] = utils.errors["genre-slug-exists"]
+                genre_check = GenresService.get_by_slug(args["slug"])
 
-                if team_check is None:
-                    team = TeamService.create(args["name"], args["slug"], args["description"])
-                    PermissionsService.add(account, f"team-{team.slug}", "admin")
-                    TeamService.add_member(team, account)
+                if genre_check is None:
+                    genre = GenresService.create(args["name"], args["slug"], args["description"])
 
                     result["error"] = None
                     result["data"] = {
-                        "description": team.description,
-                        "name": team.name,
-                        "slug": team.slug
+                        "description": genre.description,
+                        "name": genre.name,
+                        "slug": genre.slug
                     }
 
         return result
 
 
-api.add_resource(NewTeam, "/api/teams/new")
+api.add_resource(NewGenre, "/api/genres/new")

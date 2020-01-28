@@ -5,7 +5,7 @@ from typing import List
 
 class TeamService:
     @classmethod
-    def create(cls, name: str, description: str, slug: str) -> Team:
+    def create(cls, name: str, slug: str, description: str) -> Team:
         team = Team(name=name, description=description, slug=slug)
         team.save()
         return team
