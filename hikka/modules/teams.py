@@ -4,7 +4,6 @@ from hikka.services.users import UserService
 from flask_restful import Resource
 from flask_restful import reqparse
 from hikka import utils
-from hikka import api
 
 class NewTeam(Resource):
     def post(self):
@@ -42,6 +41,3 @@ class NewTeam(Resource):
                     }
 
         return result
-
-
-api.add_resource(NewTeam, "/api/teams/new")

@@ -5,7 +5,6 @@ from flask_restful import reqparse
 from datetime import datetime
 from hikka.auth import Token
 from hikka import utils
-from hikka import api
 import config
 
 class Join(Resource):
@@ -101,8 +100,3 @@ class Activate(Resource):
                     }
 
         return result
-
-
-api.add_resource(Join, "/api/join")
-api.add_resource(Login, "/api/login")
-api.add_resource(Activate, "/api/activate/<string:token>")

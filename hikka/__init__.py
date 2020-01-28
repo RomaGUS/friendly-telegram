@@ -8,10 +8,7 @@ app.config["SECRET_KEY"] = config.secret
 api = Api(app)
 CORS(app)
 
-from hikka.modules import auth
-from hikka.modules import files
-from hikka.modules import teams
-from hikka.modules import genres
+from hikka import routes
 
 @app.route("/")
 def root():

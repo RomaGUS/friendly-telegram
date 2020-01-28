@@ -4,7 +4,6 @@ from hikka.services.users import UserService
 from flask_restful import Resource
 from flask_restful import reqparse
 from hikka import utils
-from hikka import api
 
 class NewGenre(Resource):
     def post(self):
@@ -40,6 +39,3 @@ class NewGenre(Resource):
                     }
 
         return result
-
-
-api.add_resource(NewGenre, "/api/genres/new")
