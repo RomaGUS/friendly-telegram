@@ -1,6 +1,6 @@
-import mongoengine
-from datetime import datetime
 from hikka.services.models.permission import Permission
+from datetime import datetime
+import mongoengine
 
 class User(mongoengine.Document):
     permissions = mongoengine.ListField(mongoengine.ReferenceField(Permission))
