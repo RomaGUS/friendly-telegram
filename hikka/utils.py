@@ -46,5 +46,7 @@ errors = {
     "pagination-error": "Pagination is out of range",
     "team-slug-exists": "Team with this slug already exists",
     "genre-slug-exists": "Genre with this slug already exists",
-    "genre-not-found": "Genre not found"
+    "genre-not-found": "Genre not found",
+    "type-slug-exists": "Type with this slug already exists",
+    "type-not-found": "Type not found"
 }
