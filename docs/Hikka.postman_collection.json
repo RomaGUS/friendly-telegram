@@ -1,0 +1,314 @@
+{
+	"info": {
+		"_postman_id": "3a1cc77f-2a39-4298-ab59-659df8d1752f",
+		"name": "Hikka",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Join",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"username\": \"volbil\", \"password\": \"thisispassword\", \"email\": \"volbilnexus@gmail.com\"}"
+						},
+						"url": {
+							"raw": "http://0.0.0.0:1234/api/join",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "1234",
+							"path": [
+								"api",
+								"join"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"email\": \"volbilnexus@gmail.com\", \"password\": \"thisispassword\"}"
+						},
+						"url": {
+							"raw": "http://0.0.0.0:1234/api/login",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "1234",
+							"path": [
+								"api",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Activate",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://0.0.0.0:1234/api/activate/3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuaKHVFGSweqHCNPp.2pR458h7miLmikY2nQKDfcMbUiUECXWAGTNFvAmSdcq5htXjjAhK92W7PWYGmcew3RW1AkQWaMdBAXDLG1GRt8SATFYSorqhNkY.z5r3LwTkqoxrbCD6XsW1bAYtAo9E9AmfwyXYdA2HDcEWiTuTj",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "1234",
+							"path": [
+								"api",
+								"activate",
+								"3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuaKHVFGSweqHCNPp.2pR458h7miLmikY2nQKDfcMbUiUECXWAGTNFvAmSdcq5htXjjAhK92W7PWYGmcew3RW1AkQWaMdBAXDLG1GRt8SATFYSorqhNkY.z5r3LwTkqoxrbCD6XsW1bAYtAo9E9AmfwyXYdA2HDcEWiTuTj"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Teams",
+			"item": [
+				{
+					"name": "New Team",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"description\": \"FanVoxUA - Озвучуємо для вас!\", \"name\": \"FanVoxUA\", \"slug\": \"fanvox\", \"auth\": \"3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuaKHVFGSweqHCNPp.4egwDo2Nnr4kWRocQrG7BTDbtsD4deanbKdYpdMc3AuUVf4kKjhTAnjnoFXXb5g8HRPUi3serkra3YEkr9eSUZX2uwBf.5hvxrCF637t2QA1ZyBzqhfmyu4XVKcSKu1MJvZGCxVr5oZqxy\"}"
+						},
+						"url": {
+							"raw": "http://0.0.0.0:1234/api/teams/new",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "1234",
+							"path": [
+								"api",
+								"teams",
+								"new"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Genres",
+			"item": [
+				{
+					"name": "New Genre",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"name\": \"Романтика\", \"slug\": \"romance\", \"auth\": \"3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuaKHVFGSweqHCNPp.4egwDo2Nnr4kWRocQrG7BTDbtsD4deanbKdYpdMc3AuUVf4kKjhTAnjnoFXXb5g8HRPUi3serkra3YEkr9eSUZX2uwBf.5hvxrCF637t2QA1ZyBzqhfmyu4XVKcSKu1MJvZGCxVr5oZqxy\"}"
+						},
+						"url": {
+							"raw": "http://0.0.0.0:1234/api/genres/new",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "1234",
+							"path": [
+								"api",
+								"genres",
+								"new"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Genre",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"slug\": \"romance\", \"auth\": \"3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuaKHVFGSweqHCNPp.4egwDo2Nnr4kWRocQrG7BTDbtsD4deanbKdYpdMc3AuUVf4kKjhTAnjnoFXXb5g8HRPUi3serkra3YEkr9eSUZX2uwBf.5hvxrCF637t2QA1ZyBzqhfmyu4XVKcSKu1MJvZGCxVr5oZqxy\", \"update\": {\"description\": null}}"
+						},
+						"url": {
+							"raw": "http://0.0.0.0:1234/api/genres/update",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "1234",
+							"path": [
+								"api",
+								"genres",
+								"update"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Release Types",
+			"item": [
+				{
+					"name": "New Release Type",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"name\": \"TV\", \"slug\": \"tv\", \"auth\": \"3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuaKHVFGSweqHCNPp.4egwDo2Nnr4kWRocQrG7BTDbtsD4deanbKdYpdMc3AuUVf4kKjhTAnjnoFXXb5g8HRPUi3serkra3YEkr9eSUZX2uwBf.5hvxrCF637t2QA1ZyBzqhfmyu4XVKcSKu1MJvZGCxVr5oZqxy\"}"
+						},
+						"url": {
+							"raw": "http://0.0.0.0:1234/api/types/new",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "1234",
+							"path": [
+								"api",
+								"types",
+								"new"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Release Type",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"slug\": \"tv\", \"auth\": \"3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuaKHVFGSweqHCNPp.4egwDo2Nnr4kWRocQrG7BTDbtsD4deanbKdYpdMc3AuUVf4kKjhTAnjnoFXXb5g8HRPUi3serkra3YEkr9eSUZX2uwBf.5hvxrCF637t2QA1ZyBzqhfmyu4XVKcSKu1MJvZGCxVr5oZqxy\", \"update\": {\"description\": null}}"
+						},
+						"url": {
+							"raw": "http://0.0.0.0:1234/api/types/update",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "1234",
+							"path": [
+								"api",
+								"types",
+								"update"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"protocolProfileBehavior": {}
+}
