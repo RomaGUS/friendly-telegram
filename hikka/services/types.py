@@ -4,7 +4,12 @@ from typing import List
 class ReleaseTypesService:
     @classmethod
     def create(cls, name: str, slug: str, description=None) -> ReleaseType:
-        rtype = ReleaseType(name=name, slug=slug, description=description)
+        rtype = ReleaseType(
+            name=name,
+            slug=slug,
+            description=description
+        )
+
         rtype.save()
         return rtype
 

@@ -4,7 +4,12 @@ from typing import List
 class GenresService:
     @classmethod
     def create(cls, name: str, slug: str, description=None) -> Genre:
-        genre = Genre(name=name, slug=slug, description=description)
+        genre = Genre(
+            name=name,
+            slug=slug,
+            description=description
+        )
+
         genre.save()
         return genre
 

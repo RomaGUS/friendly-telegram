@@ -8,7 +8,12 @@ from typing import List
 class UserService:
     @classmethod
     def signup(cls, username: str, email: str, password: str) -> User:
-        user = User(email=email, username=username, password=auth.hashpwd(password))
+        user = User(
+            email=email,
+            username=username,
+            password=auth.hashpwd(password)
+        )
+
         user.save()
         return user
 

@@ -45,8 +45,11 @@ errors = {
     "token-invalid-type": "Invalid token type",
     "pagination-error": "Pagination is out of range",
     "team-slug-exists": "Team with this slug already exists",
+    "team-not-found": "Team not found",
     "genre-slug-exists": "Genre with this slug already exists",
     "genre-not-found": "Genre not found",
     "type-slug-exists": "Type with this slug already exists",
-    "type-not-found": "Type not found"
+    "type-not-found": "Type not found",
+    "release-slug-exists": "Release with this slug already exists",
+    "missing-field": "Field is not set"
 }
