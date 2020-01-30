@@ -49,6 +49,12 @@ class UpdateReleaseType(Resource):
         parser.add_argument("update", type=dict, default={})
         args = parser.parse_args()
 
+        update_parser = reqparse.RequestParser()
+        update_parser.add_argument("name", type=str, location=("update",))
+        update_parser.add_argument("slug", type=str, location=("update",))
+        update_parser.add_argument("description", type=str, location=("update",))
+        update_args = update_parser.parse_args(req=args)
+
         result = {
             "error": utils.errors["account-not-found"],
             "data": {}
@@ -65,7 +71,7 @@ class UpdateReleaseType(Resource):
 
                 if rtype is not None:
                     keys = ["name", "slug", "description"]
-                    update = utils.filter_dict(args["update"], keys)
+                    update = utils.filter_dict(update_args, keys)
                     update_document(rtype, update)
 
                     result["error"] = None
