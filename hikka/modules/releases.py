@@ -12,13 +12,18 @@ class NewRelease(Resource):
     def post(self):
         parser = reqparse.RequestParser()
         parser.add_argument("description", type=str, default=None, required=True)
-        parser.add_argument("name", type=str, default=None, required=True)
         parser.add_argument("slug", type=str, default=None, required=True)
         parser.add_argument("team", type=str, default=None, required=True)
         parser.add_argument("type", type=str, default=None, required=True)
         parser.add_argument("auth", type=str, default=None, required=True)
+        parser.add_argument("title", type=dict, required=True)
         parser.add_argument("genres", type=list, default=[])
         args = parser.parse_args()
+
+        title_parser = reqparse.RequestParser()
+        title_parser.add_argument("ua", type=str, location=("title",))
+        title_parser.add_argument("jp", type=str, default=None, location=("title",))
+        title_args = title_parser.parse_args(req=args)
 
         result = {
             "error": utils.errors["account-not-found"],
@@ -45,9 +50,6 @@ class NewRelease(Resource):
                     if rtype is None:
                         result["error"] = utils.errors["type-not-found"]
 
-                    if args["name"] is None:
-                        result["error"] = utils.errors["missing-field"]
-
                     if args["description"] is None:
                         result["error"] = utils.errors["missing-field"]
 
@@ -62,8 +64,10 @@ class NewRelease(Resource):
                             break
 
                     if result["error"] is None:
+                        title = ReleasesService.get_title(title_args["ua"], title_args["jp"])
+
                         release = ReleasesService.create(
-                            args["name"],
+                            title,
                             args["slug"],
                             args["description"],
                             rtype,
@@ -72,7 +76,7 @@ class NewRelease(Resource):
                         )
 
                         result["data"] = {
-                            "name": release.name,
+                            "title": release.title.dict(),
                             "description": release.description,
                             "type": release.rtype.slug,
                             "slug": release.slug

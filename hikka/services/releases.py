@@ -1,14 +1,19 @@
+from hikka.services.models.release import Release, Title
 from hikka.services.models.type import ReleaseType
-from hikka.services.models.release import Release
 from typing import List
 
 class ReleasesService:
     @classmethod
-    def create(cls, name: str, slug: str, description: str,
+    def get_title(cls, ua: str, jp=None):
+        title = Title(ua=ua, jp=jp)
+        return title
+
+    @classmethod
+    def create(cls, title: Title, slug: str, description: str,
                 rtype: ReleaseType, genres=[], teams=[]) -> Release:
 
         release = Release(
-            name=name,
+            title=title,
             slug=slug,
             description=description,
             rtype=rtype,
