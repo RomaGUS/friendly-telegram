@@ -26,7 +26,7 @@ class UserService:
         data = Token.validate(token)
 
         if data["valid"] and data["payload"]["action"] == "login":
-            user = cls.get_by_username(data["payload"]["username"])
+            user = cls.get_by_username(data["payload"]["meta"])
             if user is not None:
                 if PermissionsService.check(user, "accounts", "activated"):
                     return user

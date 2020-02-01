@@ -72,7 +72,7 @@ class Login(Resource):
                 result["data"] = {
                     "token": token,
                     "expire": data["payload"]["expire"],
-                    "username": data["payload"]["username"]
+                    "username": data["payload"]["meta"]
                 }
 
         return result
@@ -87,7 +87,7 @@ class Activate(Resource):
 
         if data["valid"]:
             result["error"] = errors.get("account", "not-found")
-            account = UserService.get_by_username(data["payload"]["username"])
+            account = UserService.get_by_username(data["payload"]["meta"])
 
             if account is not None:
                 result["error"] = errors.get("account", "activated")
