@@ -7,10 +7,10 @@ import hmac
 import json
 
 def hashpwd(password: str) -> str:
-    return bcrypt.hashpw(utils.sha256(password), bcrypt.gensalt()).decode()
+    return bcrypt.hashpw(str.encode(password), bcrypt.gensalt()).decode()
 
 def checkpwd(password, bcrypt_hash) -> bool:
-    return bcrypt.checkpw(utils.sha256(password), str.encode(bcrypt_hash))
+    return bcrypt.checkpw(str.encode(password), str.encode(bcrypt_hash))
 
 # https://gist.github.com/darelf/190bc97b29e91509534d7535ebde4762
 class JWT():
