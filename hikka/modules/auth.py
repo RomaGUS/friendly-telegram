@@ -9,15 +9,19 @@ import config
 
 class Join(Resource):
     def post(self):
+        result = {"error": None, "data": {}}
+
         parser = reqparse.RequestParser()
         parser.add_argument("username", type=str, required=True)
         parser.add_argument("password", type=str, required=True)
         parser.add_argument("email", type=str, required=True)
-        args = parser.parse_args()
 
-        result = {"error": None, "data": {}}
+        try:
+            args = parser.parse_args()
+        except Exception:
+            return abort("general", "missing-field")
+
         account = UserService.get_by_username(args["username"])
-
         if account is not None:
             return abort("account", "username-exist")
 
@@ -37,22 +41,26 @@ class Join(Resource):
             "username": account.username
         }
 
+        # Display activation code only in debug mode
         if config.debug:
-            # Display activation code only in debug mode
             result["data"]["code"] = Token.create("activation", account.username)
 
         return result
 
 class Login(Resource):
     def post(self):
+        result = {"error": None, "data": {}}
+
         parser = reqparse.RequestParser()
         parser.add_argument("password", type=str, required=True)
         parser.add_argument("email", type=str, required=True)
-        args = parser.parse_args()
 
-        result = {"error": None, "data": {}}
+        try:
+            args = parser.parse_args()
+        except Exception:
+            return abort("general", "missing-field")
+
         account = UserService.get_by_email(args["email"])
-
         if account is None:
             return abort("account", "not-found")
 
@@ -74,13 +82,17 @@ class Login(Resource):
 
 class Activate(Resource):
     def post(self):
-        parser = reqparse.RequestParser()
-        parser.add_argument("token", type=str, default=None)
-        args = parser.parse_args()
-
         result = {"error": None, "data": {}}
-        data = Token.validate(args["token"])
 
+        parser = reqparse.RequestParser()
+        parser.add_argument("token", type=str, required=True)
+
+        try:
+            args = parser.parse_args()
+        except Exception:
+            return abort("general", "missing-field")
+
+        data = Token.validate(args["token"])
         if not data["valid"]:
             return abort("general", "token-invalid-type")
 

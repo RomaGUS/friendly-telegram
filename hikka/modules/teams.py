@@ -7,14 +7,18 @@ from hikka.errors import abort
 
 class NewTeam(Resource):
     def post(self):
-        parser = reqparse.RequestParser()
-        parser.add_argument("description", type=str, default=None, required=True)
-        parser.add_argument("name", type=str, default=None, required=True)
-        parser.add_argument("slug", type=str, default=None, required=True)
-        parser.add_argument("auth", type=str, default=None, required=True)
-        args = parser.parse_args()
-
         result = {"error": None, "data": {}}
+
+        parser = reqparse.RequestParser()
+        parser.add_argument("description", type=str, required=True)
+        parser.add_argument("name", type=str, required=True)
+        parser.add_argument("slug", type=str, required=True)
+        parser.add_argument("auth", type=str, required=True)
+
+        try:
+            args = parser.parse_args()
+        except Exception:
+            return abort("general", "missing-field")
 
         account = UserService.auth(args["auth"])
         if account is None:

@@ -10,24 +10,28 @@ from hikka.errors import abort
 
 class NewRelease(Resource):
     def post(self):
+        result = {"error": None, "data": {}}
+
         parser = reqparse.RequestParser()
-        parser.add_argument("description", type=str, default=None, required=True)
-        parser.add_argument("slug", type=str, default=None, required=True)
-        parser.add_argument("team", type=str, default=None, required=True)
-        parser.add_argument("type", type=str, default=None, required=True)
-        parser.add_argument("auth", type=str, default=None, required=True)
+        parser.add_argument("description", type=str, required=True)
         parser.add_argument("title", type=dict, required=True)
+        parser.add_argument("slug", type=str, required=True)
+        parser.add_argument("team", type=str, required=True)
+        parser.add_argument("type", type=str, required=True)
+        parser.add_argument("auth", type=str, required=True)
         parser.add_argument("genres", type=list, default=[])
-        args = parser.parse_args()
+
+        try:
+            args = parser.parse_args()
+        except Exception:
+            return abort("general", "missing-field")
 
         title_parser = reqparse.RequestParser()
-        title_parser.add_argument("ua", type=str, location=("title",))
         title_parser.add_argument("jp", type=str, default=None, location=("title",))
+        title_parser.add_argument("ua", type=str, location=("title",))
         title_args = title_parser.parse_args(req=args)
 
-        result = {"error": None, "data": {}}
         account = UserService.auth(args["auth"])
-
         if account is None:
             return abort("account", "not-found")
 

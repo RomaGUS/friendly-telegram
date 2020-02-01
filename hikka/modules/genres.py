@@ -9,14 +9,18 @@ from hikka import utils
 
 class NewGenre(Resource):
     def post(self):
-        parser = reqparse.RequestParser()
-        parser.add_argument("name", type=str, default=None, required=True)
-        parser.add_argument("slug", type=str, default=None, required=True)
-        parser.add_argument("auth", type=str, default=None, required=True)
-        parser.add_argument("description", type=str, default=None)
-        args = parser.parse_args()
-
         result = {"error": None, "data": {}}
+
+        parser = reqparse.RequestParser()
+        parser.add_argument("description", type=str, default=None)
+        parser.add_argument("name", type=str, required=True)
+        parser.add_argument("slug", type=str, required=True)
+        parser.add_argument("auth", type=str, required=True)
+
+        try:
+            args = parser.parse_args()
+        except Exception:
+            return abort("general", "missing-field")
 
         account = UserService.auth(args["auth"])
         if account is None:
@@ -40,19 +44,23 @@ class NewGenre(Resource):
 
 class UpdateGenre(Resource):
     def post(self):
+        result = {"error": None, "data": {}}
+
         parser = reqparse.RequestParser()
-        parser.add_argument("slug", type=str, default=None, required=True)
-        parser.add_argument("auth", type=str, default=None, required=True)
+        parser.add_argument("slug", type=str, required=True)
+        parser.add_argument("auth", type=str, required=True)
         parser.add_argument("update", type=dict, default={})
-        args = parser.parse_args()
+
+        try:
+            args = parser.parse_args()
+        except Exception:
+            return abort("general", "missing-field")
 
         update_parser = reqparse.RequestParser()
         update_parser.add_argument("name", type=str, location=("update",))
         update_parser.add_argument("slug", type=str, location=("update",))
         update_parser.add_argument("description", type=str, location=("update",))
         update_args = update_parser.parse_args(req=args)
-
-        result = {"error": None, "data": {}}
 
         account = UserService.auth(args["auth"])
         if account is None:

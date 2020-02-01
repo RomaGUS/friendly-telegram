@@ -33,7 +33,7 @@ errors = {
     "general": {
         "token-invalid-type": "Invalid token type",
         "pagination-error": "Pagination is out of range",
-        "missing-field": "Field is not set"
+        "missing-field": "Required field is missing"
     }
 }
 
