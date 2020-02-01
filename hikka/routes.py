@@ -9,7 +9,7 @@ from hikka import api
 # Auth routes
 api.add_resource(auth.Join, "/auth/join")
 api.add_resource(auth.Login, "/auth/login")
-api.add_resource(auth.Activate, "/auth/activate/<string:token>")
+api.add_resource(auth.Activate, "/auth/activate")
 
 # Team routes
 api.add_resource(teams.NewTeam, "/teams/new")

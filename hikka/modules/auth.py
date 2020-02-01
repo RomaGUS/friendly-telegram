@@ -78,8 +78,12 @@ class Login(Resource):
         return result
 
 class Activate(Resource):
-    def get(self, token):
-        data = Token.validate(token)
+    def post(self):
+        parser = reqparse.RequestParser()
+        parser.add_argument("token", type=str, default=None)
+        args = parser.parse_args()
+
+        data = Token.validate(args["token"])
         result = {
             "error": errors.get("general", "token-invalid-type"),
             "data": {}
