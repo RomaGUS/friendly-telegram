@@ -1,5 +1,5 @@
 from hikka import spaces
-from hikka import utils
+import secrets
 import ffmpeg
 import shutil
 import os
@@ -8,8 +8,8 @@ class Hls():
     def __init__(self, path):
         # ToDo: add mime type check
         # ToDo: track upload progress
-        self.tmp_dir = f"/tmp/hikka-{utils.pebble()}/"
-        self.tmp_file = self.tmp_dir + f"{utils.pebble()}.mp4"
+        self.tmp_dir = f"/tmp/hikka-{secrets.token_hex(16)}/"
+        self.tmp_file = self.tmp_dir + f"{secrets.token_hex(16)}.mp4"
         self.tmp_hls_dir = self.tmp_dir + "hls/"
         self.fs = spaces.init_fs()
         self.spaces_path = path

@@ -1,15 +1,10 @@
 import hashlib
-import os
 
-def sha256(password: str):
-    encoded_password = str.encode(password)
-    return hashlib.sha256(encoded_password).digest()
-
-def pebble():
-    """
-    Generate random 32 characters string
-    """
-    return os.urandom(16).hex()
+def blake2b(data: str):
+    return hashlib.blake2b(
+        str.encode(data),
+        digest_size=32
+    ).digest()
 
 def check_fields(fields: list, data: dict):
     """

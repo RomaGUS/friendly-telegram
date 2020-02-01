@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 from hikka import utils
+import hashlib
 import config
 import bcrypt
 import base58
@@ -17,10 +18,10 @@ class JWT():
     @classmethod
     def create_signed_token(cls, key, data):
         """
-        Create a complete JWT token. Exclusively uses sha256
+        Create a complete JWT token. Exclusively uses blake2b
         HMAC.
         """
-        header = json.dumps({"typ": "JWT", "alg": "HS256"}).encode("utf-8")
+        header = json.dumps({"typ": "JWT", "alg": "BLK2B"}).encode("utf-8")
         henc = base58.b58encode_check(header).decode()
 
         payload = json.dumps(data).encode("utf-8")
@@ -28,7 +29,7 @@ class JWT():
 
         hdata = henc + "." + penc
 
-        d = hmac.new(key, hdata.encode("utf-8"), "sha256")
+        d = hmac.new(key, hdata.encode("utf-8"), digestmod=hashlib.blake2b)
         dig = d.digest()
         denc = base58.b58encode_check(dig).decode()
 
@@ -47,7 +48,7 @@ class JWT():
             (header, payload, sig) = token.split(".")
             hdata = header + "." + payload
 
-            d = hmac.new(key, hdata.encode("utf-8"), "sha256")
+            d = hmac.new(key, hdata.encode("utf-8"), digestmod=hashlib.blake2b)
             dig = d.digest()
             denc = base58.b58encode_check(dig).decode()
 
@@ -70,7 +71,7 @@ class Token():
         Token valid for 3 days by default
         """
         expire = int(datetime.timestamp(datetime.now() + timedelta(days=days)))
-        return JWT.create_signed_token(utils.sha256(config.secret), {
+        return JWT.create_signed_token(utils.blake2b(config.secret), {
             "action": action,
             "expire": expire,
             "meta": meta
@@ -78,7 +79,7 @@ class Token():
 
     @classmethod
     def validate(cls, token):
-        data = JWT.verify_signed_token(utils.sha256(config.secret), token)
+        data = JWT.verify_signed_token(utils.blake2b(config.secret), token)
         if "expire" not in data["payload"]:
             data["valid"] = False
         else:
