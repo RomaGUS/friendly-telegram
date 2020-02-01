@@ -6,7 +6,7 @@ from hikka.services.teams import TeamService
 from hikka.services.users import UserService
 from flask_restful import Resource
 from flask_restful import reqparse
-from hikka import errors
+from hikka.errors import abort
 
 class NewRelease(Resource):
     def post(self):
@@ -25,61 +25,54 @@ class NewRelease(Resource):
         title_parser.add_argument("jp", type=str, default=None, location=("title",))
         title_args = title_parser.parse_args(req=args)
 
-        result = {
-            "error": errors.get("account", "not-found"),
-            "data": {}
-        }
-
+        result = {"error": None, "data": {}}
         account = UserService.auth(args["auth"])
 
-        if account is not None:
-            result["error"] = errors.get("team", "not-found")
-            team = TeamService.get_by_slug(args["team"])
+        if account is None:
+            return abort("account", "not-found")
 
-            if team is not None:
-                result["error"] = errors.get("account", "permission")
+        team = TeamService.get_by_slug(args["team"])
+        if team is None:
+            return abort("team", "not-found")
 
-                if PermissionsService.check(account, f"team-{team.slug}", "admin"):
-                    result["error"] = None
+        if not PermissionsService.check(account, f"team-{team.slug}", "admin"):
+            return abort("account", "permission")
 
-                    release = ReleasesService.get_by_slug(args["slug"])
-                    if release is not None:
-                        result["error"] = errors.get("release", "slug-exists")
+        release = ReleasesService.get_by_slug(args["slug"])
+        if release is not None:
+            return abort("release", "slug-exists")
 
-                    rtype = ReleaseTypesService.get_by_slug(args["type"])
-                    if rtype is None:
-                        result["error"] = errors.get("type", "not-found")
+        rtype = ReleaseTypesService.get_by_slug(args["type"])
+        if rtype is None:
+            return abort("type", "not-found")
 
-                    if args["description"] is None:
-                        result["error"] = errors.get("general", "missing-field")
+        if args["description"] is None:
+            return abort("general", "missing-field")
 
-                    genres = []
-                    for slug in args["genres"]:
-                        genre = GenresService.get_by_slug(slug)
-                        if genre is not None:
-                            genres.append(genre)
+        genres = []
+        for slug in args["genres"]:
+            genre = GenresService.get_by_slug(slug)
+            if genre is not None:
+                genres.append(genre)
 
-                        else:
-                            result["error"] = errors.get("genre", "not-found")
-                            break
+            else:
+                return abort("genre", "not-found")
 
-                    if result["error"] is None:
-                        title = ReleasesService.get_title(title_args["ua"], title_args["jp"])
+        title = ReleasesService.get_title(title_args["ua"], title_args["jp"])
+        release = ReleasesService.create(
+            title,
+            args["slug"],
+            args["description"],
+            rtype,
+            genres,
+            [team]
+        )
 
-                        release = ReleasesService.create(
-                            title,
-                            args["slug"],
-                            args["description"],
-                            rtype,
-                            genres,
-                            [team]
-                        )
-
-                        result["data"] = {
-                            "title": release.title.dict(),
-                            "description": release.description,
-                            "type": release.rtype.slug,
-                            "slug": release.slug
-                        }
+        result["data"] = {
+            "title": release.title.dict(),
+            "description": release.description,
+            "type": release.rtype.slug,
+            "slug": release.slug
+        }
 
         return result

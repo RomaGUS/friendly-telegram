@@ -1,7 +1,7 @@
 from flask_restful import Resource
+from hikka.errors import abort
 from flask import request
 from hikka import spaces
-from hikka import errors
 from PIL import Image
 import secrets
 import shutil
@@ -10,7 +10,6 @@ import os
 supported_images = ["image/jpeg", "image/png"]
 
 def upload_avatar(result, file):
-    result["error"] = errors.get("file", "bad-mime")
     fs = spaces.init_fs()
     max_size = 250
 
@@ -54,16 +53,16 @@ def upload_avatar(result, file):
 
 class Upload(Resource):
     def post(self):
-        result = {
-            "error": errors.get("file", "not-found"),
-            "data": {}
-        }
+        result = {"error": None, "data": {}}
 
-        if "upload" in request.files:
-            result["error"] = errors.get("file", "bad-upload-type")
-            upload_type = "avatar"
+        if "upload" not in request.files:
+            return abort("file", "not-found")
 
-            if upload_type == "avatar":
-                upload_avatar(result, request.files["upload"])
+        upload_type = "avatar"
+
+        if upload_type == "avatar":
+            upload_avatar(result, request.files["upload"])
+        else:
+            return abort("file", "bad-upload-type")
 
         return result

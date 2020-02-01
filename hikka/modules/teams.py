@@ -3,7 +3,7 @@ from hikka.services.teams import TeamService
 from hikka.services.users import UserService
 from flask_restful import Resource
 from flask_restful import reqparse
-from hikka import errors
+from hikka.errors import abort
 
 class NewTeam(Resource):
     def post(self):
@@ -14,30 +14,27 @@ class NewTeam(Resource):
         parser.add_argument("auth", type=str, default=None, required=True)
         args = parser.parse_args()
 
-        result = {
-            "error": errors.get("account", "not-found"),
-            "data": {}
-        }
+        result = {"error": None, "data": {}}
 
         account = UserService.auth(args["auth"])
+        if account is None:
+            return abort("account", "not-found"),
 
-        if account is not None:
-            result["error"] = errors.get("account", "permission")
+        if not PermissionsService.check(account, "global", "teams"):
+            return abort("account", "permission")
 
-            if PermissionsService.check(account, "global", "teams"):
-                result["error"] = errors.get("team", "slug-exists")
-                team = TeamService.get_by_slug(args["slug"])
+        team = TeamService.get_by_slug(args["slug"])
+        if team is not None:
+            return abort("team", "slug-exists")
 
-                if team is None:
-                    team = TeamService.create(args["name"], args["slug"], args["description"])
-                    PermissionsService.add(account, f"team-{team.slug}", "admin")
-                    TeamService.add_member(team, account)
+        team = TeamService.create(args["name"], args["slug"], args["description"])
+        PermissionsService.add(account, f"team-{team.slug}", "admin")
+        TeamService.add_member(team, account)
 
-                    result["error"] = None
-                    result["data"] = {
-                        "description": team.description,
-                        "name": team.name,
-                        "slug": team.slug
-                    }
+        result["data"] = {
+            "description": team.description,
+            "name": team.name,
+            "slug": team.slug
+        }
 
         return result

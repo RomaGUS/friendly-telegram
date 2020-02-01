@@ -6,7 +6,7 @@ class Permission(mongoengine.Document):
 
     meta = {
         "alias": "default",
-        "collection": "rights",
+        "collection": "permissions",
         "indexes": [
             "scope",
             "name",

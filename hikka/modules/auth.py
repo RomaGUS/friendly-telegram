@@ -2,78 +2,73 @@ from hikka.services.permissions import PermissionsService
 from hikka.services.users import UserService
 from flask_restful import Resource
 from flask_restful import reqparse
+from hikka.errors import abort
 from datetime import datetime
 from hikka.auth import Token
-from hikka import errors
 import config
 
 class Join(Resource):
     def post(self):
         parser = reqparse.RequestParser()
-        parser.add_argument("username", type=str, default=None)
-        parser.add_argument("password", type=str, default=None)
-        parser.add_argument("email", type=str, default=None)
+        parser.add_argument("username", type=str, required=True)
+        parser.add_argument("password", type=str, required=True)
+        parser.add_argument("email", type=str, required=True)
         args = parser.parse_args()
 
-        result = {
-            "error": errors.get("account", "username-exist"),
-            "data": {}
-        }
-
+        result = {"error": None, "data": {}}
         account = UserService.get_by_username(args["username"])
 
-        if account is None:
-            result["error"] = errors.get("account", "email-exist"),
-            account_check = UserService.get_by_email(args["email"])
+        if account is not None:
+            return abort("account", "username-exist")
 
-            if account_check is None:
-                admin = len(UserService.list()) == 0
-                account = UserService.signup(args["username"], args["email"], args["password"])
+        account_check = UserService.get_by_email(args["email"])
+        if account_check is not None:
+            return abort("account", "email-exist")
 
-                if admin:
-                    # Make first registered user admin
-                    PermissionsService.add(account, "global", "admin")
+        admin = len(UserService.list()) == 0
+        account = UserService.signup(args["username"], args["email"], args["password"])
 
-                result["error"] = None
-                result["data"] = {
-                    "username": account.username
-                }
+        # Make first registered user admin
+        if admin:
+            PermissionsService.add(account, "global", "activated")
+            PermissionsService.add(account, "global", "admin")
 
-                if config.debug:
-                    # Display activation code only in debug mode
-                    result["data"]["code"] = Token.create("activation", account.username)
+        result["data"] = {
+            "username": account.username
+        }
+
+        if config.debug:
+            # Display activation code only in debug mode
+            result["data"]["code"] = Token.create("activation", account.username)
 
         return result
 
 class Login(Resource):
     def post(self):
         parser = reqparse.RequestParser()
-        parser.add_argument("password", type=str, default=None)
-        parser.add_argument("email", type=str, default=None)
+        parser.add_argument("password", type=str, required=True)
+        parser.add_argument("email", type=str, required=True)
         args = parser.parse_args()
 
-        result = {
-            "error": errors.get("account", "not-found"),
-            "data": {}
-        }
-
+        result = {"error": None, "data": {}}
         account = UserService.get_by_email(args["email"])
 
-        if account is not None:
-            result["error"] = errors.get("account", "login-failed")
-            login = UserService.login(args["password"], account.password)
+        if account is None:
+            return abort("account", "not-found")
 
-            if login:
-                UserService.update(account, login=datetime.now)
-                token = Token.create("login", account.username)
-                data = Token.validate(token)
+        login = UserService.login(args["password"], account.password)
+        if not login:
+            return abort("account", "login-failed")
 
-                result["error"] = None
-                result["data"] = {
-                    "token": token,
-                    "expire": data["payload"]["expire"],
-                    "username": data["payload"]["meta"]
-                }
+        UserService.update(account, login=datetime.now)
+        token = Token.create("login", account.username)
+        data = Token.validate(token)
+
+        result["data"] = {
+            "token": token,
+            "expire": data["payload"]["expire"],
+            "username": data["payload"]["meta"]
+        }
 
         return result
 
@@ -83,27 +78,27 @@ class Activate(Resource):
         parser.add_argument("token", type=str, default=None)
         args = parser.parse_args()
 
+        result = {"error": None, "data": {}}
         data = Token.validate(args["token"])
-        result = {
-            "error": errors.get("general", "token-invalid-type"),
-            "data": {}
+
+        if not data["valid"]:
+            return abort("general", "token-invalid-type")
+
+        account = UserService.get_by_username(data["payload"]["meta"])
+        if account is None:
+            return abort("account", "not-found")
+
+        if data["payload"]["action"] != "activation":
+            return abort("general", "token-invalid-type")
+
+        activated = PermissionsService.check(account, "global", "activated")
+        if activated:
+            return abort("account", "activated")
+
+        PermissionsService.add(account, "global", "activated")
+        result["data"] = {
+            "username": account.username,
+            "activated": True
         }
-
-        if data["valid"]:
-            result["error"] = errors.get("account", "not-found")
-            account = UserService.get_by_username(data["payload"]["meta"])
-
-            if account is not None:
-                result["error"] = errors.get("account", "activated")
-                activated = PermissionsService.check(account, "accounts", "activated")
-
-                if not activated and data["payload"]["action"] == "activation":
-                    PermissionsService.add(account, "accounts", "activated")
-
-                    result["error"] = None
-                    result["data"] = {
-                        "username": account.username,
-                        "activated": True
-                    }
 
         return result

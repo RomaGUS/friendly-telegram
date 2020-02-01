@@ -28,7 +28,7 @@ class UserService:
         if data["valid"] and data["payload"]["action"] == "login":
             user = cls.get_by_username(data["payload"]["meta"])
             if user is not None:
-                if PermissionsService.check(user, "accounts", "activated"):
+                if PermissionsService.check(user, "global", "activated"):
                     return user
 
         return None

@@ -1,3 +1,5 @@
+from flask import jsonify
+
 errors = {
     "account": {
         "email-exist": "Account with this email already exists",
@@ -48,3 +50,12 @@ def get(scope, message):
         "message": error_message,
         "code": error_code
     }
+
+def abort(scope, message, status_code=400):
+    response = jsonify({
+        "error": get(scope, message),
+        "data": {}
+    })
+
+    response.status_code = status_code
+    return response

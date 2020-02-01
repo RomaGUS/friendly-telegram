@@ -4,7 +4,7 @@ from hikka.services.func import update_document
 from hikka.services.users import UserService
 from flask_restful import Resource
 from flask_restful import reqparse
-from hikka import errors
+from hikka.errors import abort
 from hikka import utils
 
 class NewReleaseType(Resource):
@@ -16,29 +16,25 @@ class NewReleaseType(Resource):
         parser.add_argument("description", type=str, default=None)
         args = parser.parse_args()
 
-        result = {
-            "error": errors.get("account", "not-found"),
-            "data": {}
-        }
-
+        result = {"error": None, "data": {}}
         account = UserService.auth(args["auth"])
 
-        if account is not None:
-            result["error"] = errors.get("account", "permission")
+        if account is None:
+            return abort("account", "not-found")
 
-            if PermissionsService.check(account, "global", "admin"):
-                result["error"] = errors.get("type", "slug-exists")
-                rtype = ReleaseTypesService.get_by_slug(args["slug"])
+        if not PermissionsService.check(account, "global", "admin"):
+            return abort("account", "permission")
 
-                if rtype is None:
-                    rtype = ReleaseTypesService.create(args["name"], args["slug"], args["description"])
+        rtype = ReleaseTypesService.get_by_slug(args["slug"])
+        if rtype is not None:
+            return abort("type", "slug-exists")
 
-                    result["error"] = None
-                    result["data"] = {
-                        "description": rtype.description,
-                        "name": rtype.name,
-                        "slug": rtype.slug
-                    }
+        rtype = ReleaseTypesService.create(args["name"], args["slug"], args["description"])
+        result["data"] = {
+            "description": rtype.description,
+            "name": rtype.name,
+            "slug": rtype.slug
+        }
 
         return result
 
@@ -56,30 +52,27 @@ class UpdateReleaseType(Resource):
         update_parser.add_argument("description", type=str, location=("update",))
         update_args = update_parser.parse_args(req=args)
 
-        result = {
-            "error": errors.get("account", "not-found"),
-            "data": {}
-        }
-
+        result = {"error": None, "data": {}}
         account = UserService.auth(args["auth"])
 
-        if account is not None:
-            result["error"] = errors.get("account", "permission")
+        if account is None:
+            return abort("account", "not-found")
 
-            if PermissionsService.check(account, "global", "admin"):
-                result["error"] = errors.get("type", "not-found")
-                rtype = ReleaseTypesService.get_by_slug(args["slug"])
+        if not PermissionsService.check(account, "global", "admin"):
+            return abort("account", "permission")
 
-                if rtype is not None:
-                    keys = ["name", "slug", "description"]
-                    update = utils.filter_dict(update_args, keys)
-                    update_document(rtype, update)
+        rtype = ReleaseTypesService.get_by_slug(args["slug"])
+        if rtype is None:
+            return abort("type", "not-found")
 
-                    result["error"] = None
-                    result["data"] = {
-                        "description": rtype.description,
-                        "name": rtype.name,
-                        "slug": rtype.slug
-                    }
+        keys = ["name", "slug", "description"]
+        update = utils.filter_dict(update_args, keys)
+        update_document(rtype, update)
+
+        result["data"] = {
+            "description": rtype.description,
+            "name": rtype.name,
+            "slug": rtype.slug
+        }
 
         return result
