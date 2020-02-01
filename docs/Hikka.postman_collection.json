@@ -21,10 +21,10 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"username\": \"volbil\", \"password\": \"thisispassword\", \"email\": \"volbilnexus@gmail.com\"}"
+							"raw": "{\"username\": \"volbil1\", \"password\": \"thisispassword\", \"email\": \"volbilnexus1@gmail.com\"}"
 						},
 						"url": {
-							"raw": "http://0.0.0.0:1234/api/join",
+							"raw": "http://0.0.0.0:1234/auth/join",
 							"protocol": "http",
 							"host": [
 								"0",
@@ -34,7 +34,7 @@
 							],
 							"port": "1234",
 							"path": [
-								"api",
+								"auth",
 								"join"
 							]
 						}
@@ -58,7 +58,7 @@
 							"raw": "{\"email\": \"volbilnexus@gmail.com\", \"password\": \"thisispassword\"}"
 						},
 						"url": {
-							"raw": "http://0.0.0.0:1234/api/login",
+							"raw": "http://0.0.0.0:1234/auth/login",
 							"protocol": "http",
 							"host": [
 								"0",
@@ -68,7 +68,7 @@
 							],
 							"port": "1234",
 							"path": [
-								"api",
+								"auth",
 								"login"
 							]
 						}
@@ -77,11 +77,8 @@
 				},
 				{
 					"name": "Activate",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [
 							{
 								"key": "Content-Type",
@@ -92,10 +89,10 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": ""
+							"raw": "{\"token\": \"3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuaKHVFGSweqHCNPp.2E72ScWndShkgPLDPftW1LHkPPLCuRckr8x7YRU1gYmykSDug2xNRgXJ4NMmZwEKEKCaPi8UrQ4JatVBWbvCaM7Bv4ofih9.WUAqmi4u3p8Zmz5Ny5kaqDsF7AqzfPGnX5ebzmfPyK448Egeu\"}"
 						},
 						"url": {
-							"raw": "http://0.0.0.0:1234/api/activate/3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuaKHVFGSweqHCNPp.2pR458h7miLmikY2nQKDfcMbUiUECXWAGTNFvAmSdcq5htXjjAhK92W7PWYGmcew3RW1AkQWaMdBAXDLG1GRt8SATFYSorqhNkY.z5r3LwTkqoxrbCD6XsW1bAYtAo9E9AmfwyXYdA2HDcEWiTuTj",
+							"raw": "http://0.0.0.0:1234/auth/activate",
 							"protocol": "http",
 							"host": [
 								"0",
@@ -105,9 +102,8 @@
 							],
 							"port": "1234",
 							"path": [
-								"api",
-								"activate",
-								"3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuaKHVFGSweqHCNPp.2pR458h7miLmikY2nQKDfcMbUiUECXWAGTNFvAmSdcq5htXjjAhK92W7PWYGmcew3RW1AkQWaMdBAXDLG1GRt8SATFYSorqhNkY.z5r3LwTkqoxrbCD6XsW1bAYtAo9E9AmfwyXYdA2HDcEWiTuTj"
+								"auth",
+								"activate"
 							]
 						}
 					},
@@ -133,10 +129,10 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"description\": \"FanVoxUA - Озвучуємо для вас!\", \"name\": \"FanVoxUA\", \"slug\": \"fanvox\", \"auth\": \"3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuaKHVFGSweqHCNPp.4egwDo2Nnr4kWRocQrG7BTDbtsD4deanbKdYpdMc3AuUVf4kKjhTAnjnoFXXb5g8HRPUi3serkra3YEkr9eSUZX2uwBf.5hvxrCF637t2QA1ZyBzqhfmyu4XVKcSKu1MJvZGCxVr5oZqxy\"}"
+							"raw": "{\"description\": \"FanVoxUA - Озвучуємо для вас!\", \"name\": \"FanVoxUA\", \"slug\": \"fanvox\", \"auth\": \"3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuaKHVFGSweqHCNPp.ZMKC1hNPqdfkmnGBbzBZRyFxaagjRewcWqBUd2dc72GrWwYbUQon5AbZ6QzTXNSAjs5rujLZi56M597wJe4ivX.XHZwQXD4fSoUyAQosWch1zY6a3W4ubw187Q5mgeBHbK54dMVn\"}"
 						},
 						"url": {
-							"raw": "http://0.0.0.0:1234/api/teams/new",
+							"raw": "http://0.0.0.0:1234/teams/new",
 							"protocol": "http",
 							"host": [
 								"0",
@@ -146,7 +142,6 @@
 							],
 							"port": "1234",
 							"path": [
-								"api",
 								"teams",
 								"new"
 							]
@@ -174,10 +169,10 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"name\": \"Романтика\", \"slug\": \"romance\", \"auth\": \"3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuaKHVFGSweqHCNPp.4egwDo2Nnr4kWRocQrG7BTDbtsD4deanbKdYpdMc3AuUVf4kKjhTAnjnoFXXb5g8HRPUi3serkra3YEkr9eSUZX2uwBf.5hvxrCF637t2QA1ZyBzqhfmyu4XVKcSKu1MJvZGCxVr5oZqxy\"}"
+							"raw": "{\"name\": \"Романтика\", \"slug\": \"romance\", \"auth\": \"3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuaKHVFGSweqHCNPp.ZMKC1hNPqdfkmnGBbzBZRyFxaagjRewcWqBUd2dc72GrWwYbUQon5AbZ6QzTXNSAjs5rujLZi56M597wJe4ivX.XHZwQXD4fSoUyAQosWch1zY6a3W4ubw187Q5mgeBHbK54dMVn\"}"
 						},
 						"url": {
-							"raw": "http://0.0.0.0:1234/api/genres/new",
+							"raw": "http://0.0.0.0:1234/genres/new",
 							"protocol": "http",
 							"host": [
 								"0",
@@ -187,7 +182,6 @@
 							],
 							"port": "1234",
 							"path": [
-								"api",
 								"genres",
 								"new"
 							]
@@ -209,10 +203,10 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"slug\": \"romance\", \"auth\": \"3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuaKHVFGSweqHCNPp.4egwDo2Nnr4kWRocQrG7BTDbtsD4deanbKdYpdMc3AuUVf4kKjhTAnjnoFXXb5g8HRPUi3serkra3YEkr9eSUZX2uwBf.5hvxrCF637t2QA1ZyBzqhfmyu4XVKcSKu1MJvZGCxVr5oZqxy\", \"update\": {\"description\": null}}"
+							"raw": "{\"slug\": \"romance\", \"auth\": \"3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuaKHVFGSweqHCNPp.ZMKC1hNPqdfkmnGBbzBZRyFxaagjRewcWqBUd2dc72GrWwYbUQon5AbZ6QzTXNSAjs5rujLZi56M597wJe4ivX.XHZwQXD4fSoUyAQosWch1zY6a3W4ubw187Q5mgeBHbK54dMVn\", \"update\": {\"description\": null}}"
 						},
 						"url": {
-							"raw": "http://0.0.0.0:1234/api/genres/update",
+							"raw": "http://0.0.0.0:1234/genres/update",
 							"protocol": "http",
 							"host": [
 								"0",
@@ -222,7 +216,6 @@
 							],
 							"port": "1234",
 							"path": [
-								"api",
 								"genres",
 								"update"
 							]
@@ -250,10 +243,10 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"name\": \"TV\", \"slug\": \"tv\", \"auth\": \"3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuaKHVFGSweqHCNPp.4egwDo2Nnr4kWRocQrG7BTDbtsD4deanbKdYpdMc3AuUVf4kKjhTAnjnoFXXb5g8HRPUi3serkra3YEkr9eSUZX2uwBf.5hvxrCF637t2QA1ZyBzqhfmyu4XVKcSKu1MJvZGCxVr5oZqxy\"}"
+							"raw": "{\"name\": \"TV\", \"slug\": \"tv\", \"auth\": \"3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuaKHVFGSweqHCNPp.ZMKC1hNPqdfkmnGBbzBZRyFxaagjRewcWqBUd2dc72GrWwYbUQon5AbZ6QzTXNSAjs5rujLZi56M597wJe4ivX.XHZwQXD4fSoUyAQosWch1zY6a3W4ubw187Q5mgeBHbK54dMVn\"}"
 						},
 						"url": {
-							"raw": "http://0.0.0.0:1234/api/types/new",
+							"raw": "http://0.0.0.0:1234/types/new",
 							"protocol": "http",
 							"host": [
 								"0",
@@ -263,7 +256,6 @@
 							],
 							"port": "1234",
 							"path": [
-								"api",
 								"types",
 								"new"
 							]
@@ -285,10 +277,10 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"slug\": \"tv\", \"auth\": \"3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuaKHVFGSweqHCNPp.4egwDo2Nnr4kWRocQrG7BTDbtsD4deanbKdYpdMc3AuUVf4kKjhTAnjnoFXXb5g8HRPUi3serkra3YEkr9eSUZX2uwBf.5hvxrCF637t2QA1ZyBzqhfmyu4XVKcSKu1MJvZGCxVr5oZqxy\", \"update\": {\"description\": null}}"
+							"raw": "{\"slug\": \"tv\", \"auth\": \"3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuaKHVFGSweqHCNPp.ZMKC1hNPqdfkmnGBbzBZRyFxaagjRewcWqBUd2dc72GrWwYbUQon5AbZ6QzTXNSAjs5rujLZi56M597wJe4ivX.XHZwQXD4fSoUyAQosWch1zY6a3W4ubw187Q5mgeBHbK54dMVn\", \"update\": {\"description\": null}}"
 						},
 						"url": {
-							"raw": "http://0.0.0.0:1234/api/types/update",
+							"raw": "http://0.0.0.0:1234/types/update",
 							"protocol": "http",
 							"host": [
 								"0",
@@ -298,9 +290,48 @@
 							],
 							"port": "1234",
 							"path": [
-								"api",
 								"types",
 								"update"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Releases",
+			"item": [
+				{
+					"name": "New Release",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"description\": \"Шіномія Каґуя та Шіроґане Міюкі — члени Учнівської ради елітної академії Шючіїн, генії з геніїв. Після часу проведеного разом часу, у них зародилися почуття один до одного. Але, на жаль, але їхня гордість не дозволить зізнатися одне одному про свої почуття. Кохання — це війна, це безжальна битва, метою якої є змусити супротивника освідчитися!\", \"title\": {\"ua\": \"Каґуя-сама, Кохання як війна\"}, \"slug\": \"kaguya-sama\", \"auth\": \"3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuaKHVFGSweqHCNPp.ZMKC1hNPqdfkmnGBbzBZRyFxaagjRewcWqBUd2dc72GrWwYbUQon5AbZ6QzTXNSAjs5rujLZi56M597wJe4ivX.XHZwQXD4fSoUyAQosWch1zY6a3W4ubw187Q5mgeBHbK54dMVn\", \"team\": \"fanvox\", \"type\": \"tv\"}"
+						},
+						"url": {
+							"raw": "http://0.0.0.0:1234/releases/new",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "1234",
+							"path": [
+								"releases",
+								"new"
 							]
 						}
 					},
