@@ -7,7 +7,6 @@
 
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/video.js/7.6.5/alt/video-js-cdn.min.css">
 
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/video.js/7.6.5/video.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/videojs-contrib-hls/5.15.0/videojs-contrib-hls.min.js"></script>
@@ -22,19 +21,13 @@
 			<button type="submit" id="btnSubmit">Upload</button></a>
 		</form>
 
-		<video id=example-video width=960 height=540 class="video-js vjs-default-skin" controls>
+		<!-- <img src="https://cdn.hikka.io/volbil/hikka_da92080672e8a49917e3aa0bb237ead8.jpg" alt=""> -->
+
+		<!-- <video id=example-video width=960 height=540 class="video-js vjs-default-skin" controls>
 			<source src="https://cdn.hikka.io/konosuba/hls/watch.m3u8" type="application/x-mpegURL">
-		</video>
+		</video> -->
 
 		<script>
-			// const socket = io("http://0.0.0.0:1234")
-
-			// function info() {
-			// 	socket.emit("info", function(data) {
-			// 		console.log(data)
-			// 	})
-			// }
-
 			$(document).ready(function () {
 
 				$("#btnSubmit").click(function(e) {
@@ -60,8 +53,8 @@
 					});
 				});
 
-				var player = videojs('example-video');
-				player.play();
+				// var player = videojs('example-video');
+				// player.play();
 
 			});
 

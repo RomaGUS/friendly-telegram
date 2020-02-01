@@ -6,7 +6,7 @@ from hikka.services.teams import TeamService
 from hikka.services.users import UserService
 from flask_restful import Resource
 from flask_restful import reqparse
-from hikka import utils
+from hikka import errors
 
 class NewRelease(Resource):
     def post(self):
@@ -26,32 +26,32 @@ class NewRelease(Resource):
         title_args = title_parser.parse_args(req=args)
 
         result = {
-            "error": utils.errors["account-not-found"],
+            "error": errors.get("account", "not-found"),
             "data": {}
         }
 
         account = UserService.auth(args["auth"])
 
         if account is not None:
-            result["error"] = utils.errors["team-not-found"]
+            result["error"] = errors.get("team", "not-found")
             team = TeamService.get_by_slug(args["team"])
 
             if team is not None:
-                result["error"] = utils.errors["account-permission"]
+                result["error"] = errors.get("account", "permission")
 
                 if PermissionsService.check(account, f"team-{team.slug}", "admin"):
                     result["error"] = None
 
                     release = ReleasesService.get_by_slug(args["slug"])
                     if release is not None:
-                        result["error"] = utils.errors["release-slug-exists"]
+                        result["error"] = errors.get("release", "slug-exists")
 
                     rtype = ReleaseTypesService.get_by_slug(args["type"])
                     if rtype is None:
-                        result["error"] = utils.errors["type-not-found"]
+                        result["error"] = errors.get("type", "not-found")
 
                     if args["description"] is None:
-                        result["error"] = utils.errors["missing-field"]
+                        result["error"] = errors.get("general", "missing-field")
 
                     genres = []
                     for slug in args["genres"]:
@@ -60,7 +60,7 @@ class NewRelease(Resource):
                             genres.append(genre)
 
                         else:
-                            result["error"] = utils.errors["genre-not-found"]
+                            result["error"] = errors.get("genre", "not-found")
                             break
 
                     if result["error"] is None:

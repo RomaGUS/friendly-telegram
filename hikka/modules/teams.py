@@ -3,7 +3,7 @@ from hikka.services.teams import TeamService
 from hikka.services.users import UserService
 from flask_restful import Resource
 from flask_restful import reqparse
-from hikka import utils
+from hikka import errors
 
 class NewTeam(Resource):
     def post(self):
@@ -15,17 +15,17 @@ class NewTeam(Resource):
         args = parser.parse_args()
 
         result = {
-            "error": utils.errors["account-not-found"],
+            "error": errors.get("account", "not-found"),
             "data": {}
         }
 
         account = UserService.auth(args["auth"])
 
         if account is not None:
-            result["error"] = utils.errors["account-permission"]
+            result["error"] = errors.get("account", "permission")
 
             if PermissionsService.check(account, "global", "teams"):
-                result["error"] = utils.errors["team-slug-exists"]
+                result["error"] = errors.get("team", "slug-exists")
                 team = TeamService.get_by_slug(args["slug"])
 
                 if team is None:

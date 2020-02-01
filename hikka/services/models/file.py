@@ -1,13 +1,12 @@
+from hikka.services.models.user import User
 from datetime import datetime
 import mongoengine
 
 class File(mongoengine.Document):
-    created = mongoengine.DateTimeField(default=datetime.now)
     uploaded = mongoengine.BooleanField(required=True, default=False)
-    name = mongoengine.StringField()
+    created = mongoengine.DateTimeField(default=datetime.now)
+    account = mongoengine.ReferenceField(User)
     path = mongoengine.StringField()
-    mime = mongoengine.StringField()
-    tmp = mongoengine.StringField()
 
     meta = {
         "alias": "default",

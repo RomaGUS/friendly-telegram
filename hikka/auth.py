@@ -65,16 +65,16 @@ class JWT():
 
 class Token():
     @classmethod
-    def create(cls, action, user, days=3):
+    def create(cls, action, meta, days=3):
         """
         Token valid for 3 days by default
         """
         expire = int(datetime.timestamp(datetime.now() + timedelta(days=days)))
         return JWT.create_signed_token(utils.sha256(config.secret), {
             "action": action,
-            "username": user,
-            "expire": expire}
-        )
+            "expire": expire,
+            "meta": meta
+        })
 
     @classmethod
     def validate(cls, token):

@@ -4,7 +4,7 @@ from flask_restful import Resource
 from flask_restful import reqparse
 from datetime import datetime
 from hikka.auth import Token
-from hikka import utils
+from hikka import errors
 import config
 
 class Join(Resource):
@@ -16,14 +16,14 @@ class Join(Resource):
         args = parser.parse_args()
 
         result = {
-            "error": utils.errors["account-username-exist"],
+            "error": errors.get("account", "username-exist"),
             "data": {}
         }
 
         account = UserService.get_by_username(args["username"])
 
         if account is None:
-            result["error"] = utils.errors["account-email-exist"]
+            result["error"] = errors.get("account", "email-exist"),
             account_check = UserService.get_by_email(args["email"])
 
             if account_check is None:
@@ -53,14 +53,14 @@ class Login(Resource):
         args = parser.parse_args()
 
         result = {
-            "error": utils.errors["account-not-found"],
+            "error": errors.get("account", "not-found"),
             "data": {}
         }
 
         account = UserService.get_by_email(args["email"])
 
         if account is not None:
-            result["error"] = utils.errors["login-failed"]
+            result["error"] = errors.get("account", "login-failed")
             login = UserService.login(args["password"], account.password)
 
             if login:
@@ -80,14 +80,17 @@ class Login(Resource):
 class Activate(Resource):
     def get(self, token):
         data = Token.validate(token)
-        result = {"error": utils.errors["token-invalid-type"], "data": {}}
+        result = {
+            "error": errors.get("general", "token-invalid-type"),
+            "data": {}
+        }
 
         if data["valid"]:
-            result["error"] = utils.errors["account-not-found"]
+            result["error"] = errors.get("account", "not-found")
             account = UserService.get_by_username(data["payload"]["username"])
 
             if account is not None:
-                result["error"] = utils.errors["account-activated"]
+                result["error"] = errors.get("account", "activated")
                 activated = PermissionsService.check(account, "accounts", "activated")
 
                 if not activated and data["payload"]["action"] == "activation":

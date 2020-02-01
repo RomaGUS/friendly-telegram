@@ -31,25 +31,3 @@ def filter_dict(data, keys):
             result[key] = data[key]
 
     return result
-
-
-errors = {
-    "account-email-exist": "Account with this email already exists",
-    "account-username-exist": "Account with this username already exists",
-    "account-activated": "Account already activated",
-    "account-permission": "Account don't have corresponding permission",
-    "login-failed": "Login failed",
-    "account-not-found": "User not found",
-    "user-activated": "User already activated",
-    "account-not-admin": "User must be admin",
-    "token-invalid-type": "Invalid token type",
-    "pagination-error": "Pagination is out of range",
-    "team-slug-exists": "Team with this slug already exists",
-    "team-not-found": "Team not found",
-    "genre-slug-exists": "Genre with this slug already exists",
-    "genre-not-found": "Genre not found",
-    "type-slug-exists": "Type with this slug already exists",
-    "type-not-found": "Type not found",
-    "release-slug-exists": "Release with this slug already exists",
-    "missing-field": "Field is not set"
-}

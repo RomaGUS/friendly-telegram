@@ -4,6 +4,7 @@ from hikka.services.func import update_document
 from hikka.services.users import UserService
 from flask_restful import Resource
 from flask_restful import reqparse
+from hikka import errors
 from hikka import utils
 
 class NewReleaseType(Resource):
@@ -16,17 +17,17 @@ class NewReleaseType(Resource):
         args = parser.parse_args()
 
         result = {
-            "error": utils.errors["account-not-found"],
+            "error": errors.get("account", "not-found"),
             "data": {}
         }
 
         account = UserService.auth(args["auth"])
 
         if account is not None:
-            result["error"] = utils.errors["account-permission"]
+            result["error"] = errors.get("account", "permission")
 
             if PermissionsService.check(account, "global", "admin"):
-                result["error"] = utils.errors["type-slug-exists"]
+                result["error"] = errors.get("type", "slug-exists")
                 rtype = ReleaseTypesService.get_by_slug(args["slug"])
 
                 if rtype is None:
@@ -56,17 +57,17 @@ class UpdateReleaseType(Resource):
         update_args = update_parser.parse_args(req=args)
 
         result = {
-            "error": utils.errors["account-not-found"],
+            "error": errors.get("account", "not-found"),
             "data": {}
         }
 
         account = UserService.auth(args["auth"])
 
         if account is not None:
-            result["error"] = utils.errors["account-permission"]
+            result["error"] = errors.get("account", "permission")
 
             if PermissionsService.check(account, "global", "admin"):
-                result["error"] = utils.errors["type-not-found"]
+                result["error"] = errors.get("type", "not-found")
                 rtype = ReleaseTypesService.get_by_slug(args["slug"])
 
                 if rtype is not None:
