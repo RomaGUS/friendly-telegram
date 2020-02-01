@@ -7,23 +7,23 @@ from hikka.modules import auth
 from hikka import api
 
 # Auth routes
-api.add_resource(auth.Join, "/api/join")
-api.add_resource(auth.Login, "/api/login")
-api.add_resource(auth.Activate, "/api/activate/<string:token>")
+api.add_resource(auth.Join, "/auth/join")
+api.add_resource(auth.Login, "/auth/login")
+api.add_resource(auth.Activate, "/auth/activate/<string:token>")
 
 # Team routes
-api.add_resource(teams.NewTeam, "/api/teams/new")
+api.add_resource(teams.NewTeam, "/teams/new")
 
 # Genre routes
-api.add_resource(genres.NewGenre, "/api/genres/new")
-api.add_resource(genres.UpdateGenre, "/api/genres/update")
+api.add_resource(genres.NewGenre, "/genres/new")
+api.add_resource(genres.UpdateGenre, "/genres/update")
 
 # Type routes
-api.add_resource(types.NewReleaseType, "/api/types/new")
-api.add_resource(types.UpdateReleaseType, "/api/types/update")
+api.add_resource(types.NewReleaseType, "/types/new")
+api.add_resource(types.UpdateReleaseType, "/types/update")
 
 # Release routes
-api.add_resource(releases.NewRelease, "/api/releases/new")
+api.add_resource(releases.NewRelease, "/releases/new")
 
 # Misc
-api.add_resource(files.Upload, "/api/upload")
+api.add_resource(files.Upload, "/upload")
