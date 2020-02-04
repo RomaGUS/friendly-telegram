@@ -1,9 +1,10 @@
 import hashlib
 
-def blake2b(data: str):
+def blake2b(data: str, size=32, key=""):
     return hashlib.blake2b(
         str.encode(data),
-        digest_size=32
+        key=str.encode(key),
+        digest_size=size
     ).digest()
 
 def check_fields(fields: list, data: dict):

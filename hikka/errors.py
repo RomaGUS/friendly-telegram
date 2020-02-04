@@ -30,6 +30,9 @@ errors = {
         "bad-mime": "Unsupported file type",
         "bad-upload-type": "Unsupported upload type"
     },
+    "image": {
+        "not-square": "Image is not square"
+    },
     "general": {
         "token-invalid-type": "Invalid token type",
         "pagination-error": "Pagination is out of range",

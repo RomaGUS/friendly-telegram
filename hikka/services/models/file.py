@@ -5,8 +5,9 @@ import mongoengine
 class File(mongoengine.Document):
     uploaded = mongoengine.BooleanField(required=True, default=False)
     created = mongoengine.DateTimeField(default=datetime.now)
-    account = mongoengine.ReferenceField(User)
+    account = mongoengine.ReferenceField(User, required=True)
     path = mongoengine.StringField()
+    name = mongoengine.StringField()
 
     meta = {
         "alias": "default",

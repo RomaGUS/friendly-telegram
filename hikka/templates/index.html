@@ -21,6 +21,8 @@
 			<button type="submit" id="btnSubmit">Upload</button></a>
 		</form>
 
+		<img id="upload-preview" src="" alt="">
+
 		<!-- <img src="https://cdn.hikka.io/volbil/hikka_da92080672e8a49917e3aa0bb237ead8.jpg" alt=""> -->
 
 		<!-- <video id=example-video width=960 height=540 class="video-js vjs-default-skin" controls>
@@ -38,7 +40,7 @@
 					$.ajax({
 						type: "POST",
 						enctype: 'multipart/form-data',
-						url: "/api/upload",
+						url: "/upload",
 						data: data,
 						processData: false,
 						contentType: false,
@@ -46,9 +48,10 @@
 						timeout: 600000,
 						success: function (data) {
 							console.log("SUCCESS : ", data);
+							$("#upload-preview").attr("src", data.data.path)
 						},
 						error: function (e) {
-							console.log("ERROR : ", e);
+							console.log("ERROR : ", e.responseJSON);
 						}
 					});
 				});

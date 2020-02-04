@@ -8,6 +8,8 @@ secret = "Lorem ipsum dolor sit."
 host = "0.0.0.0"
 port = 1234
 
+cdn = "CDN_LINK"
+
 spaces = {
     "app": "APP_ID",
     "secret": "APP_SECRET",
