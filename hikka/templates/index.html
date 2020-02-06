@@ -35,7 +35,10 @@
 				$("#btnSubmit").click(function(e) {
 					e.preventDefault();
 					var form = $('#fileUploadForm')[0];
-					var data = new FormData(form);
+					var data = new FormData(form)
+
+					data.append("auth", "3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuYpbsSVbHxJnUepd.ZMKC1hNPqdfkmnGBbzBZRyFxaagjRewcWqBUd2dc72GrWwjwm6nZnjuHTWGpUaqZmYJe7gpHiQGNQVvjhFRTpR.Bg2wiT4yniUPTEMqWLqi5NUaHSAUqHy479qhcb81zBgqwgGEzgaV2zpZGmddruAphxt7C3Q13eStctY3HTvfAjU5zdu3V")
+					data.append("type", "avatar")
 
 					$.ajax({
 						type: "POST",
