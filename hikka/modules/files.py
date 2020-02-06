@@ -36,34 +36,32 @@ class Upload(Resource):
                 result["error"] = None
 
                 file_type = upload.filename.rsplit('.', 1)[1]
-                save_type = "jpg"
+                tmp_file_name = file.name + "." + file_type
+                spaces_file_name = file.name + ".jpg"
 
                 spaces_dir = f"{spaces_name}/{upload_type}/{folder}/"
                 tmp_dir = f"/tmp/{spaces_name}/{file.name}/"
 
                 os.makedirs(tmp_dir)
-                upload.save(tmp_dir + file.name + "." + file_type)
-
-                spaces_path = spaces_dir + file.name + "." + save_type
-                tmp_path = tmp_dir + file.name + "." + save_type
-
-                pil = Image.open(tmp_dir + file.name + "." + file_type)
+                upload.save(tmp_dir + tmp_file_name)
+                pil = Image.open(tmp_dir + tmp_file_name)
 
                 size = pil.size
-
                 if size[0] != size[1]:
                     return abort("image", "not-square")
+
+                spaces_path = spaces_dir + spaces_file_name
+                tmp_path = tmp_dir + spaces_file_name
 
                 pil = pil.resize((max_size, max_size), Image.LANCZOS)
                 pil.save(tmp_path, optimize=True, quality=95)
 
                 fs.put(tmp_path, spaces_path)
                 fs.chmod(spaces_path, 'public-read')
-
                 shutil.rmtree(tmp_dir)
 
+                file.path = f"/{upload_type}/{folder}/{spaces_file_name}"
                 file.uploaded = True
-                file.path = f"/{upload_type}/{folder}/{file.name}.{save_type}"
                 file.save()
 
                 result["data"]["path"] = config.cdn + file.path
