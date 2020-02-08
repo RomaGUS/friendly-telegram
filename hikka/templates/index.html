@@ -6,49 +6,86 @@
 		<meta http-equiv="X-UA-Compatible" content="ie=edge" />
 
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/video.js/7.6.5/alt/video-js-cdn.min.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css">
 
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/video.js/7.6.5/video.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/videojs-contrib-hls/5.15.0/videojs-contrib-hls.min.js"></script>
+
+		<style>
+			body {
+				padding: 20px;
+			}
+		</style>
 		
 		<title>Document</title>
 	</head>
 	<body>
-		<button onClick="info()">Info</button>
+		<div class="input-group mb-3">
+			<select id="type" class="custom-select">
+				<option value="avatar">avatar</option>
+				<option value="poster">poster</option>
+				<option value="release">release</option>
+			</select>
+			<div class="input-group-append">
+				<button type="submit" id="btnSubmit" class="btn btn-primary">Upload</button>
+			</div>
+		</div>
 
 		<form method="post" enctype="multipart/form-data" id="fileUploadForm">
 			<input name="upload" type="file">
-			<button type="submit" id="btnSubmit">Upload</button></a>
 		</form>
 
 		<img id="upload-preview" src="" alt="">
 
 		<!-- <img src="https://cdn.hikka.io/volbil/hikka_da92080672e8a49917e3aa0bb237ead8.jpg" alt=""> -->
 
-		<!-- <video id=example-video width=960 height=540 class="video-js vjs-default-skin" controls>
-			<source src="https://cdn.hikka.io/konosuba/hls/watch.m3u8" type="application/x-mpegURL">
-		</video> -->
+		<hr>
+
+		<video id=example-video width=960 height=540 class="video-js vjs-default-skin" controls>
+			<source src="https://cdn.hikka.io/release/54ea7ceddf3ee8a574a5d1f721da7ced/14bfacaf763ea655b6c25e5bc701b9b4.mp4" type="video/mp4">
+		</video>
 
 		<script>
-			$(document).ready(function () {
+			function progress(e) {
+				if(e.lengthComputable){
+					var max = e.total
+					var current = e.loaded
+					var percentage = (current * 100) / max
+					console.log(percentage)
+				}  
+			}
 
+			$(document).ready(function() {
 				$("#btnSubmit").click(function(e) {
 					e.preventDefault();
 					var form = $('#fileUploadForm')[0];
 					var data = new FormData(form)
+					var release = $("#type").val()
 
+					data.append("type", release)
 					data.append("auth", "3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuYpbsSVbHxJnUepd.ZMKC1hNPqdfkmnGBbzBZRyFxaagjRewcWqBUd2dc72GrWwjwm6nZnjuHTWGpUaqZmYJe7gpHiQGNQVvjhFRTpR.Bg2wiT4yniUPTEMqWLqi5NUaHSAUqHy479qhcb81zBgqwgGEzgaV2zpZGmddruAphxt7C3Q13eStctY3HTvfAjU5zdu3V")
-					data.append("type", "avatar")
+
+					if (["release", "poster"].includes(release)) {
+						data.append("team", "fanvox")
+					}
 
 					$.ajax({
 						type: "POST",
-						enctype: 'multipart/form-data',
-						url: "/upload",
+						enctype: "multipart/form-data",
+						url: "/files/upload",
 						data: data,
 						processData: false,
 						contentType: false,
 						cache: false,
 						timeout: 600000,
+						xhr: function() {
+								var myXhr = $.ajaxSettings.xhr();
+								if(myXhr.upload){
+									myXhr.upload.addEventListener("progress", progress, false);
+								}
+								return myXhr;
+						},
 						success: function (data) {
 							console.log("SUCCESS : ", data);
 							$("#upload-preview").attr("src", data.data.path)
@@ -59,8 +96,8 @@
 					});
 				});
 
-				// var player = videojs('example-video');
-				// player.play();
+				var player = videojs('example-video');
+				player.play();
 
 			});
 

@@ -28,10 +28,13 @@ errors = {
     "file": {
         "not-found": "File not provided",
         "bad-mime": "Unsupported file type",
-        "bad-upload-type": "Unsupported upload type"
+        "bad-upload-type": "Unsupported upload type",
+        "bad-mime-type": "Unsupported mime type",
+        "too-big": "File is larger than allowed"
     },
     "image": {
-        "not-square": "Image is not square"
+        "not-square": "Image is not square",
+        "small-image": "Image is way to slow"
     },
     "general": {
         "token-invalid-type": "Invalid token type",

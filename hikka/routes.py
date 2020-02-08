@@ -26,4 +26,4 @@ api.add_resource(types.UpdateReleaseType, "/types/update")
 api.add_resource(releases.NewRelease, "/releases/new")
 
 # Misc
-api.add_resource(files.Upload, "/upload")
+api.add_resource(files.Upload, "/files/upload")
