@@ -1,8 +1,3 @@
-from hikka.services.models.type import ReleaseType
-from hikka.services.models.genre import Genre
-from hikka.services.models.team import Team
-from hikka.services.models.user import User
-from hikka.services.models.file import File
 from datetime import datetime
 import mongoengine
 
@@ -10,7 +5,7 @@ class Comment(mongoengine.EmbeddedDocument):
     text = mongoengine.StringField(required=True)
     created = mongoengine.DateTimeField(default=datetime.now)
     hidden = mongoengine.BooleanField(required=True, default=False)
-    account = mongoengine.ReferenceField(User)
+    account = mongoengine.ReferenceField("User")
 
 class Title(mongoengine.EmbeddedDocument):
     ua = mongoengine.StringField(required=True)
@@ -24,15 +19,16 @@ class Title(mongoengine.EmbeddedDocument):
 
 class Release(mongoengine.Document):
     title = mongoengine.EmbeddedDocumentField(Title, required=True)
-    rtype = mongoengine.ReferenceField(ReleaseType, required=True)
     hidden = mongoengine.BooleanField(required=True, default=False)
+    rtype = mongoengine.ReferenceField("ReleaseType", required=True)
     description = mongoengine.StringField(required=True, default=None)
-    genres = mongoengine.ListField(mongoengine.ReferenceField(Genre))
-    teams = mongoengine.ListField(mongoengine.ReferenceField(Team))
+    genres = mongoengine.ListField(mongoengine.ReferenceField("Genre"))
+    teams = mongoengine.ListField(mongoengine.ReferenceField("Team"))
+    state = mongoengine.ReferenceField("State", required=True)
     created = mongoengine.DateTimeField(default=datetime.now)
     comments = mongoengine.EmbeddedDocumentListField(Comment)
     slug = mongoengine.StringField(required=True)
-    poster = mongoengine.ReferenceField(File)
+    poster = mongoengine.ReferenceField("File")
     views = mongoengine.IntField(default=0)
 
     meta = {

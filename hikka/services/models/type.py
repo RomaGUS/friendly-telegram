@@ -1,8 +1,8 @@
 import mongoengine
 
 class ReleaseType(mongoengine.Document):
-    name = mongoengine.StringField(required=True)
     description = mongoengine.StringField(default=None)
+    name = mongoengine.StringField(required=True)
     slug = mongoengine.StringField(required=True)
 
     meta = {

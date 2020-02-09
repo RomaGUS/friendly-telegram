@@ -1,6 +1,7 @@
 from hikka.services.permissions import PermissionsService
 from hikka.services.teams import TeamService
 from hikka.services.users import UserService
+from hikka.services.files import FileService
 from flask_restful import Resource
 from flask_restful import reqparse
 from hikka.errors import abort
@@ -11,6 +12,7 @@ class NewTeam(Resource):
 
         parser = reqparse.RequestParser()
         parser.add_argument("description", type=str, required=True)
+        parser.add_argument("avatar", type=str, default=None)
         parser.add_argument("name", type=str, required=True)
         parser.add_argument("slug", type=str, required=True)
         parser.add_argument("auth", type=str, required=True)
@@ -31,9 +33,16 @@ class NewTeam(Resource):
         if team is not None:
             return abort("team", "slug-exists")
 
+        avatar = None
+        if args["avatar"] is not None:
+            avatar = FileService.get_by_name(args["avatar"])
+
         team = TeamService.create(args["name"], args["slug"], args["description"])
         PermissionsService.add(account, f"team-{team.slug}", "admin")
         TeamService.add_member(team, account)
+
+        if avatar is not None:
+            TeamService.add_avatar(team, avatar)
 
         result["data"] = {
             "description": team.description,

@@ -1,5 +1,6 @@
 from hikka.services.models.release import Release, Title
 from hikka.services.models.type import ReleaseType
+from hikka.services.models.state import State
 from hikka.services.models.file import File
 from typing import List
 
@@ -11,13 +12,14 @@ class ReleasesService:
 
     @classmethod
     def create(cls, title: Title, slug: str, description: str,
-                rtype: ReleaseType, genres=[], teams=[]) -> Release:
+                rtype: ReleaseType, state: State, genres=[], teams=[]) -> Release:
 
         release = Release(
             title=title,
             slug=slug,
             description=description,
             rtype=rtype,
+            state=state,
             genres=genres,
             teams=teams
         )

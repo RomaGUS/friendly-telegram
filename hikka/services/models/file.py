@@ -1,12 +1,11 @@
-from hikka.services.models.user import User
 from datetime import datetime
 import mongoengine
 import config
 
 class File(mongoengine.Document):
     uploaded = mongoengine.BooleanField(required=True, default=False)
+    account = mongoengine.ReferenceField("User", required=True)
     created = mongoengine.DateTimeField(default=datetime.now)
-    account = mongoengine.ReferenceField(User, required=True)
     path = mongoengine.StringField()
     name = mongoengine.StringField()
 

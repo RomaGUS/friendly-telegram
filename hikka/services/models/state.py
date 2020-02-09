@@ -1,13 +1,13 @@
 import mongoengine
 
-class Genre(mongoengine.Document):
+class State(mongoengine.Document):
     description = mongoengine.StringField(default=None)
     name = mongoengine.StringField(required=True)
     slug = mongoengine.StringField(required=True)
 
     meta = {
         "alias": "default",
-        "collection": "genres",
+        "collection": "states",
         "indexes": [
             "name",
             "slug",

@@ -49,18 +49,18 @@ class UpdateGenre(Resource):
         parser = reqparse.RequestParser()
         parser.add_argument("slug", type=str, required=True)
         parser.add_argument("auth", type=str, required=True)
-        parser.add_argument("update", type=dict, default={})
+        parser.add_argument("params", type=dict, default={})
 
         try:
             args = parser.parse_args()
         except Exception:
             return abort("general", "missing-field")
 
-        update_parser = reqparse.RequestParser()
-        update_parser.add_argument("name", type=str, location=("update",))
-        update_parser.add_argument("slug", type=str, location=("update",))
-        update_parser.add_argument("description", type=str, location=("update",))
-        update_args = update_parser.parse_args(req=args)
+        params_parser = reqparse.RequestParser()
+        params_parser.add_argument("name", type=str, location=("params",))
+        params_parser.add_argument("slug", type=str, location=("params",))
+        params_parser.add_argument("description", type=str, location=("params",))
+        params_args = params_parser.parse_args(req=args)
 
         account = UserService.auth(args["auth"])
         if account is None:
@@ -74,8 +74,9 @@ class UpdateGenre(Resource):
             return abort("genre", "not-found")
 
         keys = ["name", "slug", "description"]
-        update = utils.filter_dict(update_args, keys)
+        update = utils.filter_dict(params_args, keys)
         update_document(genre, update)
+        genre.save()
 
         result["data"] = {
             "description": genre.description,

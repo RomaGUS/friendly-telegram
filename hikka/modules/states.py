@@ -1,5 +1,5 @@
 from hikka.services.permissions import PermissionsService
-from hikka.services.types import ReleaseTypesService
+from hikka.services.states import StatesService
 from hikka.services.func import update_document
 from hikka.services.users import UserService
 from flask_restful import Resource
@@ -7,7 +7,7 @@ from flask_restful import reqparse
 from hikka.errors import abort
 from hikka import utils
 
-class NewReleaseType(Resource):
+class NewState(Resource):
     def post(self):
         result = {"error": None, "data": {}}
 
@@ -29,20 +29,20 @@ class NewReleaseType(Resource):
         if not PermissionsService.check(account, "global", "admin"):
             return abort("account", "permission")
 
-        rtype = ReleaseTypesService.get_by_slug(args["slug"])
-        if rtype is not None:
-            return abort("type", "slug-exists")
+        state_check = StatesService.get_by_slug(args["slug"])
+        if state_check is not None:
+            return abort("state", "slug-exists")
 
-        rtype = ReleaseTypesService.create(args["name"], args["slug"], args["description"])
+        state = StatesService.create(args["name"], args["slug"], args["description"])
         result["data"] = {
-            "description": rtype.description,
-            "name": rtype.name,
-            "slug": rtype.slug
+            "description": state.description,
+            "name": state.name,
+            "slug": state.slug
         }
 
         return result
 
-class UpdateReleaseType(Resource):
+class UpdateState(Resource):
     def post(self):
         result = {"error": None, "data": {}}
 
@@ -57,9 +57,9 @@ class UpdateReleaseType(Resource):
             return abort("general", "missing-field")
 
         params_parser = reqparse.RequestParser()
-        params_parser.add_argument("description", type=str, location=("params",))
         params_parser.add_argument("name", type=str, location=("params",))
         params_parser.add_argument("slug", type=str, location=("params",))
+        params_parser.add_argument("description", type=str, location=("params",))
         params_args = params_parser.parse_args(req=args)
 
         account = UserService.auth(args["auth"])
@@ -69,19 +69,19 @@ class UpdateReleaseType(Resource):
         if not PermissionsService.check(account, "global", "admin"):
             return abort("account", "permission")
 
-        rtype = ReleaseTypesService.get_by_slug(args["slug"])
-        if rtype is None:
-            return abort("type", "not-found")
+        state = StatesService.get_by_slug(args["slug"])
+        if state is None:
+            return abort("state", "not-found")
 
         keys = ["name", "slug", "description"]
         update = utils.filter_dict(params_args, keys)
-        update_document(rtype, update)
-        rtype.save()
+        update_document(state, update)
+        state.save()
 
         result["data"] = {
-            "description": rtype.description,
-            "name": rtype.name,
-            "slug": rtype.slug
+            "description": state.description,
+            "name": state.name,
+            "slug": state.slug
         }
 
         return result

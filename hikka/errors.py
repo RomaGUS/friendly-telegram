@@ -18,6 +18,10 @@ errors = {
         "slug-exists": "Genre with this slug already exists",
         "not-found": "Genre not found"
     },
+    "state": {
+        "slug-exists": "State with this slug already exists",
+        "not-found": "State not found"
+    },
     "type": {
         "slug-exists": "Type with this slug already exists",
         "not-found": "Type not found"

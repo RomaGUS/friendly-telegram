@@ -2,6 +2,7 @@ from hikka.services.permissions import PermissionsService
 from hikka.services.types import ReleaseTypesService
 from hikka.services.releases import ReleasesService
 from hikka.services.genres import GenresService
+from hikka.services.states import StatesService
 from hikka.services.teams import TeamService
 from hikka.services.users import UserService
 from hikka.services.files import FileService
@@ -21,6 +22,7 @@ class NewRelease(Resource):
         parser.add_argument("type", type=str, required=True)
         parser.add_argument("auth", type=str, required=True)
         parser.add_argument("poster", type=str, default=None)
+        parser.add_argument("state", type=str, default=None)
         parser.add_argument("genres", type=list, default=[])
 
         try:
@@ -52,6 +54,10 @@ class NewRelease(Resource):
         if rtype is None:
             return abort("type", "not-found")
 
+        state = StatesService.get_by_slug(args["state"])
+        if state is None:
+            return abort("state", "not-found")
+
         if args["description"] is None:
             return abort("general", "missing-field")
 
@@ -74,6 +80,7 @@ class NewRelease(Resource):
             args["slug"],
             args["description"],
             rtype,
+            state,
             genres,
             [team]
         )

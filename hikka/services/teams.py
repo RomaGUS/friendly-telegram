@@ -1,6 +1,7 @@
 from hikka.services.func import update_document
 from hikka.services.models.user import User
 from hikka.services.models.team import Team
+from hikka.services.models.file import File
 from typing import List
 
 class TeamService:
@@ -30,6 +31,13 @@ class TeamService:
         if user not in team.members:
             team.members.append(user)
         team.save()
+
+    @classmethod
+    def add_avatar(cls, team: Team, avatar: File):
+        team.team = avatar
+        team.save()
+
+        return team
 
     @classmethod
     def remove_member(cls, team: Team, user: User):
