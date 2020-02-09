@@ -2,6 +2,7 @@ from hikka.services.models.type import ReleaseType
 from hikka.services.models.genre import Genre
 from hikka.services.models.team import Team
 from hikka.services.models.user import User
+from hikka.services.models.file import File
 from datetime import datetime
 import mongoengine
 
@@ -31,6 +32,7 @@ class Release(mongoengine.Document):
     created = mongoengine.DateTimeField(default=datetime.now)
     comments = mongoengine.EmbeddedDocumentListField(Comment)
     slug = mongoengine.StringField(required=True)
+    poster = mongoengine.ReferenceField(File)
     views = mongoengine.IntField(default=0)
 
     meta = {

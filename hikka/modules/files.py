@@ -161,7 +161,7 @@ class Upload(Resource):
         if type(data) is Response:
             return data
 
-        result["data"]["path"] = config.cdn + data.path
+        result["data"]["path"] = data.link()
         result["data"]["name"] = data.name
 
         return result

@@ -4,6 +4,7 @@ from hikka.services.releases import ReleasesService
 from hikka.services.genres import GenresService
 from hikka.services.teams import TeamService
 from hikka.services.users import UserService
+from hikka.services.files import FileService
 from flask_restful import Resource
 from flask_restful import reqparse
 from hikka.errors import abort
@@ -19,6 +20,7 @@ class NewRelease(Resource):
         parser.add_argument("team", type=str, required=True)
         parser.add_argument("type", type=str, required=True)
         parser.add_argument("auth", type=str, required=True)
+        parser.add_argument("poster", type=str, default=None)
         parser.add_argument("genres", type=list, default=[])
 
         try:
@@ -53,6 +55,10 @@ class NewRelease(Resource):
         if args["description"] is None:
             return abort("general", "missing-field")
 
+        poster = None
+        if args["poster"] is not None:
+            poster = FileService.get_by_name(args["poster"])
+
         genres = []
         for slug in args["genres"]:
             genre = GenresService.get_by_slug(slug)
@@ -72,11 +78,17 @@ class NewRelease(Resource):
             [team]
         )
 
+        if poster is not None:
+            ReleasesService.add_poster(release, poster)
+
         result["data"] = {
             "title": release.title.dict(),
             "description": release.description,
             "type": release.rtype.slug,
             "slug": release.slug
         }
+
+        if release.poster is not None:
+            result["data"]["poster"] = release.poster.link()
 
         return result

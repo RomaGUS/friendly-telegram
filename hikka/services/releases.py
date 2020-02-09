@@ -1,5 +1,6 @@
 from hikka.services.models.release import Release, Title
 from hikka.services.models.type import ReleaseType
+from hikka.services.models.file import File
 from typing import List
 
 class ReleasesService:
@@ -22,6 +23,13 @@ class ReleasesService:
         )
 
         release.save()
+        return release
+
+    @classmethod
+    def add_poster(cls, release: Release, poster: File):
+        release.poster = poster
+        release.save()
+
         return release
 
     @classmethod
