@@ -5,6 +5,7 @@ from flask_restful import reqparse
 from hikka.errors import abort
 from datetime import datetime
 from hikka.auth import Token
+from hikka.mail import Email
 import config
 
 class Join(Resource):
@@ -41,9 +42,14 @@ class Join(Resource):
             "username": account.username
         }
 
+        activation_token = Token.create("activation", account.username)
+
         # Display activation code only in debug mode
         if config.debug:
-            result["data"]["code"] = Token.create("activation", account.username)
+            result["data"]["code"] = activation_token
+
+        mail = Email()
+        mail.account_confirmation(account.email, activation_token)
 
         return result
 
