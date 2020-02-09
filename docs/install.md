@@ -24,6 +24,7 @@ host = "0.0.0.0"
 port = 1234
 
 cdn = "CDN_LINK"
+url = "FRONTEND_URL"
 
 spaces = {
     "app": "APP_ID",
@@ -39,13 +40,22 @@ db = {
     "port": 27017,
     "name": "DB_NAME"
 }
+
+smtp = {
+    "username": "SMTP_USERNAME",
+    "password": "SMTP_PASSWORD",
+    "host": "SMTP_HOST",
+    "port": 587
+}
 ```
 
 Here is some key points overview:
 
 - `secret`: Flask [SECRET_KEY](https://stackoverflow.com/a/22463969/9217774).
 - `cdn`: link to spaces cdn domain.
+- `url`: website frontend url.
 - `spaces`: this object contains DigitalOcean spaces credentials, but you should be able to use any S3 compatible services.
+- `smtp`: SMTP credentials.
 - `db`: MongoDB credentials.
 
 ## Virtual enviroment
