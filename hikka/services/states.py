@@ -1,7 +1,7 @@
 from hikka.services.models.state import State
 from typing import List
 
-class StatesService:
+class StateService:
     @classmethod
     def create(cls, name: str, slug: str, description=None) -> State:
         status = State(

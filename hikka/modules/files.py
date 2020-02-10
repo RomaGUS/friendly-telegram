@@ -1,4 +1,4 @@
-from hikka.services.permissions import PermissionsService
+from hikka.services.permissions import PermissionService
 from werkzeug.datastructures import FileStorage
 from hikka.services.files import FileService
 from hikka.services.teams import TeamService
@@ -135,7 +135,7 @@ class Upload(Resource):
                 if team is None:
                     return abort("team", "not-found")
 
-                if not PermissionsService.check(account, f"team-{team.slug}", "admin"):
+                if not PermissionService.check(account, f"team-{team.slug}", "admin"):
                     return abort("account", "permission")
 
             helper.upload.seek(0, 0)
@@ -150,7 +150,7 @@ class Upload(Resource):
                 if team is None:
                     return abort("team", "not-found")
 
-                if not PermissionsService.check(account, f"team-{team.slug}", "admin"):
+                if not PermissionService.check(account, f"team-{team.slug}", "admin"):
                     return abort("account", "permission")
 
             data = helper.upload_video()

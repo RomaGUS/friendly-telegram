@@ -1,4 +1,4 @@
-from hikka.services.permissions import PermissionsService
+from hikka.services.permissions import PermissionService
 from hikka.services.func import update_document
 from hikka.services.models.user import User
 from hikka.auth import Token
@@ -28,7 +28,7 @@ class UserService:
         if data["valid"] and data["payload"]["action"] == "login":
             user = cls.get_by_username(data["payload"]["meta"])
             if user is not None:
-                if PermissionsService.check(user, "global", "activated"):
+                if PermissionService.check(user, "global", "activated"):
                     return user
 
         return None

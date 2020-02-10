@@ -1,8 +1,8 @@
-from hikka.services.permissions import PermissionsService
+from hikka.services.permissions import PermissionService
 from hikka.services.types import ReleaseTypesService
-from hikka.services.releases import ReleasesService
-from hikka.services.genres import GenresService
-from hikka.services.states import StatesService
+from hikka.services.releases import ReleaseService
+from hikka.services.genres import GenreService
+from hikka.services.states import StateService
 from hikka.services.teams import TeamService
 from hikka.services.users import UserService
 from hikka.services.files import FileService
@@ -15,6 +15,9 @@ class NewRelease(Resource):
         result = {"error": None, "data": {}}
 
         parser = reqparse.RequestParser()
+        parser.add_argument("subtitles", type=list, default=[], location='json')
+        parser.add_argument("voiceover", type=list, default=[], location='json')
+        parser.add_argument("genres", type=list, default=[], location='json')
         parser.add_argument("description", type=str, required=True)
         parser.add_argument("title", type=dict, required=True)
         parser.add_argument("slug", type=str, required=True)
@@ -23,7 +26,6 @@ class NewRelease(Resource):
         parser.add_argument("auth", type=str, required=True)
         parser.add_argument("poster", type=str, default=None)
         parser.add_argument("state", type=str, default=None)
-        parser.add_argument("genres", type=list, default=[])
 
         try:
             args = parser.parse_args()
@@ -43,10 +45,10 @@ class NewRelease(Resource):
         if team is None:
             return abort("team", "not-found")
 
-        if not PermissionsService.check(account, f"team-{team.slug}", "admin"):
+        if not PermissionService.check(account, f"team-{team.slug}", "admin"):
             return abort("account", "permission")
 
-        release = ReleasesService.get_by_slug(args["slug"])
+        release = ReleaseService.get_by_slug(args["slug"])
         if release is not None:
             return abort("release", "slug-exists")
 
@@ -54,7 +56,7 @@ class NewRelease(Resource):
         if rtype is None:
             return abort("type", "not-found")
 
-        state = StatesService.get_by_slug(args["state"])
+        state = StateService.get_by_slug(args["state"])
         if state is None:
             return abort("state", "not-found")
 
@@ -67,35 +69,67 @@ class NewRelease(Resource):
 
         genres = []
         for slug in args["genres"]:
-            genre = GenresService.get_by_slug(slug)
+            genre = GenreService.get_by_slug(slug)
             if genre is not None:
                 genres.append(genre)
 
             else:
                 return abort("genre", "not-found")
 
-        title = ReleasesService.get_title(title_args["ua"], title_args["jp"])
-        release = ReleasesService.create(
+        subtitles = []
+        for username in args["subtitles"]:
+            account = UserService.get_by_username(username)
+            if account is not None:
+                subtitles.append(account)
+
+            else:
+                return abort("account", "not-found")
+
+        voiceover = []
+        for username in args["voiceover"]:
+            account = UserService.get_by_username(username)
+            if account is not None:
+                voiceover.append(account)
+
+            else:
+                return abort("account", "not-found")
+
+        title = ReleaseService.get_title(title_args["ua"], title_args["jp"])
+        release = ReleaseService.create(
             title,
             args["slug"],
             args["description"],
             rtype,
             state,
             genres,
-            [team]
+            [team],
+            subtitles,
+            voiceover
         )
 
         if poster is not None:
-            ReleasesService.add_poster(release, poster)
+            ReleaseService.add_poster(release, poster)
 
         result["data"] = {
             "title": release.title.dict(),
             "description": release.description,
             "type": release.rtype.slug,
-            "slug": release.slug
+            "slug": release.slug,
+            "subtitles": [],
+            "voiceover": [],
+            "genres": []
         }
 
         if release.poster is not None:
             result["data"]["poster"] = release.poster.link()
+
+        for account in release.subtitles:
+            result["data"]["subtitles"].append(account.dict())
+
+        for account in release.voiceover:
+            result["data"]["voiceover"].append(account.dict())
+
+        for genre in release.genres:
+            result["data"]["genres"].append(genre.dict())
 
         return result

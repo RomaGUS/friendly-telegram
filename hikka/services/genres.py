@@ -1,7 +1,7 @@
 from hikka.services.models.genre import Genre
 from typing import List
 
-class GenresService:
+class GenreService:
     @classmethod
     def create(cls, name: str, slug: str, description=None) -> Genre:
         genre = Genre(

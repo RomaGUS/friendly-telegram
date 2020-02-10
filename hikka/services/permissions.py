@@ -1,7 +1,7 @@
 from hikka.services.models.permission import Permission
 from hikka.services.models.user import User
 
-class PermissionsService:
+class PermissionService:
     @classmethod
     def get(cls, scope: str, name: str) -> Permission:
         permission = Permission.objects().filter(scope=scope, name=name).first()

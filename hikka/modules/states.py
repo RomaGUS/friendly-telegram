@@ -1,5 +1,5 @@
-from hikka.services.permissions import PermissionsService
-from hikka.services.states import StatesService
+from hikka.services.permissions import PermissionService
+from hikka.services.states import StateService
 from hikka.services.func import update_document
 from hikka.services.users import UserService
 from flask_restful import Resource
@@ -26,14 +26,14 @@ class NewState(Resource):
         if account is None:
             return abort("account", "not-found")
 
-        if not PermissionsService.check(account, "global", "admin"):
+        if not PermissionService.check(account, "global", "admin"):
             return abort("account", "permission")
 
-        state_check = StatesService.get_by_slug(args["slug"])
+        state_check = StateService.get_by_slug(args["slug"])
         if state_check is not None:
             return abort("state", "slug-exists")
 
-        state = StatesService.create(args["name"], args["slug"], args["description"])
+        state = StateService.create(args["name"], args["slug"], args["description"])
         result["data"] = {
             "description": state.description,
             "name": state.name,
@@ -66,10 +66,10 @@ class UpdateState(Resource):
         if account is None:
             return abort("account", "not-found")
 
-        if not PermissionsService.check(account, "global", "admin"):
+        if not PermissionService.check(account, "global", "admin"):
             return abort("account", "permission")
 
-        state = StatesService.get_by_slug(args["slug"])
+        state = StateService.get_by_slug(args["slug"])
         if state is None:
             return abort("state", "not-found")
 

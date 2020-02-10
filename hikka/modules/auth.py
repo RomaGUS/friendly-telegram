@@ -1,4 +1,4 @@
-from hikka.services.permissions import PermissionsService
+from hikka.services.permissions import PermissionService
 from hikka.services.users import UserService
 from flask_restful import Resource
 from flask_restful import reqparse
@@ -35,8 +35,8 @@ class Join(Resource):
 
         # Make first registered user admin
         if admin:
-            PermissionsService.add(account, "global", "activated")
-            PermissionsService.add(account, "global", "admin")
+            PermissionService.add(account, "global", "activated")
+            PermissionService.add(account, "global", "admin")
 
         result["data"] = {
             "username": account.username
@@ -109,11 +109,11 @@ class Activate(Resource):
         if data["payload"]["action"] != "activation":
             return abort("general", "token-invalid-type")
 
-        activated = PermissionsService.check(account, "global", "activated")
+        activated = PermissionService.check(account, "global", "activated")
         if activated:
             return abort("account", "activated")
 
-        PermissionsService.add(account, "global", "activated")
+        PermissionService.add(account, "global", "activated")
         result["data"] = {
             "username": account.username,
             "activated": True

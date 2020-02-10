@@ -21,3 +21,10 @@ class User(mongoengine.Document):
         ],
         "ordering": ["-created"]
     }
+
+    def dict(self):
+        avatar = self.avatar.link() if self.avatar is not None else None
+        return {
+            "username": self.username,
+            "avatar": avatar
+        }

@@ -4,7 +4,7 @@ from hikka.services.models.state import State
 from hikka.services.models.file import File
 from typing import List
 
-class ReleasesService:
+class ReleaseService:
     @classmethod
     def get_title(cls, ua: str, jp=None):
         title = Title(ua=ua, jp=jp)
@@ -12,7 +12,9 @@ class ReleasesService:
 
     @classmethod
     def create(cls, title: Title, slug: str, description: str,
-                rtype: ReleaseType, state: State, genres=[], teams=[]) -> Release:
+                rtype: ReleaseType, state: State,
+                genres=[], teams=[], subtitles=[],
+                voiceover=[]) -> Release:
 
         release = Release(
             title=title,
@@ -21,7 +23,9 @@ class ReleasesService:
             rtype=rtype,
             state=state,
             genres=genres,
-            teams=teams
+            teams=teams,
+            subtitles=subtitles,
+            voiceover=voiceover
         )
 
         release.save()

@@ -1,4 +1,4 @@
-from hikka.services.permissions import PermissionsService
+from hikka.services.permissions import PermissionService
 from hikka.services.types import ReleaseTypesService
 from hikka.services.func import update_document
 from hikka.services.users import UserService
@@ -26,7 +26,7 @@ class NewReleaseType(Resource):
         if account is None:
             return abort("account", "not-found")
 
-        if not PermissionsService.check(account, "global", "admin"):
+        if not PermissionService.check(account, "global", "admin"):
             return abort("account", "permission")
 
         rtype = ReleaseTypesService.get_by_slug(args["slug"])
@@ -66,7 +66,7 @@ class UpdateReleaseType(Resource):
         if account is None:
             return abort("account", "not-found")
 
-        if not PermissionsService.check(account, "global", "admin"):
+        if not PermissionService.check(account, "global", "admin"):
             return abort("account", "permission")
 
         rtype = ReleaseTypesService.get_by_slug(args["slug"])

@@ -1,4 +1,4 @@
-from hikka.services.permissions import PermissionsService
+from hikka.services.permissions import PermissionService
 from hikka.services.teams import TeamService
 from hikka.services.users import UserService
 from hikka.services.files import FileService
@@ -26,7 +26,7 @@ class NewTeam(Resource):
         if account is None:
             return abort("account", "not-found"),
 
-        if not PermissionsService.check(account, "global", "teams"):
+        if not PermissionService.check(account, "global", "teams"):
             return abort("account", "permission")
 
         team = TeamService.get_by_slug(args["slug"])
@@ -38,7 +38,7 @@ class NewTeam(Resource):
             avatar = FileService.get_by_name(args["avatar"])
 
         team = TeamService.create(args["name"], args["slug"], args["description"])
-        PermissionsService.add(account, f"team-{team.slug}", "admin")
+        PermissionService.add(account, f"team-{team.slug}", "admin")
         TeamService.add_member(team, account)
 
         if avatar is not None:

@@ -1,5 +1,5 @@
-from hikka.services.permissions import PermissionsService
-from hikka.services.genres import GenresService
+from hikka.services.permissions import PermissionService
+from hikka.services.genres import GenreService
 from hikka.services.func import update_document
 from hikka.services.users import UserService
 from flask_restful import Resource
@@ -26,14 +26,14 @@ class NewGenre(Resource):
         if account is None:
             return abort("account", "not-found")
 
-        if not PermissionsService.check(account, "global", "admin"):
+        if not PermissionService.check(account, "global", "admin"):
             return abort("account", "permission")
 
-        genre_check = GenresService.get_by_slug(args["slug"])
+        genre_check = GenreService.get_by_slug(args["slug"])
         if genre_check is not None:
             return abort("genre", "slug-exists")
 
-        genre = GenresService.create(args["name"], args["slug"], args["description"])
+        genre = GenreService.create(args["name"], args["slug"], args["description"])
         result["data"] = {
             "description": genre.description,
             "name": genre.name,
@@ -66,10 +66,10 @@ class UpdateGenre(Resource):
         if account is None:
             return abort("account", "not-found")
 
-        if not PermissionsService.check(account, "global", "admin"):
+        if not PermissionService.check(account, "global", "admin"):
             return abort("account", "permission")
 
-        genre = GenresService.get_by_slug(args["slug"])
+        genre = GenreService.get_by_slug(args["slug"])
         if genre is None:
             return abort("genre", "not-found")
 

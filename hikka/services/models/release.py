@@ -22,6 +22,8 @@ class Release(mongoengine.Document):
     hidden = mongoengine.BooleanField(required=True, default=False)
     rtype = mongoengine.ReferenceField("ReleaseType", required=True)
     description = mongoengine.StringField(required=True, default=None)
+    subtitles = mongoengine.ListField(mongoengine.ReferenceField("User"))
+    voiceover = mongoengine.ListField(mongoengine.ReferenceField("User"))
     genres = mongoengine.ListField(mongoengine.ReferenceField("Genre"))
     teams = mongoengine.ListField(mongoengine.ReferenceField("Team"))
     state = mongoengine.ReferenceField("State", required=True)
