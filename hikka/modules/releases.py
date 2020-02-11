@@ -1,5 +1,5 @@
 from hikka.services.permissions import PermissionService
-from hikka.services.types import ReleaseTypesService
+from hikka.services.categories import CategoryService
 from hikka.services.releases import ReleaseService
 from hikka.services.genres import GenreService
 from hikka.services.states import StateService
@@ -19,10 +19,10 @@ class NewRelease(Resource):
         parser.add_argument("voiceover", type=list, default=[], location='json')
         parser.add_argument("genres", type=list, default=[], location='json')
         parser.add_argument("description", type=str, required=True)
+        parser.add_argument("category", type=str, required=True)
         parser.add_argument("title", type=dict, required=True)
         parser.add_argument("slug", type=str, required=True)
         parser.add_argument("team", type=str, required=True)
-        parser.add_argument("type", type=str, required=True)
         parser.add_argument("auth", type=str, required=True)
         parser.add_argument("poster", type=str, default=None)
         parser.add_argument("state", type=str, default=None)
@@ -52,9 +52,9 @@ class NewRelease(Resource):
         if release is not None:
             return abort("release", "slug-exists")
 
-        rtype = ReleaseTypesService.get_by_slug(args["type"])
-        if rtype is None:
-            return abort("type", "not-found")
+        category = CategoryService.get_by_slug(args["category"])
+        if category is None:
+            return abort("category", "not-found")
 
         state = StateService.get_by_slug(args["state"])
         if state is None:
@@ -99,7 +99,7 @@ class NewRelease(Resource):
             title,
             args["slug"],
             args["description"],
-            rtype,
+            category,
             state,
             genres,
             [team],

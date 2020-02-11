@@ -1,5 +1,5 @@
 from hikka.services.permissions import PermissionService
-from hikka.services.types import ReleaseTypesService
+from hikka.services.categories import CategoryService
 from hikka.services.func import update_document
 from hikka.services.users import UserService
 from flask_restful import Resource
@@ -7,7 +7,7 @@ from flask_restful import reqparse
 from hikka.errors import abort
 from hikka import utils
 
-class NewReleaseType(Resource):
+class NewCategory(Resource):
     def post(self):
         result = {"error": None, "data": {}}
 
@@ -29,20 +29,20 @@ class NewReleaseType(Resource):
         if not PermissionService.check(account, "global", "admin"):
             return abort("account", "permission")
 
-        rtype = ReleaseTypesService.get_by_slug(args["slug"])
-        if rtype is not None:
-            return abort("type", "slug-exists")
+        category = CategoryService.get_by_slug(args["slug"])
+        if category is not None:
+            return abort("category", "slug-exists")
 
-        rtype = ReleaseTypesService.create(args["name"], args["slug"], args["description"])
+        category = CategoryService.create(args["name"], args["slug"], args["description"])
         result["data"] = {
-            "description": rtype.description,
-            "name": rtype.name,
-            "slug": rtype.slug
+            "description": category.description,
+            "name": category.name,
+            "slug": category.slug
         }
 
         return result
 
-class UpdateReleaseType(Resource):
+class UpdateCategory(Resource):
     def post(self):
         result = {"error": None, "data": {}}
 
@@ -69,19 +69,19 @@ class UpdateReleaseType(Resource):
         if not PermissionService.check(account, "global", "admin"):
             return abort("account", "permission")
 
-        rtype = ReleaseTypesService.get_by_slug(args["slug"])
-        if rtype is None:
-            return abort("type", "not-found")
+        category = CategoryService.get_by_slug(args["slug"])
+        if category is None:
+            return abort("category", "not-found")
 
         keys = ["name", "slug", "description"]
         update = utils.filter_dict(params_args, keys)
-        update_document(rtype, update)
-        rtype.save()
+        update_document(category, update)
+        category.save()
 
         result["data"] = {
-            "description": rtype.description,
-            "name": rtype.name,
-            "slug": rtype.slug
+            "description": category.description,
+            "name": category.name,
+            "slug": category.slug
         }
 
         return result

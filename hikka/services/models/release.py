@@ -17,10 +17,15 @@ class Title(mongoengine.EmbeddedDocument):
             "jp": self.jp
         }
 
+class Episode(mongoengine.EmbeddedDocument):
+    name = mongoengine.StringField(required=True, default=None)
+    position = mongoengine.IntField(required=True)
+    video = mongoengine.ReferenceField("File")
+
 class Release(mongoengine.Document):
     title = mongoengine.EmbeddedDocumentField(Title, required=True)
     hidden = mongoengine.BooleanField(required=True, default=False)
-    rtype = mongoengine.ReferenceField("ReleaseType", required=True)
+    category = mongoengine.ReferenceField("Category", required=True)
     description = mongoengine.StringField(required=True, default=None)
     subtitles = mongoengine.ListField(mongoengine.ReferenceField("User"))
     voiceover = mongoengine.ListField(mongoengine.ReferenceField("User"))
@@ -32,6 +37,11 @@ class Release(mongoengine.Document):
     slug = mongoengine.StringField(required=True)
     poster = mongoengine.ReferenceField("File")
     views = mongoengine.IntField(default=0)
+
+    episodes = mongoengine.SortedListField(
+        mongoengine.EmbeddedDocumentField(Episode),
+        ordering="position"
+    )
 
     meta = {
         "alias": "default",
@@ -48,7 +58,7 @@ class Release(mongoengine.Document):
         data = {
             "description": self.description,
             "title": self.title.dict(),
-            "type": self.rtype.dict(),
+            "category": self.category.dict(),
             "state": self.state.dict(),
             "slug": self.slug,
             "subtitles": [],

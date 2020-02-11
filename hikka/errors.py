@@ -22,9 +22,9 @@ errors = {
         "slug-exists": "State with this slug already exists",
         "not-found": "State not found"
     },
-    "type": {
-        "slug-exists": "Type with this slug already exists",
-        "not-found": "Type not found"
+    "category": {
+        "slug-exists": "Category with this slug already exists",
+        "not-found": "Category not found"
     },
     "release": {
         "slug-exists": "Release with this slug already exists"

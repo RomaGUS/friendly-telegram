@@ -1,5 +1,5 @@
-from hikka.services.models.release import Release, Title
-from hikka.services.models.type import ReleaseType
+from hikka.services.models.release import Release, Title, Episode
+from hikka.services.models.category import Category
 from hikka.services.models.state import State
 from hikka.services.models.file import File
 from typing import List
@@ -11,8 +11,13 @@ class ReleaseService:
         return title
 
     @classmethod
+    def get_episode(cls, name: str, position: int, video: File):
+        episode = Episode(name=name, position=position, video=video)
+        return episode
+
+    @classmethod
     def create(cls, title: Title, slug: str, description: str,
-                rtype: ReleaseType, state: State,
+                category: Category, state: State,
                 genres=[], teams=[], subtitles=[],
                 voiceover=[]) -> Release:
 
@@ -20,7 +25,7 @@ class ReleaseService:
             title=title,
             slug=slug,
             description=description,
-            rtype=rtype,
+            category=category,
             state=state,
             genres=genres,
             teams=teams,
