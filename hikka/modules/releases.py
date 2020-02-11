@@ -110,26 +110,6 @@ class NewRelease(Resource):
         if poster is not None:
             ReleaseService.add_poster(release, poster)
 
-        result["data"] = {
-            "title": release.title.dict(),
-            "description": release.description,
-            "type": release.rtype.slug,
-            "slug": release.slug,
-            "subtitles": [],
-            "voiceover": [],
-            "genres": []
-        }
-
-        if release.poster is not None:
-            result["data"]["poster"] = release.poster.link()
-
-        for account in release.subtitles:
-            result["data"]["subtitles"].append(account.dict())
-
-        for account in release.voiceover:
-            result["data"]["voiceover"].append(account.dict())
-
-        for genre in release.genres:
-            result["data"]["genres"].append(genre.dict())
+        result["data"] = release.dict()
 
         return result

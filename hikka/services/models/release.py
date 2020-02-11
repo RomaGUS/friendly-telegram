@@ -43,3 +43,33 @@ class Release(mongoengine.Document):
             "title.ua",
         ]
     }
+
+    def dict(self):
+        data = {
+            "description": self.description,
+            "title": self.title.dict(),
+            "type": self.rtype.dict(),
+            "state": self.state.dict(),
+            "slug": self.slug,
+            "subtitles": [],
+            "voiceover": [],
+            "genres": [],
+            "teams": []
+        }
+
+        if self.poster is not None:
+            data["poster"] = self.poster.link()
+
+        for account in self.subtitles:
+            data["subtitles"].append(account.dict())
+
+        for account in self.voiceover:
+            data["voiceover"].append(account.dict())
+
+        for genre in self.genres:
+            data["genres"].append(genre.dict())
+
+        for team in self.teams:
+            data["teams"].append(team.dict())
+
+        return data

@@ -16,3 +16,12 @@ class Team(mongoengine.Document):
             "slug",
         ]
     }
+
+    def dict(self):
+        avatar = self.avatar.link() if self.avatar is not None else None
+        return {
+            "name": self.name,
+            "description": self.description,
+            "slug": self.slug,
+            "avatar": avatar
+        }

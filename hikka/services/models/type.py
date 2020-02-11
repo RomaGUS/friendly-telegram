@@ -13,3 +13,10 @@ class ReleaseType(mongoengine.Document):
             "slug",
         ]
     }
+
+    def dict(self):
+        return {
+            "description": self.description,
+            "name": self.name,
+            "slug": self.slug
+        }
