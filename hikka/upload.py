@@ -17,7 +17,6 @@ import os
 
 supported_videos = ["video/mp4"]
 supported_images = ["image/jpeg", "image/png"]
-supported_image_types = ["avatar", "poster"]
 supported_video_types = ["release"]
 image_max_size = 10 * 1024 * 1024
 
@@ -38,6 +37,12 @@ class UploadHelper(object):
         self.tmp_dir = f"/tmp/{self.spaces_name}/{self.file.name}/"
 
     def upload_image(self):
+        if not self.is_image():
+            return abort("file", "bad-mime-type")
+
+        if self.size() > image_max_size:
+            return abort("file", "too-big")
+
         spaces_file_name = self.file.name + "." + "jpg"
         os.makedirs(self.tmp_dir)
 
@@ -49,9 +54,11 @@ class UploadHelper(object):
             avatar_size = 250
 
             if width != height:
+                self.clean()
                 return abort("image", "not-square")
 
             if width < avatar_size:
+                self.clean()
                 return abort("image", "small-image")
 
             pil = pil.resize((avatar_size, avatar_size), Image.LANCZOS)
@@ -70,7 +77,7 @@ class UploadHelper(object):
         self.fs.put(tmp_path, spaces_path)
         self.fs.chmod(spaces_path, 'public-read')
 
-        shutil.rmtree(self.tmp_dir)
+        self.clean()
 
         self.file.path = f"/{self.upload_type}/{self.folder}/{spaces_file_name}"
         self.file.uploaded = True
@@ -98,70 +105,68 @@ class UploadHelper(object):
 
         return self.file
 
-class Upload(Resource):
-    def post(self):
-        result = {"error": None, "data": {}}
+    def clean(self):
+        shutil.rmtree(self.tmp_dir)
 
-        parser = reqparse.RequestParser()
-        parser.add_argument("upload", type=FileStorage, location="files", default=None)
-        parser.add_argument("type", type=str, required=True)
-        parser.add_argument("auth", type=str, required=True)
-        parser.add_argument("team", type=str)
+    def is_image(self):
+        return self.upload.mimetype in supported_images
 
-        try:
-            args = parser.parse_args()
-        except Exception:
-            return abort("general", "missing-field")
+    def size(self):
+        file_size = 0
+        self.upload.seek(0, os.SEEK_END)
+        file_size = self.upload.tell()
+        self.upload.seek(0, 0)
 
-        account = UserService.auth(args["auth"])
-        if account is None:
-            return abort("account", "not-found")
+        return file_size
 
-        if args["upload"] is None:
-            return abort("file", "not-found")
+# class Upload(Resource):
+#     def post(self):
+#         result = {"error": None, "data": {}}
 
-        helper = UploadHelper(account, args["upload"], args["type"])
+#         parser = reqparse.RequestParser()
+#         parser.add_argument("upload", type=FileStorage, location="files", default=None)
+#         parser.add_argument("type", type=str, required=True)
+#         parser.add_argument("auth", type=str, required=True)
+#         parser.add_argument("team", type=str)
 
-        if helper.upload.mimetype in supported_images:
-            if helper.upload_type not in supported_image_types:
-                return abort("file", "bad-upload-type")
+#         try:
+#             args = parser.parse_args()
+#         except Exception:
+#             return abort("general", "missing-field")
 
-            helper.upload.seek(0, os.SEEK_END)
-            if helper.upload.tell() > image_max_size:
-                return abort("file", "too-big")
+#         account = UserService.auth(args["auth"])
+#         if account is None:
+#             return abort("account", "not-found")
 
-            if helper.upload_type == "poster":
-                team = TeamService.get_by_slug(args["team"])
-                if team is None:
-                    return abort("team", "not-found")
+#         if args["upload"] is None:
+#             return abort("file", "not-found")
 
-                if not PermissionService.check(account, f"team-{team.slug}", "admin"):
-                    return abort("account", "permission")
+#         helper = UploadHelper(account, args["upload"], args["type"])
 
-            helper.upload.seek(0, 0)
-            data = helper.upload_image()
+#         if helper.upload.mimetype in supported_images:
+#             data = helper.upload_image()
 
-        elif helper.upload.mimetype in supported_videos:
-            if helper.upload_type not in supported_video_types:
-                return abort("file", "bad-upload-type")
+#         elif helper.upload.mimetype in supported_videos:
+#             if helper.upload_type not in supported_video_types:
+#                 return abort("file", "bad-upload-type")
 
-            if helper.upload_type == "release":
-                team = TeamService.get_by_slug(args["team"])
-                if team is None:
-                    return abort("team", "not-found")
+#             if helper.upload_type == "release":
+#                 team = TeamService.get_by_slug(args["team"])
+#                 if team is None:
+#                     return abort("team", "not-found")
 
-                if not PermissionService.check(account, f"team-{team.slug}", "admin"):
-                    return abort("account", "permission")
+#                 if not PermissionService.check(account, f"team-{team.slug}", "admin"):
+#                     return abort("account", "permission")
 
-            data = helper.upload_video()
+#             data = helper.upload_video()
 
-        else:
-            return abort("file", "bad-mime-type")
+#         else:
+#             return abort("file", "bad-mime-type")
 
-        if type(data) is Response:
-            return data
+#         if type(data) is Response:
+#             return data
 
-        result["data"]["path"] = data.link()
-        result["data"]["name"] = data.name
+#         result["data"]["path"] = data.link()
+#         result["data"]["name"] = data.name
 
-        return result
+#         return result

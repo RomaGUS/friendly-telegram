@@ -67,9 +67,7 @@ class JWT():
 class Token():
     @classmethod
     def create(cls, action, meta, days=3):
-        """
-        Token valid for 3 days by default
-        """
+        """Token valid for 3 days by default"""
         expire = int(datetime.timestamp(datetime.now() + timedelta(days=days)))
         return JWT.create_signed_token(utils.blake2b(config.secret), {
             "action": action,

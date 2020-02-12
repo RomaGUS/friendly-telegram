@@ -3,7 +3,6 @@ from hikka.modules import releases
 from hikka.modules import genres
 from hikka.modules import states
 from hikka.modules import teams
-from hikka.modules import files
 from hikka.modules import auth
 from hikka import api
 
@@ -29,6 +28,3 @@ api.add_resource(categories.UpdateCategory, "/categories/update")
 
 # Release routes
 api.add_resource(releases.NewRelease, "/releases/new")
-
-# Misc
-api.add_resource(files.Upload, "/files/upload")

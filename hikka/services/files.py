@@ -1,5 +1,6 @@
 from hikka.services.models.file import File
 from hikka.services.models.user import User
+from hikka import spaces
 
 class FileService:
     @classmethod
@@ -10,5 +11,13 @@ class FileService:
 
     @classmethod
     def get_by_name(cls, name: str):
-        team = File.objects().filter(name=name).first()
-        return team
+        file = File.objects().filter(name=name).first()
+        return file
+
+    @classmethod
+    def destroy(cls, file: File):
+        if file.uploaded and file.path is not None:
+            fs = spaces.init_fs()
+            fs.rm(file.path())
+
+        file.delete()

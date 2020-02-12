@@ -1,30 +1,32 @@
 from hikka.services.permissions import PermissionService
 from hikka.services.categories import CategoryService
 from hikka.services.releases import ReleaseService
+from werkzeug.datastructures import FileStorage
 from hikka.services.genres import GenreService
 from hikka.services.states import StateService
 from hikka.services.teams import TeamService
 from hikka.services.users import UserService
-from hikka.services.files import FileService
+from hikka.upload import UploadHelper
 from flask_restful import Resource
 from flask_restful import reqparse
 from hikka.errors import abort
+from flask import Response
 
 class NewRelease(Resource):
     def post(self):
         result = {"error": None, "data": {}}
 
         parser = reqparse.RequestParser()
-        parser.add_argument("subtitles", type=list, default=[], location='json')
-        parser.add_argument("voiceover", type=list, default=[], location='json')
-        parser.add_argument("genres", type=list, default=[], location='json')
+        parser.add_argument("subtitles", type=list, default=[], location="json")
+        parser.add_argument("voiceover", type=list, default=[], location="json")
+        parser.add_argument("genres", type=list, default=[], location="json")
+        parser.add_argument("poster", type=FileStorage, location='files')
         parser.add_argument("description", type=str, required=True)
         parser.add_argument("category", type=str, required=True)
         parser.add_argument("title", type=dict, required=True)
         parser.add_argument("slug", type=str, required=True)
         parser.add_argument("team", type=str, required=True)
         parser.add_argument("auth", type=str, required=True)
-        parser.add_argument("poster", type=str, default=None)
         parser.add_argument("state", type=str, default=None)
 
         try:
@@ -65,7 +67,12 @@ class NewRelease(Resource):
 
         poster = None
         if args["poster"] is not None:
-            poster = FileService.get_by_name(args["poster"])
+            helper = UploadHelper(account, args["poster"], "poster")
+            data = helper.upload_image()
+            if type(data) is Response:
+                return data
+
+            poster = data
 
         genres = []
         for slug in args["genres"]:
@@ -108,7 +115,7 @@ class NewRelease(Resource):
         )
 
         if poster is not None:
-            ReleaseService.add_poster(release, poster)
+            ReleaseService.update_poster(release, poster)
 
         result["data"] = release.dict()
 

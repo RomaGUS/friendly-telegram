@@ -1,6 +1,7 @@
 from hikka.services.models.release import Release, Title, Episode
 from hikka.services.models.category import Category
 from hikka.services.models.state import State
+from hikka.services.files import FileService
 from hikka.services.models.file import File
 from typing import List
 
@@ -37,8 +38,11 @@ class ReleaseService:
         return release
 
     @classmethod
-    def add_poster(cls, release: Release, poster: File):
-        release.poster = poster
+    def update_poster(cls, release: Release, file: File):
+        if release.poster is not None:
+            FileService.destroy(release.poster)
+
+        release.poster = file
         release.save()
 
         return release
