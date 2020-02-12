@@ -23,7 +23,7 @@ class NewRelease(Resource):
         parser.add_argument("subtitles", type=list, default=[], location="json")
         parser.add_argument("voiceover", type=list, default=[], location="json")
         parser.add_argument("genres", type=list, default=[], location="json")
-        parser.add_argument("poster", type=FileStorage, location='files')
+        parser.add_argument("poster", type=FileStorage, location="files")
         parser.add_argument("description", type=str, required=True)
         parser.add_argument("category", type=str, required=True)
         parser.add_argument("title", type=dict, required=True)

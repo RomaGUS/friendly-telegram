@@ -1,10 +1,13 @@
 from hikka.decorators import auth_required, permission_required
 from hikka.services.permissions import PermissionService
+from werkzeug.datastructures import FileStorage
 from hikka.services.teams import TeamService
 from hikka.services.files import FileService
+from hikka.upload import UploadHelper
 from flask_restful import Resource
 from flask_restful import reqparse
 from hikka.errors import abort
+from flask import Response
 from flask import request
 
 class NewTeam(Resource):
@@ -14,8 +17,8 @@ class NewTeam(Resource):
         result = {"error": None, "data": {}}
 
         parser = reqparse.RequestParser()
+        parser.add_argument("avatar", type=FileStorage, location="files")
         parser.add_argument("description", type=str, required=True)
-        parser.add_argument("avatar", type=str, default=None)
         parser.add_argument("name", type=str, required=True)
         parser.add_argument("slug", type=str, required=True)
 
@@ -30,14 +33,20 @@ class NewTeam(Resource):
 
         avatar = None
         if args["avatar"] is not None:
-            avatar = FileService.get_by_name(args["avatar"])
+            helper = UploadHelper(request.account, args["avatar"], "avatar")
+            data = helper.upload_image()
+
+            if type(data) is Response:
+                return data
+
+            avatar = data
 
         team = TeamService.create(args["name"], args["slug"], args["description"])
         PermissionService.add(request.account, f"team-{team.slug}", "admin")
         TeamService.add_member(team, request.account)
 
         if avatar is not None:
-            TeamService.add_avatar(team, avatar)
+            TeamService.update_avatar(team, avatar)
 
         result["data"] = {
             "description": team.description,

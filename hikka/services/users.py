@@ -1,6 +1,8 @@
 from hikka.services.permissions import PermissionService
 from hikka.services.func import update_document
+from hikka.services.files import FileService
 from hikka.services.models.user import User
+from hikka.services.models.file import File
 from hikka.auth import Token
 import hikka.auth as auth
 from typing import List
@@ -37,6 +39,16 @@ class UserService:
     def update(cls, user: User, **kwargs):
         user = update_document(user, kwargs)
         user.save()
+
+    @classmethod
+    def update_avatar(cls, user: User, file: File):
+        if user.avatar is not None:
+            FileService.destroy(user.avatar)
+
+        user.avatar = file
+        user.save()
+
+        return user
 
     @classmethod
     def get_by_id(cls, uid: str):

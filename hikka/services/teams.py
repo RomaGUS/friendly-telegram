@@ -1,4 +1,5 @@
 from hikka.services.func import update_document
+from hikka.services.files import FileService
 from hikka.services.models.user import User
 from hikka.services.models.team import Team
 from hikka.services.models.file import File
@@ -33,8 +34,11 @@ class TeamService:
         team.save()
 
     @classmethod
-    def add_avatar(cls, team: Team, avatar: File):
-        team.team = avatar
+    def update_avatar(cls, team: Team, file: File):
+        if team.avatar is not None:
+            FileService.destroy(team.avatar)
+
+        team.avatar = file
         team.save()
 
         return team
