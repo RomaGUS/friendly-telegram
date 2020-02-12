@@ -10,6 +10,7 @@ from hikka import api
 api.add_resource(auth.Join, "/auth/join")
 api.add_resource(auth.Login, "/auth/login")
 api.add_resource(auth.Activate, "/auth/activate")
+api.add_resource(auth.Test, "/auth/test")
 
 # Team routes
 api.add_resource(teams.NewTeam, "/teams/new")

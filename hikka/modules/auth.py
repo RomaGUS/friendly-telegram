@@ -1,3 +1,4 @@
+from hikka.decorators import auth_required, permission_required
 from hikka.services.permissions import PermissionService
 from hikka.services.users import UserService
 from flask_restful import Resource
@@ -120,3 +121,9 @@ class Activate(Resource):
         }
 
         return result
+
+class Test(Resource):
+    @auth_required
+    @permission_required("global", "admin")
+    def post(self):
+        return "WORKING"

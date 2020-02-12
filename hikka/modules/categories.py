@@ -1,15 +1,14 @@
-from hikka.services.permissions import PermissionService
+from hikka.decorators import auth_required, permission_required
 from hikka.services.categories import CategoryService
 from hikka.services.func import update_document
-from hikka.decorators import auth_required
 from flask_restful import Resource
 from flask_restful import reqparse
 from hikka.errors import abort
-from flask import request
 from hikka import utils
 
 class NewCategory(Resource):
     @auth_required
+    @permission_required("global", "admin")
     def post(self):
         result = {"error": None, "data": {}}
 
@@ -22,9 +21,6 @@ class NewCategory(Resource):
             args = parser.parse_args()
         except Exception:
             return abort("general", "missing-field")
-
-        if not PermissionService.check(request.account, "global", "admin"):
-            return abort("account", "permission")
 
         category = CategoryService.get_by_slug(args["slug"])
         if category is not None:
@@ -41,6 +37,7 @@ class NewCategory(Resource):
 
 class UpdateCategory(Resource):
     @auth_required
+    @permission_required("global", "admin")
     def post(self):
         result = {"error": None, "data": {}}
 
@@ -52,9 +49,6 @@ class UpdateCategory(Resource):
             args = parser.parse_args()
         except Exception:
             return abort("general", "missing-field")
-
-        if not PermissionService.check(request.account, "global", "admin"):
-            return abort("account", "permission")
 
         category = CategoryService.get_by_slug(args["slug"])
         if category is None:

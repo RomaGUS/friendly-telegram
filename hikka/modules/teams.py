@@ -1,7 +1,7 @@
+from hikka.decorators import auth_required, permission_required
 from hikka.services.permissions import PermissionService
 from hikka.services.teams import TeamService
 from hikka.services.files import FileService
-from hikka.decorators import auth_required
 from flask_restful import Resource
 from flask_restful import reqparse
 from hikka.errors import abort
@@ -9,6 +9,7 @@ from flask import request
 
 class NewTeam(Resource):
     @auth_required
+    @permission_required("global", "admin")
     def post(self):
         result = {"error": None, "data": {}}
 
@@ -22,9 +23,6 @@ class NewTeam(Resource):
             args = parser.parse_args()
         except Exception:
             return abort("general", "missing-field")
-
-        if not PermissionService.check(request.account, "global", "teams"):
-            return abort("account", "permission")
 
         team = TeamService.get_by_slug(args["slug"])
         if team is not None:

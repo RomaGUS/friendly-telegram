@@ -1,15 +1,14 @@
-from hikka.services.permissions import PermissionService
-from hikka.services.states import StateService
+from hikka.decorators import auth_required, permission_required
 from hikka.services.func import update_document
-from hikka.decorators import auth_required
+from hikka.services.states import StateService
 from flask_restful import Resource
 from flask_restful import reqparse
 from hikka.errors import abort
-from flask import request
 from hikka import utils
 
 class NewState(Resource):
     @auth_required
+    @permission_required("global", "admin")
     def post(self):
         result = {"error": None, "data": {}}
 
@@ -22,9 +21,6 @@ class NewState(Resource):
             args = parser.parse_args()
         except Exception:
             return abort("general", "missing-field")
-
-        if not PermissionService.check(request.account, "global", "admin"):
-            return abort("account", "permission")
 
         state_check = StateService.get_by_slug(args["slug"])
         if state_check is not None:
@@ -41,6 +37,7 @@ class NewState(Resource):
 
 class UpdateState(Resource):
     @auth_required
+    @permission_required("global", "admin")
     def post(self):
         result = {"error": None, "data": {}}
 
@@ -52,9 +49,6 @@ class UpdateState(Resource):
             args = parser.parse_args()
         except Exception:
             return abort("general", "missing-field")
-
-        if not PermissionService.check(request.account, "global", "admin"):
-            return abort("account", "permission")
 
         state = StateService.get_by_slug(args["slug"])
         if state is None:
