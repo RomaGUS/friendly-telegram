@@ -27,7 +27,8 @@ errors = {
         "not-found": "Category not found"
     },
     "release": {
-        "slug-exists": "Release with this slug already exists"
+        "slug-exists": "Release with this slug already exists",
+        "not-found": "Release not found"
     },
     "file": {
         "not-found": "File not provided",

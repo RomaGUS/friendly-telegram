@@ -2,7 +2,6 @@ from hikka.decorators import auth_required, permission_required
 from hikka.services.permissions import PermissionService
 from werkzeug.datastructures import FileStorage
 from hikka.services.teams import TeamService
-from hikka.services.files import FileService
 from hikka.upload import UploadHelper
 from flask_restful import Resource
 from flask_restful import reqparse

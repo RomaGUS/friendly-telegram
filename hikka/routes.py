@@ -29,3 +29,4 @@ api.add_resource(categories.UpdateCategory, "/categories/update")
 
 # Release routes
 api.add_resource(releases.NewRelease, "/releases/new")
+api.add_resource(releases.GetRelease, "/releases/get/<string:slug>")

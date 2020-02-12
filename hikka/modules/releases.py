@@ -119,3 +119,11 @@ class NewRelease(Resource):
         result["data"] = release.dict()
 
         return result
+
+class GetRelease(Resource):
+    def get(self, slug):
+        release = ReleaseService.get_by_slug(slug)
+        if release is None:
+            return abort("release", "not-found")
+
+        return release.dict()
