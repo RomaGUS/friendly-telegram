@@ -21,7 +21,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"username\": \"volbil1\", \"password\": \"thisispassword\", \"email\": \"volbilnexus1@gmail.com\"}"
+							"raw": "{\"username\": \"volbil\", \"password\": \"thisispassword\", \"email\": \"volbilnexus@gmail.com\"}"
 						},
 						"url": {
 							"raw": "http://0.0.0.0:1234/auth/join",
@@ -89,7 +89,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"token\": \"3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuaKHVFGSweqHCNPp.2E72ScWndShkgPLDPftW1LHkPPLCuRckr8x7YRU1gYmykSDug2xNRgXJ4NMmZwEKEKCaPi8UrQ4JatVBWbvCaM7Bv4ofih9.WUAqmi4u3p8Zmz5Ny5kaqDsF7AqzfPGnX5ebzmfPyK448Egeu\"}"
+							"raw": "{\"token\": \"3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuaKHVFGSweqHCNPp.H7MGKU95BMZZ2tUjHy5JkLevZFKZGYfUu6gzsQLe4825QPQiUBHBaRY4dGNnK3pSyMroKvXdCpSaUUvSY9t3LGdwW6nWT.GYfvzpc9ovBDiyBsTbd5Wpz4xXYaM5Y876Dg2sfuXVSHeFz62\"}"
 						},
 						"url": {
 							"raw": "http://0.0.0.0:1234/auth/activate",
@@ -104,6 +104,45 @@
 							"path": [
 								"auth",
 								"activate"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Activate Copy",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authentication",
+								"value": "3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuYpbsSVbHxJnUepd.ZMKC1hNPqdfkmnGBbzBZRyFxaagjRewcWqBUd2dc72GrWwkAwFxBXG35FvfGc2WrNoNGMsY6L9V4cnzwrBV4j6.UtArtJ5ZQn3PJcd6WvTb6EgWNTZULwQt7wwbV5Qje3rR79UvUp4KgHtFM8HbgmpedyNjCLkndzhF4Nt7Dj72YJ9BveguY",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"token\": \"3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuaKHVFGSweqHCNPp.H7MGKU95BMZZ2tUjHy5JkLevZFKZGYfUu6gzsQLe4825QPQiUBHBaRY4dGNnK3pSyMroKvXdCpSaUUvSY9t3LGdwW6nWT.GYfvzpc9ovBDiyBsTbd5Wpz4xXYaM5Y876Dg2sfuXVSHeFz62\"}"
+						},
+						"url": {
+							"raw": "http://0.0.0.0:1234/auth/test",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "1234",
+							"path": [
+								"auth",
+								"test"
 							]
 						}
 					},
@@ -125,11 +164,16 @@
 								"name": "Content-Type",
 								"type": "text",
 								"value": "application/json"
+							},
+							{
+								"key": "Authentication",
+								"value": "3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuYpbsSVbHxJnUepd.ZMKC1hNPqdfkmnGBbzBZRyFxaagjRewcWqBUd2dc72GrWwkAwFxBXG35FvfGc2WrNoNGMsY6L9V4cnzwrBV4j6.UtArtJ5ZQn3PJcd6WvTb6EgWNTZULwQt7wwbV5Qje3rR79UvUp4KgHtFM8HbgmpedyNjCLkndzhF4Nt7Dj72YJ9BveguY",
+								"type": "text"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"description\": \"FanVoxUA - Озвучуємо для вас!\", \"name\": \"FanVoxUA\", \"slug\": \"fanvox\", \"auth\": \"3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuaKHVFGSweqHCNPp.ZMKC1hNPqdfkmnGBbzBZRyFxaagjRewcWqBUd2dc72GrWwYbUQon5AbZ6QzTXNSAjs5rujLZi56M597wJe4ivX.XHZwQXD4fSoUyAQosWch1zY6a3W4ubw187Q5mgeBHbK54dMVn\"}"
+							"raw": "{\"description\": \"FanVoxUA - Озвучуємо для вас!\", \"name\": \"FanVoxUA\", \"slug\": \"fanvox\"}"
 						},
 						"url": {
 							"raw": "http://0.0.0.0:1234/teams/new",
@@ -165,11 +209,16 @@
 								"name": "Content-Type",
 								"type": "text",
 								"value": "application/json"
+							},
+							{
+								"key": "Authentication",
+								"value": "3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuYpbsSVbHxJnUepd.ZMKC1hNPqdfkmnGBbzBZRyFxaagjRewcWqBUd2dc72GrWwkAwFxBXG35FvfGc2WrNoNGMsY6L9V4cnzwrBV4j6.UtArtJ5ZQn3PJcd6WvTb6EgWNTZULwQt7wwbV5Qje3rR79UvUp4KgHtFM8HbgmpedyNjCLkndzhF4Nt7Dj72YJ9BveguY",
+								"type": "text"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"name\": \"Романтика\", \"slug\": \"romance\", \"auth\": \"3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuaKHVFGSweqHCNPp.ZMKC1hNPqdfkmnGBbzBZRyFxaagjRewcWqBUd2dc72GrWwYbUQon5AbZ6QzTXNSAjs5rujLZi56M597wJe4ivX.XHZwQXD4fSoUyAQosWch1zY6a3W4ubw187Q5mgeBHbK54dMVn\"}"
+							"raw": "{\"name\": \"Романтика\", \"slug\": \"romance\"}"
 						},
 						"url": {
 							"raw": "http://0.0.0.0:1234/genres/new",
@@ -199,11 +248,16 @@
 								"name": "Content-Type",
 								"type": "text",
 								"value": "application/json"
+							},
+							{
+								"key": "Authentication",
+								"value": "3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuYpbsSVbHxJnUepd.ZMKC1hNPqdfkmnGBbzBZRyFxaagjRewcWqBUd2dc72GrWwkAwFxBXG35FvfGc2WrNoNGMsY6L9V4cnzwrBV4j6.UtArtJ5ZQn3PJcd6WvTb6EgWNTZULwQt7wwbV5Qje3rR79UvUp4KgHtFM8HbgmpedyNjCLkndzhF4Nt7Dj72YJ9BveguY",
+								"type": "text"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"slug\": \"romance\", \"auth\": \"3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuaKHVFGSweqHCNPp.ZMKC1hNPqdfkmnGBbzBZRyFxaagjRewcWqBUd2dc72GrWwYbUQon5AbZ6QzTXNSAjs5rujLZi56M597wJe4ivX.XHZwQXD4fSoUyAQosWch1zY6a3W4ubw187Q5mgeBHbK54dMVn\", \"update\": {\"description\": null}}"
+							"raw": "{\"slug\": \"romance\", \"params\": {\"description\": \"111\"}}"
 						},
 						"url": {
 							"raw": "http://0.0.0.0:1234/genres/update",
@@ -227,10 +281,10 @@
 			"protocolProfileBehavior": {}
 		},
 		{
-			"name": "Release Types",
+			"name": "States",
 			"item": [
 				{
-					"name": "New Release Type",
+					"name": "New State",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -239,14 +293,19 @@
 								"name": "Content-Type",
 								"type": "text",
 								"value": "application/json"
+							},
+							{
+								"key": "Authentication",
+								"value": "3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuYpbsSVbHxJnUepd.ZMKC1hNPqdfkmnGBbzBZRyFxaagjRewcWqBUd2dc72GrWwkAwFxBXG35FvfGc2WrNoNGMsY6L9V4cnzwrBV4j6.UtArtJ5ZQn3PJcd6WvTb6EgWNTZULwQt7wwbV5Qje3rR79UvUp4KgHtFM8HbgmpedyNjCLkndzhF4Nt7Dj72YJ9BveguY",
+								"type": "text"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"name\": \"TV\", \"slug\": \"tv\", \"auth\": \"3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuaKHVFGSweqHCNPp.ZMKC1hNPqdfkmnGBbzBZRyFxaagjRewcWqBUd2dc72GrWwYbUQon5AbZ6QzTXNSAjs5rujLZi56M597wJe4ivX.XHZwQXD4fSoUyAQosWch1zY6a3W4ubw187Q5mgeBHbK54dMVn\"}"
+							"raw": "{\"name\": \"Романтика\", \"slug\": \"romance\"}"
 						},
 						"url": {
-							"raw": "http://0.0.0.0:1234/types/new",
+							"raw": "http://0.0.0.0:1234/states/new",
 							"protocol": "http",
 							"host": [
 								"0",
@@ -256,7 +315,7 @@
 							],
 							"port": "1234",
 							"path": [
-								"types",
+								"states",
 								"new"
 							]
 						}
@@ -264,7 +323,7 @@
 					"response": []
 				},
 				{
-					"name": "Update Release Type",
+					"name": "Update State",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -273,14 +332,19 @@
 								"name": "Content-Type",
 								"type": "text",
 								"value": "application/json"
+							},
+							{
+								"key": "Authentication",
+								"value": "3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuYpbsSVbHxJnUepd.ZMKC1hNPqdfkmnGBbzBZRyFxaagjRewcWqBUd2dc72GrWwkAwFxBXG35FvfGc2WrNoNGMsY6L9V4cnzwrBV4j6.UtArtJ5ZQn3PJcd6WvTb6EgWNTZULwQt7wwbV5Qje3rR79UvUp4KgHtFM8HbgmpedyNjCLkndzhF4Nt7Dj72YJ9BveguY",
+								"type": "text"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"slug\": \"tv\", \"auth\": \"3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuaKHVFGSweqHCNPp.ZMKC1hNPqdfkmnGBbzBZRyFxaagjRewcWqBUd2dc72GrWwYbUQon5AbZ6QzTXNSAjs5rujLZi56M597wJe4ivX.XHZwQXD4fSoUyAQosWch1zY6a3W4ubw187Q5mgeBHbK54dMVn\", \"update\": {\"description\": null}}"
+							"raw": "{\"slug\": \"romance\", \"params\": {\"slug\": \"ongoing\", \"name\": \"Онгоїнг\"}}"
 						},
 						"url": {
-							"raw": "http://0.0.0.0:1234/types/update",
+							"raw": "http://0.0.0.0:1234/states/update",
 							"protocol": "http",
 							"host": [
 								"0",
@@ -290,7 +354,91 @@
 							],
 							"port": "1234",
 							"path": [
-								"types",
+								"states",
+								"update"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Categories",
+			"item": [
+				{
+					"name": "New Category",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authentication",
+								"value": "3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuYpbsSVbHxJnUepd.ZMKC1hNPqdfkmnGBbzBZRyFxaagjRewcWqBUd2dc72GrWwkAwFxBXG35FvfGc2WrNoNGMsY6L9V4cnzwrBV4j6.UtArtJ5ZQn3PJcd6WvTb6EgWNTZULwQt7wwbV5Qje3rR79UvUp4KgHtFM8HbgmpedyNjCLkndzhF4Nt7Dj72YJ9BveguY",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"name\": \"TV\", \"slug\": \"tv\"}"
+						},
+						"url": {
+							"raw": "http://0.0.0.0:1234/categories/new",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "1234",
+							"path": [
+								"categories",
+								"new"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Category",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authentication",
+								"value": "3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuYpbsSVbHxJnUepd.ZMKC1hNPqdfkmnGBbzBZRyFxaagjRewcWqBUd2dc72GrWwkAwFxBXG35FvfGc2WrNoNGMsY6L9V4cnzwrBV4j6.UtArtJ5ZQn3PJcd6WvTb6EgWNTZULwQt7wwbV5Qje3rR79UvUp4KgHtFM8HbgmpedyNjCLkndzhF4Nt7Dj72YJ9BveguY",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"slug\": \"tv\", \"params\": {\"description\": null}}"
+						},
+						"url": {
+							"raw": "http://0.0.0.0:1234/categories/update",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "1234",
+							"path": [
+								"categories",
 								"update"
 							]
 						}
@@ -313,11 +461,16 @@
 								"name": "Content-Type",
 								"type": "text",
 								"value": "application/json"
+							},
+							{
+								"key": "Authentication",
+								"value": "3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuYpbsSVbHxJnUepd.ZMKC1hNPqdfkmnGBbzBZRyFxaagjRewcWqBUd2dc72GrWwkAwFxBXG35FvfGc2WrNoNGMsY6L9V4cnzwrBV4j6.UtArtJ5ZQn3PJcd6WvTb6EgWNTZULwQt7wwbV5Qje3rR79UvUp4KgHtFM8HbgmpedyNjCLkndzhF4Nt7Dj72YJ9BveguY",
+								"type": "text"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"description\": \"Шіномія Каґуя та Шіроґане Міюкі — члени Учнівської ради елітної академії Шючіїн, генії з геніїв. Після часу проведеного разом часу, у них зародилися почуття один до одного. Але, на жаль, але їхня гордість не дозволить зізнатися одне одному про свої почуття. Кохання — це війна, це безжальна битва, метою якої є змусити супротивника освідчитися!\", \"title\": {\"ua\": \"Каґуя-сама, Кохання як війна\"}, \"slug\": \"kaguya-sama\", \"auth\": \"3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuaKHVFGSweqHCNPp.ZMKC1hNPqdfkmnGBbzBZRyFxaagjRewcWqBUd2dc72GrWwYbUQon5AbZ6QzTXNSAjs5rujLZi56M597wJe4ivX.XHZwQXD4fSoUyAQosWch1zY6a3W4ubw187Q5mgeBHbK54dMVn\", \"team\": \"fanvox\", \"type\": \"tv\"}"
+							"raw": "{\"description\": \"Шіномія Каґуя та Шіроґане Міюкі — члени Учнівської ради елітної академії Шючіїн, генії з геніїв. Після часу проведеного разом часу, у них зародилися почуття один до одного. Але, на жаль, але їхня гордість не дозволить зізнатися одне одному про свої почуття. Кохання — це війна, це безжальна битва, метою якої є змусити супротивника освідчитися!\", \"title\": {\"ua\": \"Каґуя-сама, Кохання як війна\", \"jp\": \"TEST\"}, \"slug\": \"kaguya-sama-35\", \"state\": \"ongoing\", \"genres\": [\"romance\"], \"voiceover\": [\"volbil\"], \"category\": \"tv\", \"team\": \"fanvox\"}"
 						},
 						"url": {
 							"raw": "http://0.0.0.0:1234/releases/new",
