@@ -6,13 +6,16 @@ from hikka.services.genres import GenreService
 from hikka.services.states import StateService
 from hikka.services.teams import TeamService
 from hikka.services.users import UserService
+from hikka.decorators import auth_required
 from hikka.upload import UploadHelper
 from flask_restful import Resource
 from flask_restful import reqparse
 from hikka.errors import abort
 from flask import Response
+from flask import request
 
 class NewRelease(Resource):
+    @auth_required
     def post(self):
         result = {"error": None, "data": {}}
 
@@ -26,7 +29,6 @@ class NewRelease(Resource):
         parser.add_argument("title", type=dict, required=True)
         parser.add_argument("slug", type=str, required=True)
         parser.add_argument("team", type=str, required=True)
-        parser.add_argument("auth", type=str, required=True)
         parser.add_argument("state", type=str, default=None)
 
         try:
@@ -39,15 +41,11 @@ class NewRelease(Resource):
         title_parser.add_argument("ua", type=str, location=("title",))
         title_args = title_parser.parse_args(req=args)
 
-        account = UserService.auth(args["auth"])
-        if account is None:
-            return abort("account", "not-found")
-
         team = TeamService.get_by_slug(args["team"])
         if team is None:
             return abort("team", "not-found")
 
-        if not PermissionService.check(account, f"team-{team.slug}", "admin"):
+        if not PermissionService.check(request.account, f"team-{team.slug}", "admin"):
             return abort("account", "permission")
 
         release = ReleaseService.get_by_slug(args["slug"])
@@ -67,8 +65,9 @@ class NewRelease(Resource):
 
         poster = None
         if args["poster"] is not None:
-            helper = UploadHelper(account, args["poster"], "poster")
+            helper = UploadHelper(request.account, args["poster"], "poster")
             data = helper.upload_image()
+
             if type(data) is Response:
                 return data
 
@@ -85,18 +84,18 @@ class NewRelease(Resource):
 
         subtitles = []
         for username in args["subtitles"]:
-            account = UserService.get_by_username(username)
-            if account is not None:
-                subtitles.append(account)
+            subtitles_account = UserService.get_by_username(username)
+            if subtitles_account is not None:
+                subtitles.append(subtitles_account)
 
             else:
                 return abort("account", "not-found")
 
         voiceover = []
         for username in args["voiceover"]:
-            account = UserService.get_by_username(username)
-            if account is not None:
-                voiceover.append(account)
+            voiceover_account = UserService.get_by_username(username)
+            if voiceover_account is not None:
+                voiceover.append(voiceover_account)
 
             else:
                 return abort("account", "not-found")

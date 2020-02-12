@@ -126,7 +126,6 @@ class UploadHelper(object):
 #         parser = reqparse.RequestParser()
 #         parser.add_argument("upload", type=FileStorage, location="files", default=None)
 #         parser.add_argument("type", type=str, required=True)
-#         parser.add_argument("auth", type=str, required=True)
 #         parser.add_argument("team", type=str)
 
 #         try:

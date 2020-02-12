@@ -1,12 +1,14 @@
 from hikka.services.permissions import PermissionService
 from hikka.services.teams import TeamService
-from hikka.services.users import UserService
 from hikka.services.files import FileService
+from hikka.decorators import auth_required
 from flask_restful import Resource
 from flask_restful import reqparse
 from hikka.errors import abort
+from flask import request
 
 class NewTeam(Resource):
+    @auth_required
     def post(self):
         result = {"error": None, "data": {}}
 
@@ -15,18 +17,13 @@ class NewTeam(Resource):
         parser.add_argument("avatar", type=str, default=None)
         parser.add_argument("name", type=str, required=True)
         parser.add_argument("slug", type=str, required=True)
-        parser.add_argument("auth", type=str, required=True)
 
         try:
             args = parser.parse_args()
         except Exception:
             return abort("general", "missing-field")
 
-        account = UserService.auth(args["auth"])
-        if account is None:
-            return abort("account", "not-found"),
-
-        if not PermissionService.check(account, "global", "teams"):
+        if not PermissionService.check(request.account, "global", "teams"):
             return abort("account", "permission")
 
         team = TeamService.get_by_slug(args["slug"])
@@ -38,8 +35,8 @@ class NewTeam(Resource):
             avatar = FileService.get_by_name(args["avatar"])
 
         team = TeamService.create(args["name"], args["slug"], args["description"])
-        PermissionService.add(account, f"team-{team.slug}", "admin")
-        TeamService.add_member(team, account)
+        PermissionService.add(request.account, f"team-{team.slug}", "admin")
+        TeamService.add_member(team, request.account)
 
         if avatar is not None:
             TeamService.add_avatar(team, avatar)

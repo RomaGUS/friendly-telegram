@@ -1,13 +1,15 @@
 from hikka.services.permissions import PermissionService
 from hikka.services.states import StateService
 from hikka.services.func import update_document
-from hikka.services.users import UserService
+from hikka.decorators import auth_required
 from flask_restful import Resource
 from flask_restful import reqparse
 from hikka.errors import abort
+from flask import request
 from hikka import utils
 
 class NewState(Resource):
+    @auth_required
     def post(self):
         result = {"error": None, "data": {}}
 
@@ -15,18 +17,13 @@ class NewState(Resource):
         parser.add_argument("description", type=str, default=None)
         parser.add_argument("name", type=str, required=True)
         parser.add_argument("slug", type=str, required=True)
-        parser.add_argument("auth", type=str, required=True)
 
         try:
             args = parser.parse_args()
         except Exception:
             return abort("general", "missing-field")
 
-        account = UserService.auth(args["auth"])
-        if account is None:
-            return abort("account", "not-found")
-
-        if not PermissionService.check(account, "global", "admin"):
+        if not PermissionService.check(request.account, "global", "admin"):
             return abort("account", "permission")
 
         state_check = StateService.get_by_slug(args["slug"])
@@ -43,12 +40,12 @@ class NewState(Resource):
         return result
 
 class UpdateState(Resource):
+    @auth_required
     def post(self):
         result = {"error": None, "data": {}}
 
         parser = reqparse.RequestParser()
         parser.add_argument("slug", type=str, required=True)
-        parser.add_argument("auth", type=str, required=True)
         parser.add_argument("params", type=dict, default={})
 
         try:
@@ -56,17 +53,7 @@ class UpdateState(Resource):
         except Exception:
             return abort("general", "missing-field")
 
-        params_parser = reqparse.RequestParser()
-        params_parser.add_argument("name", type=str, location=("params",))
-        params_parser.add_argument("slug", type=str, location=("params",))
-        params_parser.add_argument("description", type=str, location=("params",))
-        params_args = params_parser.parse_args(req=args)
-
-        account = UserService.auth(args["auth"])
-        if account is None:
-            return abort("account", "not-found")
-
-        if not PermissionService.check(account, "global", "admin"):
+        if not PermissionService.check(request.account, "global", "admin"):
             return abort("account", "permission")
 
         state = StateService.get_by_slug(args["slug"])
@@ -74,9 +61,13 @@ class UpdateState(Resource):
             return abort("state", "not-found")
 
         keys = ["name", "slug", "description"]
-        update = utils.filter_dict(params_args, keys)
+        update = utils.filter_dict(args["params"], keys)
         update_document(state, update)
-        state.save()
+
+        try:
+            state.save()
+        except Exception:
+            return abort("general", "empty-required")
 
         result["data"] = {
             "description": state.description,
