@@ -8,6 +8,14 @@ from flask_restful import reqparse
 from hikka.errors import abort
 from hikka import utils
 
+def get_service(service):
+    if service == "genre":
+        return GenreService
+    elif service == "category":
+        return CategoryService
+    elif service == "state":
+        return StateService
+
 class NewDescriptor(Resource):
     @auth_required
     @permission_required("global", "admin")
@@ -25,14 +33,9 @@ class NewDescriptor(Resource):
         except Exception:
             return abort("general", "missing-field")
 
-        if args["service"] == "genre":
-            service = GenreService
-        elif args["service"] == "category":
-            service = CategoryService
-        elif args["service"] == "state":
-            service = StateService
-
+        service = get_service(args["service"])
         check = service.get_by_slug(args["slug"])
+
         if check is not None:
             return abort(args["service"], "slug-exists")
 
@@ -61,14 +64,9 @@ class UpdateDescriptor(Resource):
         except Exception:
             return abort("general", "missing-field")
 
-        if args["service"] == "genre":
-            service = GenreService
-        elif args["service"] == "category":
-            service = CategoryService
-        elif args["service"] == "state":
-            service = StateService
-
+        service = get_service(args["service"])
         descriptor = service.get_by_slug(args["slug"])
+
         if descriptor is None:
             return abort(args["service"], "not-found")
 
