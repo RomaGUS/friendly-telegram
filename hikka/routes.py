@@ -1,7 +1,5 @@
-from hikka.modules import categories
+from hikka.modules import descriptors
 from hikka.modules import releases
-from hikka.modules import genres
-from hikka.modules import states
 from hikka.modules import teams
 from hikka.modules import auth
 from hikka import api
@@ -16,16 +14,8 @@ api.add_resource(auth.Test, "/auth/test")
 api.add_resource(teams.NewTeam, "/teams/new")
 
 # Genre routes
-api.add_resource(genres.NewGenre, "/genres/new")
-api.add_resource(genres.UpdateGenre, "/genres/update")
-
-# State routes
-api.add_resource(states.NewState, "/states/new")
-api.add_resource(states.UpdateState, "/states/update")
-
-# Category routes
-api.add_resource(categories.NewCategory, "/categories/new")
-api.add_resource(categories.UpdateCategory, "/categories/update")
+api.add_resource(descriptors.NewDescriptor, "/descriptors/new")
+api.add_resource(descriptors.UpdateDescriptor, "/descriptors/update")
 
 # Release routes
 api.add_resource(releases.NewRelease, "/releases/new")

@@ -1,18 +1,21 @@
 from hikka.decorators import auth_required, permission_required
 from hikka.services.categories import CategoryService
 from hikka.services.func import update_document
+from hikka.services.genres import GenreService
+from hikka.services.states import StateService
 from flask_restful import Resource
 from flask_restful import reqparse
 from hikka.errors import abort
 from hikka import utils
 
-class NewCategory(Resource):
+class NewDescriptor(Resource):
     @auth_required
     @permission_required("global", "admin")
     def post(self):
         result = {"error": None, "data": {}}
 
         parser = reqparse.RequestParser()
+        parser.add_argument("service", type=str, required=True, choices=("genre", "category", "state"))
         parser.add_argument("description", type=str, default=None)
         parser.add_argument("name", type=str, required=True)
         parser.add_argument("slug", type=str, required=True)
@@ -22,26 +25,34 @@ class NewCategory(Resource):
         except Exception:
             return abort("general", "missing-field")
 
-        category = CategoryService.get_by_slug(args["slug"])
-        if category is not None:
-            return abort("category", "slug-exists")
+        if args["service"] == "genre":
+            service = GenreService
+        elif args["service"] == "category":
+            service = CategoryService
+        elif args["service"] == "state":
+            service = StateService
 
-        category = CategoryService.create(args["name"], args["slug"], args["description"])
+        check = service.get_by_slug(args["slug"])
+        if check is not None:
+            return abort(args["service"], "slug-exists")
+
+        descriptor = service.create(args["name"], args["slug"], args["description"])
         result["data"] = {
-            "description": category.description,
-            "name": category.name,
-            "slug": category.slug
+            "description": descriptor.description,
+            "name": descriptor.name,
+            "slug": descriptor.slug
         }
 
         return result
 
-class UpdateCategory(Resource):
+class UpdateDescriptor(Resource):
     @auth_required
     @permission_required("global", "admin")
     def post(self):
         result = {"error": None, "data": {}}
 
         parser = reqparse.RequestParser()
+        parser.add_argument("service", type=str, required=True, choices=("genre", "category", "state"))
         parser.add_argument("slug", type=str, required=True)
         parser.add_argument("params", type=dict, default={})
 
@@ -50,23 +61,30 @@ class UpdateCategory(Resource):
         except Exception:
             return abort("general", "missing-field")
 
-        category = CategoryService.get_by_slug(args["slug"])
-        if category is None:
-            return abort("category", "not-found")
+        if args["service"] == "genre":
+            service = GenreService
+        elif args["service"] == "category":
+            service = CategoryService
+        elif args["service"] == "state":
+            service = StateService
+
+        descriptor = service.get_by_slug(args["slug"])
+        if descriptor is None:
+            return abort(args["service"], "not-found")
 
         keys = ["name", "slug", "description"]
         update = utils.filter_dict(args["params"], keys)
-        update_document(category, update)
+        update_document(descriptor, update)
 
         try:
-            category.save()
+            descriptor.save()
         except Exception:
             return abort("general", "empty-required")
 
         result["data"] = {
-            "description": category.description,
-            "name": category.name,
-            "slug": category.slug
+            "description": descriptor.description,
+            "name": descriptor.name,
+            "slug": descriptor.slug
         }
 
         return result
