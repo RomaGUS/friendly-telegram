@@ -108,45 +108,6 @@
 						}
 					},
 					"response": []
-				},
-				{
-					"name": "Activate Copy",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"name": "Content-Type",
-								"type": "text",
-								"value": "application/json"
-							},
-							{
-								"key": "Authentication",
-								"value": "3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuYpbsSVbHxJnUepd.ZMKC1hNPqdfkmnGBbzBZRyFxaagjRewcWqBUd2dc72GrWwkAwFxBXG35FvfGc2WrNoNGMsY6L9V4cnzwrBV4j6.UtArtJ5ZQn3PJcd6WvTb6EgWNTZULwQt7wwbV5Qje3rR79UvUp4KgHtFM8HbgmpedyNjCLkndzhF4Nt7Dj72YJ9BveguY",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\"token\": \"3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuaKHVFGSweqHCNPp.H7MGKU95BMZZ2tUjHy5JkLevZFKZGYfUu6gzsQLe4825QPQiUBHBaRY4dGNnK3pSyMroKvXdCpSaUUvSY9t3LGdwW6nWT.GYfvzpc9ovBDiyBsTbd5Wpz4xXYaM5Y876Dg2sfuXVSHeFz62\"}"
-						},
-						"url": {
-							"raw": "http://0.0.0.0:1234/auth/test",
-							"protocol": "http",
-							"host": [
-								"0",
-								"0",
-								"0",
-								"0"
-							],
-							"port": "1234",
-							"path": [
-								"auth",
-								"test"
-							]
-						}
-					},
-					"response": []
 				}
 			],
 			"protocolProfileBehavior": {}
@@ -197,10 +158,10 @@
 			"protocolProfileBehavior": {}
 		},
 		{
-			"name": "Genres",
+			"name": "Descriptors",
 			"item": [
 				{
-					"name": "New Genre",
+					"name": "New Descriptor",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -218,10 +179,10 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"name\": \"Романтика\", \"slug\": \"romance\"}"
+							"raw": "{\"name\": \"Романтика\", \"slug\": \"romance\", \"service\": \"genre\"}"
 						},
 						"url": {
-							"raw": "http://0.0.0.0:1234/genres/new",
+							"raw": "http://0.0.0.0:1234/descriptors/new",
 							"protocol": "http",
 							"host": [
 								"0",
@@ -231,7 +192,7 @@
 							],
 							"port": "1234",
 							"path": [
-								"genres",
+								"descriptors",
 								"new"
 							]
 						}
@@ -239,7 +200,7 @@
 					"response": []
 				},
 				{
-					"name": "Update Genre",
+					"name": "Update Descriptor",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -257,10 +218,10 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"slug\": \"romance\", \"params\": {\"description\": \"111\"}}"
+							"raw": "{\"slug\": \"romance\", \"service\": \"genre\", \"params\": {\"description\": \"111\"}}"
 						},
 						"url": {
-							"raw": "http://0.0.0.0:1234/genres/update",
+							"raw": "http://0.0.0.0:1234/descriptors/update",
 							"protocol": "http",
 							"host": [
 								"0",
@@ -270,175 +231,7 @@
 							],
 							"port": "1234",
 							"path": [
-								"genres",
-								"update"
-							]
-						}
-					},
-					"response": []
-				}
-			],
-			"protocolProfileBehavior": {}
-		},
-		{
-			"name": "States",
-			"item": [
-				{
-					"name": "New State",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"name": "Content-Type",
-								"type": "text",
-								"value": "application/json"
-							},
-							{
-								"key": "Authentication",
-								"value": "3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuYpbsSVbHxJnUepd.ZMKC1hNPqdfkmnGBbzBZRyFxaagjRewcWqBUd2dc72GrWwkAwFxBXG35FvfGc2WrNoNGMsY6L9V4cnzwrBV4j6.UtArtJ5ZQn3PJcd6WvTb6EgWNTZULwQt7wwbV5Qje3rR79UvUp4KgHtFM8HbgmpedyNjCLkndzhF4Nt7Dj72YJ9BveguY",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\"name\": \"Романтика\", \"slug\": \"romance\"}"
-						},
-						"url": {
-							"raw": "http://0.0.0.0:1234/states/new",
-							"protocol": "http",
-							"host": [
-								"0",
-								"0",
-								"0",
-								"0"
-							],
-							"port": "1234",
-							"path": [
-								"states",
-								"new"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update State",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"name": "Content-Type",
-								"type": "text",
-								"value": "application/json"
-							},
-							{
-								"key": "Authentication",
-								"value": "3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuYpbsSVbHxJnUepd.ZMKC1hNPqdfkmnGBbzBZRyFxaagjRewcWqBUd2dc72GrWwkAwFxBXG35FvfGc2WrNoNGMsY6L9V4cnzwrBV4j6.UtArtJ5ZQn3PJcd6WvTb6EgWNTZULwQt7wwbV5Qje3rR79UvUp4KgHtFM8HbgmpedyNjCLkndzhF4Nt7Dj72YJ9BveguY",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\"slug\": \"romance\", \"params\": {\"slug\": \"ongoing\", \"name\": \"Онгоїнг\"}}"
-						},
-						"url": {
-							"raw": "http://0.0.0.0:1234/states/update",
-							"protocol": "http",
-							"host": [
-								"0",
-								"0",
-								"0",
-								"0"
-							],
-							"port": "1234",
-							"path": [
-								"states",
-								"update"
-							]
-						}
-					},
-					"response": []
-				}
-			],
-			"protocolProfileBehavior": {}
-		},
-		{
-			"name": "Categories",
-			"item": [
-				{
-					"name": "New Category",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"name": "Content-Type",
-								"type": "text",
-								"value": "application/json"
-							},
-							{
-								"key": "Authentication",
-								"value": "3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuYpbsSVbHxJnUepd.ZMKC1hNPqdfkmnGBbzBZRyFxaagjRewcWqBUd2dc72GrWwkAwFxBXG35FvfGc2WrNoNGMsY6L9V4cnzwrBV4j6.UtArtJ5ZQn3PJcd6WvTb6EgWNTZULwQt7wwbV5Qje3rR79UvUp4KgHtFM8HbgmpedyNjCLkndzhF4Nt7Dj72YJ9BveguY",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\"name\": \"TV\", \"slug\": \"tv\"}"
-						},
-						"url": {
-							"raw": "http://0.0.0.0:1234/categories/new",
-							"protocol": "http",
-							"host": [
-								"0",
-								"0",
-								"0",
-								"0"
-							],
-							"port": "1234",
-							"path": [
-								"categories",
-								"new"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update Category",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"name": "Content-Type",
-								"type": "text",
-								"value": "application/json"
-							},
-							{
-								"key": "Authentication",
-								"value": "3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuYpbsSVbHxJnUepd.ZMKC1hNPqdfkmnGBbzBZRyFxaagjRewcWqBUd2dc72GrWwkAwFxBXG35FvfGc2WrNoNGMsY6L9V4cnzwrBV4j6.UtArtJ5ZQn3PJcd6WvTb6EgWNTZULwQt7wwbV5Qje3rR79UvUp4KgHtFM8HbgmpedyNjCLkndzhF4Nt7Dj72YJ9BveguY",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\"slug\": \"tv\", \"params\": {\"description\": null}}"
-						},
-						"url": {
-							"raw": "http://0.0.0.0:1234/categories/update",
-							"protocol": "http",
-							"host": [
-								"0",
-								"0",
-								"0",
-								"0"
-							],
-							"port": "1234",
-							"path": [
-								"categories",
+								"descriptors",
 								"update"
 							]
 						}
@@ -470,7 +263,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"description\": \"Шіномія Каґуя та Шіроґане Міюкі — члени Учнівської ради елітної академії Шючіїн, генії з геніїв. Після часу проведеного разом часу, у них зародилися почуття один до одного. Але, на жаль, але їхня гордість не дозволить зізнатися одне одному про свої почуття. Кохання — це війна, це безжальна битва, метою якої є змусити супротивника освідчитися!\", \"title\": {\"ua\": \"Каґуя-сама, Кохання як війна\", \"jp\": \"TEST\"}, \"slug\": \"kaguya-sama-35\", \"state\": \"ongoing\", \"genres\": [\"romance\"], \"voiceover\": [\"volbil\"], \"category\": \"tv\", \"team\": \"fanvox\"}"
+							"raw": "{\"description\": \"Шіномія Каґуя та Шіроґане Міюкі — члени Учнівської ради елітної академії Шючіїн, генії з геніїв. Після часу проведеного разом часу, у них зародилися почуття один до одного. Але, на жаль, але їхня гордість не дозволить зізнатися одне одному про свої почуття. Кохання — це війна, це безжальна битва, метою якої є змусити супротивника освідчитися!\", \"title\": {\"ua\": \"Каґуя-сама, Кохання як війна\", \"jp\": \"TEST\"}, \"slug\": \"kaguya-sama\", \"state\": \"ongoing\", \"genres\": [\"romance\"], \"voiceover\": [\"volbil\"], \"category\": \"tv\", \"team\": \"fanvox\"}"
 						},
 						"url": {
 							"raw": "http://0.0.0.0:1234/releases/new",
@@ -485,6 +278,172 @@
 							"path": [
 								"releases",
 								"new"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Release",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authentication",
+								"value": "3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuYpbsSVbHxJnUepd.ZMKC1hNPqdfkmnGBbzBZRyFxaagjRewcWqBUd2dc72GrWwkAwFxBXG35FvfGc2WrNoNGMsY6L9V4cnzwrBV4j6.UtArtJ5ZQn3PJcd6WvTb6EgWNTZULwQt7wwbV5Qje3rR79UvUp4KgHtFM8HbgmpedyNjCLkndzhF4Nt7Dj72YJ9BveguY",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"description\": \"Шіномія Каґуя та Шіроґане Міюкі — члени Учнівської ради елітної академії Шючіїн, генії з геніїв. Після часу проведеного разом часу, у них зародилися почуття один до одного. Але, на жаль, але їхня гордість не дозволить зізнатися одне одному про свої почуття. Кохання — це війна, це безжальна битва, метою якої є змусити супротивника освідчитися!\", \"title\": {\"ua\": \"Каґуя-сама, Кохання як війна\", \"jp\": \"TEST\"}, \"slug\": \"kaguya-sama\", \"state\": \"ongoing\", \"genres\": [\"romance\"], \"voiceover\": [\"volbil\"], \"category\": \"tv\", \"team\": \"fanvox\"}"
+						},
+						"url": {
+							"raw": "http://0.0.0.0:1234/releases/get/kaguya-sama",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "1234",
+							"path": [
+								"releases",
+								"get",
+								"kaguya-sama"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Episodes",
+			"item": [
+				{
+					"name": "Add Episode",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authentication",
+								"value": "3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuYpbsSVbHxJnUepd.ZMKC1hNPqdfkmnGBbzBZRyFxaagjRewcWqBUd2dc72GrWwkAwFxBXG35FvfGc2WrNoNGMsY6L9V4cnzwrBV4j6.UtArtJ5ZQn3PJcd6WvTb6EgWNTZULwQt7wwbV5Qje3rR79UvUp4KgHtFM8HbgmpedyNjCLkndzhF4Nt7Dj72YJ9BveguY",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"video\": null, \"position\": 0, \"team\": \"fanvox\", \"slug\": \"kaguya-sama\", \"name\": \"Перша серія\"}"
+						},
+						"url": {
+							"raw": "http://0.0.0.0:1234/episodes/add",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "1234",
+							"path": [
+								"episodes",
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Episode",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authentication",
+								"type": "text",
+								"value": "3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuYpbsSVbHxJnUepd.ZMKC1hNPqdfkmnGBbzBZRyFxaagjRewcWqBUd2dc72GrWwkAwFxBXG35FvfGc2WrNoNGMsY6L9V4cnzwrBV4j6.UtArtJ5ZQn3PJcd6WvTb6EgWNTZULwQt7wwbV5Qje3rR79UvUp4KgHtFM8HbgmpedyNjCLkndzhF4Nt7Dj72YJ9BveguY"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"position\": 0, \"team\": \"fanvox\", \"slug\": \"kaguya-sama\", \"params\": {\"name\": \"TEST\", \"video\": \"HUI\"}}"
+						},
+						"url": {
+							"raw": "http://0.0.0.0:1234/episodes/update",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "1234",
+							"path": [
+								"episodes",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Episode",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authentication",
+								"type": "text",
+								"value": "3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuYpbsSVbHxJnUepd.ZMKC1hNPqdfkmnGBbzBZRyFxaagjRewcWqBUd2dc72GrWwkAwFxBXG35FvfGc2WrNoNGMsY6L9V4cnzwrBV4j6.UtArtJ5ZQn3PJcd6WvTb6EgWNTZULwQt7wwbV5Qje3rR79UvUp4KgHtFM8HbgmpedyNjCLkndzhF4Nt7Dj72YJ9BveguY"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"position\": 0, \"team\": \"fanvox\", \"slug\": \"kaguya-sama\"}"
+						},
+						"url": {
+							"raw": "http://0.0.0.0:1234/episodes/delete",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "1234",
+							"path": [
+								"episodes",
+								"delete"
 							]
 						}
 					},
