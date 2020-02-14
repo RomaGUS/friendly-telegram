@@ -114,6 +114,10 @@ class UpdateEpisode(Resource):
             if args["position"] < 0:
                 return abort("general", "out-of-range")
 
+            episode_check = ReleaseService.find_position(release, args["position"])
+            if episode_check is not None:
+                return abort("episodes", "position-exists")
+
             position = args["params"]["position"]
 
         ReleaseService.remove_episode(release, episode)
