@@ -47,10 +47,6 @@ class NewTeam(Resource):
         if avatar is not None:
             TeamService.update_avatar(team, avatar)
 
-        result["data"] = {
-            "description": team.description,
-            "name": team.name,
-            "slug": team.slug
-        }
+        result["data"] = team.dict()
 
         return result

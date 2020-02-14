@@ -121,9 +121,3 @@ class Activate(Resource):
         }
 
         return result
-
-class Test(Resource):
-    @auth_required
-    @permission_required("global", "admin")
-    def post(self):
-        return "WORKING"

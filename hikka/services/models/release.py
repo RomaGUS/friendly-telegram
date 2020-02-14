@@ -61,14 +61,12 @@ class Release(mongoengine.Document):
             "category": self.category.dict(),
             "state": self.state.dict(),
             "slug": self.slug,
+            "poster": None,
             "subtitles": [],
             "voiceover": [],
             "genres": [],
             "teams": []
         }
-
-        if self.poster is not None:
-            data["poster"] = self.poster.link()
 
         for account in self.subtitles:
             data["subtitles"].append(account.dict())
@@ -81,5 +79,9 @@ class Release(mongoengine.Document):
 
         for team in self.teams:
             data["teams"].append(team.dict())
+
+        if self.poster is not None:
+            if self.poster.uploaded is True:
+                data["poster"] = self.poster.link()
 
         return data

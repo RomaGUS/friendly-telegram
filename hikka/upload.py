@@ -1,12 +1,5 @@
-from hikka.services.permissions import PermissionService
-from werkzeug.datastructures import FileStorage
 from hikka.services.files import FileService
-from hikka.services.teams import TeamService
-from hikka.services.users import UserService
-from flask_restful import Resource
-from flask_restful import reqparse
 from hikka.errors import abort
-from flask import Response
 from hikka import spaces
 from hikka import utils
 from PIL import Image
@@ -86,6 +79,9 @@ class UploadHelper(object):
         return self.file
 
     def upload_video(self):
+        if not self.is_video():
+            return abort("file", "bad-mime-type")
+
         spaces_file_name = self.file.name + "." + "mp4"
 
         os.makedirs(self.tmp_dir)
@@ -111,6 +107,9 @@ class UploadHelper(object):
     def is_image(self):
         return self.upload.mimetype in supported_images
 
+    def is_video(self):
+        return self.upload.mimetype in supported_videos
+
     def size(self):
         file_size = 0
         self.upload.seek(0, os.SEEK_END)
@@ -118,54 +117,3 @@ class UploadHelper(object):
         self.upload.seek(0, 0)
 
         return file_size
-
-# class Upload(Resource):
-#     def post(self):
-#         result = {"error": None, "data": {}}
-
-#         parser = reqparse.RequestParser()
-#         parser.add_argument("upload", type=FileStorage, location="files", default=None)
-#         parser.add_argument("type", type=str, required=True)
-#         parser.add_argument("team", type=str)
-
-#         try:
-#             args = parser.parse_args()
-#         except Exception:
-#             return abort("general", "missing-field")
-
-#         account = UserService.auth(args["auth"])
-#         if account is None:
-#             return abort("account", "not-found")
-
-#         if args["upload"] is None:
-#             return abort("file", "not-found")
-
-#         helper = UploadHelper(account, args["upload"], args["type"])
-
-#         if helper.upload.mimetype in supported_images:
-#             data = helper.upload_image()
-
-#         elif helper.upload.mimetype in supported_videos:
-#             if helper.upload_type not in supported_video_types:
-#                 return abort("file", "bad-upload-type")
-
-#             if helper.upload_type == "release":
-#                 team = TeamService.get_by_slug(args["team"])
-#                 if team is None:
-#                     return abort("team", "not-found")
-
-#                 if not PermissionService.check(account, f"team-{team.slug}", "admin"):
-#                     return abort("account", "permission")
-
-#             data = helper.upload_video()
-
-#         else:
-#             return abort("file", "bad-mime-type")
-
-#         if type(data) is Response:
-#             return data
-
-#         result["data"]["path"] = data.link()
-#         result["data"]["name"] = data.name
-
-#         return result

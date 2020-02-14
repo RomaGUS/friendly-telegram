@@ -8,7 +8,6 @@ from hikka import api
 api.add_resource(auth.Join, "/auth/join")
 api.add_resource(auth.Login, "/auth/login")
 api.add_resource(auth.Activate, "/auth/activate")
-api.add_resource(auth.Test, "/auth/test")
 
 # Team routes
 api.add_resource(teams.NewTeam, "/teams/new")
@@ -20,3 +19,5 @@ api.add_resource(descriptors.UpdateDescriptor, "/descriptors/update")
 # Release routes
 api.add_resource(releases.NewRelease, "/releases/new")
 api.add_resource(releases.GetRelease, "/releases/get/<string:slug>")
+api.add_resource(releases.ReleasesList, "/releases")
+api.add_resource(releases.Test, "/releases/test")

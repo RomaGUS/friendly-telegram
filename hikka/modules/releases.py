@@ -121,9 +121,61 @@ class NewRelease(Resource):
         return result
 
 class GetRelease(Resource):
-    def get(self, slug):
-        release = ReleaseService.get_by_slug(slug)
+    def post(self, slug):
+        release = ReleaseService.list(slug)
         if release is None:
             return abort("release", "not-found")
 
         return release.dict()
+
+class ReleasesList(Resource):
+    def get(self):
+        result = {"error": None, "data": []}
+
+        parser = reqparse.RequestParser()
+        parser.add_argument("page", type=int, default=0)
+
+        try:
+            args = parser.parse_args()
+        except Exception:
+            return abort("general", "missing-field")
+
+        releases = ReleaseService.list(args["page"])
+
+        for release in releases:
+            result["data"].append(release.dict())
+
+        return result
+
+class ReleaseEpisode(Resource):
+    @auth_required
+    def post(self):
+        result = {"error": None, "data": {}}
+
+        parser = reqparse.RequestParser()
+        parser.add_argument("video", type=FileStorage, location="files", required=True)
+        parser.add_argument("position", type=str, required=True)
+        parser.add_argument("name", type=str, required=True)
+        parser.add_argument("team", type=str, required=True)
+
+        try:
+            args = parser.parse_args()
+        except Exception:
+            return abort("general", "missing-field")
+
+        team = TeamService.get_by_slug(args["team"])
+        if team is None:
+            return abort("team", "not-found")
+
+        helper = UploadHelper(request.account, args["video"], "video")
+        data = helper.upload_image()
+
+        if type(data) is Response:
+            return data
+
+        video = data
+
+class Test(Resource):
+    def get(self):
+        episode = ReleaseService.get_episode("slug")
+        print(episode)

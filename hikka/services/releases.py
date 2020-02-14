@@ -53,7 +53,7 @@ class ReleaseService:
         return release
 
     @classmethod
-    def list(cls, page=0, limit=10) -> List[Release]:
+    def list(cls, page=0, limit=20) -> List[Release]:
         offset = page * limit
         releases = Release.objects().filter().limit(limit).skip(offset)
         return list(releases)

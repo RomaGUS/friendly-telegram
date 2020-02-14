@@ -8,6 +8,8 @@ from flask_restful import reqparse
 from hikka.errors import abort
 from hikka import utils
 
+choices = ("genre", "category", "state")
+
 def get_service(service):
     if service == "genre":
         return GenreService
@@ -23,7 +25,7 @@ class NewDescriptor(Resource):
         result = {"error": None, "data": {}}
 
         parser = reqparse.RequestParser()
-        parser.add_argument("service", type=str, required=True, choices=("genre", "category", "state"))
+        parser.add_argument("service", type=str, required=True, choices=choices)
         parser.add_argument("description", type=str, default=None)
         parser.add_argument("name", type=str, required=True)
         parser.add_argument("slug", type=str, required=True)
@@ -35,16 +37,11 @@ class NewDescriptor(Resource):
 
         service = get_service(args["service"])
         check = service.get_by_slug(args["slug"])
-
         if check is not None:
             return abort(args["service"], "slug-exists")
 
         descriptor = service.create(args["name"], args["slug"], args["description"])
-        result["data"] = {
-            "description": descriptor.description,
-            "name": descriptor.name,
-            "slug": descriptor.slug
-        }
+        result["data"] = descriptor.dict()
 
         return result
 
@@ -55,7 +52,7 @@ class UpdateDescriptor(Resource):
         result = {"error": None, "data": {}}
 
         parser = reqparse.RequestParser()
-        parser.add_argument("service", type=str, required=True, choices=("genre", "category", "state"))
+        parser.add_argument("service", type=str, required=True, choices=choices)
         parser.add_argument("slug", type=str, required=True)
         parser.add_argument("params", type=dict, default={})
 
@@ -66,7 +63,6 @@ class UpdateDescriptor(Resource):
 
         service = get_service(args["service"])
         descriptor = service.get_by_slug(args["slug"])
-
         if descriptor is None:
             return abort(args["service"], "not-found")
 
@@ -79,10 +75,6 @@ class UpdateDescriptor(Resource):
         except Exception:
             return abort("general", "empty-required")
 
-        result["data"] = {
-            "description": descriptor.description,
-            "name": descriptor.name,
-            "slug": descriptor.slug
-        }
+        result["data"] = descriptor.dict()
 
         return result
