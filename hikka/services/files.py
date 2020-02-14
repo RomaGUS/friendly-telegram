@@ -18,6 +18,6 @@ class FileService:
     def destroy(cls, file: File):
         if file.uploaded and file.path is not None:
             fs = spaces.init_fs()
-            fs.rm(file.path())
+            fs.rm(file.spaces())
 
         file.delete()

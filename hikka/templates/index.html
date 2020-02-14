@@ -21,19 +21,12 @@
 		<title>Document</title>
 	</head>
 	<body>
-		<div class="input-group mb-3">
-			<select id="type" class="custom-select">
-				<option value="avatar">avatar</option>
-				<option value="poster">poster</option>
-				<option value="release">release</option>
-			</select>
-			<div class="input-group-append">
-				<button type="submit" id="btnSubmit" class="btn btn-primary">Upload</button>
-			</div>
+		<div class="input-group-append">
+			<button type="submit" id="btnSubmit" class="btn btn-primary">Upload</button>
 		</div>
 
 		<form method="post" enctype="multipart/form-data" id="fileUploadForm">
-			<input name="upload" type="file">
+			<input name="video" type="file">
 		</form>
 
 		<img id="upload-preview" src="" alt="">
@@ -43,7 +36,7 @@
 		<hr>
 
 		<video id=example-video width=960 height=540 class="video-js vjs-default-skin" controls>
-			<source src="https://cdn.hikka.io/release/54ea7ceddf3ee8a574a5d1f721da7ced/14bfacaf763ea655b6c25e5bc701b9b4.mp4" type="video/mp4">
+			<source src="https://cdn.hikka.io/video/54ea7ceddf3ee8a574a5d1f721da7ced/bfc40344235372b8964a66f6a93d34e5.mp4" type="video/mp4">
 		</video>
 
 		<script>
@@ -61,24 +54,23 @@
 					e.preventDefault();
 					var form = $('#fileUploadForm')[0];
 					var data = new FormData(form)
-					var release = $("#type").val()
 
-					data.append("type", release)
-					data.append("auth", "3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuYpbsSVbHxJnUepd.ZMKC1hNPqdfkmnGBbzBZRyFxaagjRewcWqBUd2dc72GrWwjwm6nZnjuHTWGpUaqZmYJe7gpHiQGNQVvjhFRTpR.Bg2wiT4yniUPTEMqWLqi5NUaHSAUqHy479qhcb81zBgqwgGEzgaV2zpZGmddruAphxt7C3Q13eStctY3HTvfAjU5zdu3V")
-
-					if (["release", "poster"].includes(release)) {
-						data.append("team", "fanvox")
-					}
+					data.append("position", 0)
+					data.append("team", "fanvox")
+					data.append("slug", "kaguya-sama")
 
 					$.ajax({
 						type: "POST",
 						enctype: "multipart/form-data",
-						url: "/files/upload",
+						url: "/episodes/update",
 						data: data,
 						processData: false,
 						contentType: false,
 						cache: false,
 						timeout: 600000,
+						beforeSend: function(request) {
+							request.setRequestHeader("Authentication", "3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuYpbsSVbHxJnUepd.ZMKC1hNPqdfkmnGBbzBZRyFxaagjRewcWqBUd2dc72GrWwkGDtq5LS4dnnL5n8BWk79o7e4xHHfdXZKZaPJsxu.Ns4b38iy3JN2P5aPi6FJ7RkayTjMkE7CfsxHnnEb5Sows8ejiFks59EcgTBYPbGvR7em3iaagQTq7NY6oDBmGaH2rLKhf");
+						},
 						xhr: function() {
 								var myXhr = $.ajaxSettings.xhr();
 								if(myXhr.upload){
@@ -88,7 +80,6 @@
 						},
 						success: function (data) {
 							console.log("SUCCESS : ", data);
-							$("#upload-preview").attr("src", data.data.path)
 						},
 						error: function (e) {
 							console.log("ERROR : ", e.responseJSON);

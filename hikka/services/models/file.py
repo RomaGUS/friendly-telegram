@@ -20,9 +20,11 @@ class File(mongoengine.Document):
 
     def link(self):
         """Return CDN link"""
+        if self.path is None:
+            return None
+
         return config.cdn + self.path
 
-    def path(self):
+    def spaces(self):
         """Return Spaces path"""
-        name = config.spaces["name"]
-        return f"/{name}/{self.path}"
+        return config.spaces["name"] + self.path

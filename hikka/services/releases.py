@@ -48,6 +48,28 @@ class ReleaseService:
         return release
 
     @classmethod
+    def add_episode(cls, release: Release, episode: Episode):
+        release.episodes.append(episode)
+        release.save()
+
+    @classmethod
+    def remove_episode(cls, release: Release, episode: Episode):
+        if episode in release.episodes:
+            index = release.episodes.index(episode)
+            release.episodes.pop(index)
+
+        release.save()
+
+    @classmethod
+    def find_position(cls, release: Release, position: int):
+        episode = None
+        for release_episode in release.episodes:
+            if release_episode.position == position:
+                episode = release_episode
+
+        return episode
+
+    @classmethod
     def get_by_slug(cls, slug: str):
         release = Release.objects().filter(slug=slug).first()
         return release

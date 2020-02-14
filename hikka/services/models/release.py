@@ -18,9 +18,16 @@ class Title(mongoengine.EmbeddedDocument):
         }
 
 class Episode(mongoengine.EmbeddedDocument):
-    name = mongoengine.StringField(required=True, default=None)
     position = mongoengine.IntField(required=True)
+    name = mongoengine.StringField(default=None)
     video = mongoengine.ReferenceField("File")
+
+    def dict(self):
+        return {
+            "video": self.video.link(),
+            "position": self.position,
+            "name": self.name
+        }
 
 class Release(mongoengine.Document):
     title = mongoengine.EmbeddedDocumentField(Title, required=True)
@@ -54,7 +61,7 @@ class Release(mongoengine.Document):
         ]
     }
 
-    def dict(self):
+    def dict(self, episodes=False):
         data = {
             "description": self.description,
             "title": self.title.dict(),
@@ -83,5 +90,11 @@ class Release(mongoengine.Document):
         if self.poster is not None:
             if self.poster.uploaded is True:
                 data["poster"] = self.poster.link()
+
+        if episodes:
+            data["episodes"] = []
+
+            for episode in self.episodes:
+                data["episodes"].append(episode.dict())
 
         return data

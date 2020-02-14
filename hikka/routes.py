@@ -1,5 +1,6 @@
 from hikka.modules import descriptors
 from hikka.modules import releases
+from hikka.modules import episodes
 from hikka.modules import teams
 from hikka.modules import auth
 from hikka import api
@@ -20,4 +21,7 @@ api.add_resource(descriptors.UpdateDescriptor, "/descriptors/update")
 api.add_resource(releases.NewRelease, "/releases/new")
 api.add_resource(releases.GetRelease, "/releases/get/<string:slug>")
 api.add_resource(releases.ReleasesList, "/releases")
-api.add_resource(releases.Test, "/releases/test")
+
+api.add_resource(episodes.AddEpisode, "/episodes/add")
+api.add_resource(episodes.UpdateEpisode, "/episodes/update")
+api.add_resource(episodes.DeleteEpisode, "/episodes/delete")

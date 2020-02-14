@@ -45,8 +45,13 @@ errors = {
         "token-invalid-type": "Invalid token type",
         "pagination-error": "Pagination is out of range",
         "missing-field": "Required field is missing",
-        "empty-required": "Required field can't be empty"
-    }
+        "empty-required": "Required field can't be empty",
+        "out-of-range": "Number is out of range"
+    },
+    "episodes": {
+        "position-exists": "Episode with this number exists",
+        "not-found": "Episode not found"
+    },
 }
 
 def get(scope, message):
