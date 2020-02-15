@@ -20,11 +20,7 @@ class NewTeam(Resource):
         parser.add_argument("description", type=str, required=True)
         parser.add_argument("name", type=str, required=True)
         parser.add_argument("slug", type=str, required=True)
-
-        try:
-            args = parser.parse_args()
-        except Exception:
-            return abort("general", "missing-field")
+        args = parser.parse_args()
 
         team = TeamService.get_by_slug(args["slug"])
         if team is not None:

@@ -22,11 +22,7 @@ class AddEpisode(Resource):
         parser.add_argument("team", type=str, required=True)
         parser.add_argument("slug", type=str, required=True)
         parser.add_argument("name", type=str, default=None)
-
-        try:
-            args = parser.parse_args()
-        except Exception:
-            return abort("general", "missing-field")
+        args = parser.parse_args()
 
         if args["position"] < 0:
             return abort("general", "out-of-range")
@@ -73,11 +69,7 @@ class UpdateEpisode(Resource):
         parser.add_argument("team", type=str, required=True)
         parser.add_argument("slug", type=str, required=True)
         parser.add_argument("params", type=dict, default={})
-
-        try:
-            args = parser.parse_args()
-        except Exception:
-            return abort("general", "missing-field")
+        args = parser.parse_args()
 
         team = TeamService.get_by_slug(args["team"])
         if team is None:
@@ -136,11 +128,7 @@ class DeleteEpisode(Resource):
         parser.add_argument("position", type=int, required=True)
         parser.add_argument("team", type=str, required=True)
         parser.add_argument("slug", type=str, required=True)
-
-        try:
-            args = parser.parse_args()
-        except Exception:
-            return abort("general", "missing-field")
+        args = parser.parse_args()
 
         team = TeamService.get_by_slug(args["team"])
         if team is None:

@@ -1,4 +1,6 @@
+from flask import abort as flask_abort
 from flask import jsonify
+import flask_restful
 
 errors = {
     "account": {
@@ -46,13 +48,18 @@ errors = {
         "pagination-error": "Pagination is out of range",
         "missing-field": "Required field is missing",
         "empty-required": "Required field can't be empty",
-        "out-of-range": "Number is out of range"
+        "out-of-range": "Number is out of range",
+        "method-not-allowed": "Method not allowed"
     },
     "episodes": {
         "position-exists": "Episode with this number exists",
         "not-found": "Episode not found"
     },
 }
+
+class Api(flask_restful.Api):
+    def error_router(self, original_handler, e):
+        return original_handler(e)
 
 def get(scope, message):
     error_code = scope.title()
@@ -64,15 +71,18 @@ def get(scope, message):
         error_message = "Unknown error"
 
     return {
-        "message": error_message,
-        "code": error_code
+        "error": {
+            "message": error_message,
+            "code": error_code
+        },
+        "data": {}
     }
 
+def reqparse_abort(http_status_code, **kwargs):
+    flask_abort(jsonify(get("general", "missing-field")))
+
 def abort(scope, message, status_code=400):
-    response = jsonify({
-        "error": get(scope, message),
-        "data": {}
-    })
+    response = jsonify(get(scope, message))
 
     response.status_code = status_code
     return response

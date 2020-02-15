@@ -30,11 +30,7 @@ class NewRelease(Resource):
         parser.add_argument("slug", type=str, required=True)
         parser.add_argument("team", type=str, required=True)
         parser.add_argument("state", type=str, default=None)
-
-        try:
-            args = parser.parse_args()
-        except Exception:
-            return abort("general", "missing-field")
+        args = parser.parse_args()
 
         title_parser = reqparse.RequestParser()
         title_parser.add_argument("jp", type=str, default=None, location=("title",))
@@ -133,14 +129,9 @@ class ReleasesList(Resource):
 
         parser = reqparse.RequestParser()
         parser.add_argument("page", type=int, default=0)
-
-        try:
-            args = parser.parse_args()
-        except Exception:
-            return abort("general", "missing-field")
+        args = parser.parse_args()
 
         releases = ReleaseService.list(args["page"])
-
         for release in releases:
             result["data"].append(release.dict())
 

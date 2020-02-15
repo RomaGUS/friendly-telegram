@@ -16,11 +16,7 @@ class Join(Resource):
         parser.add_argument("username", type=str, required=True)
         parser.add_argument("password", type=str, required=True)
         parser.add_argument("email", type=str, required=True)
-
-        try:
-            args = parser.parse_args()
-        except Exception:
-            return abort("general", "missing-field")
+        args = parser.parse_args()
 
         account = UserService.get_by_username(args["username"])
         if account is not None:
@@ -60,11 +56,7 @@ class Login(Resource):
         parser = reqparse.RequestParser()
         parser.add_argument("password", type=str, required=True)
         parser.add_argument("email", type=str, required=True)
-
-        try:
-            args = parser.parse_args()
-        except Exception:
-            return abort("general", "missing-field")
+        args = parser.parse_args()
 
         account = UserService.get_by_email(args["email"])
         if account is None:
@@ -92,11 +84,7 @@ class Activate(Resource):
 
         parser = reqparse.RequestParser()
         parser.add_argument("token", type=str, required=True)
-
-        try:
-            args = parser.parse_args()
-        except Exception:
-            return abort("general", "missing-field")
+        args = parser.parse_args()
 
         data = Token.validate(args["token"])
         if not data["valid"]:

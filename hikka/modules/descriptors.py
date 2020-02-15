@@ -29,11 +29,7 @@ class NewDescriptor(Resource):
         parser.add_argument("description", type=str, default=None)
         parser.add_argument("name", type=str, required=True)
         parser.add_argument("slug", type=str, required=True)
-
-        try:
-            args = parser.parse_args()
-        except Exception:
-            return abort("general", "missing-field")
+        args = parser.parse_args()
 
         service = get_service(args["service"])
         check = service.get_by_slug(args["slug"])
@@ -55,11 +51,7 @@ class UpdateDescriptor(Resource):
         parser.add_argument("service", type=str, required=True, choices=choices)
         parser.add_argument("slug", type=str, required=True)
         parser.add_argument("params", type=dict, default={})
-
-        try:
-            args = parser.parse_args()
-        except Exception:
-            return abort("general", "missing-field")
+        args = parser.parse_args()
 
         service = get_service(args["service"])
         descriptor = service.get_by_slug(args["slug"])
