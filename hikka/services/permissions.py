@@ -21,7 +21,7 @@ class PermissionService:
     @classmethod
     def remove(cls, user: User, scope: str, name: str):
         permission = cls.get(scope=scope, name=name)
-        if permission.id in user.permission:
+        if permission.id in user.permissions:
             index = user.permission.index(permission.id)
             user.permission.pop(index)
         user.save()

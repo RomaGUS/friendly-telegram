@@ -17,11 +17,18 @@ class Team(mongoengine.Document):
         ]
     }
 
-    def dict(self):
+    def dict(self, members=False):
         avatar = self.avatar.link() if self.avatar is not None else None
-        return {
+        data = {
             "name": self.name,
             "description": self.description,
             "slug": self.slug,
             "avatar": avatar
         }
+
+        if members:
+            data["members"] = []
+            for member in self.members:
+                data["members"].append(member.dict())
+
+        return data

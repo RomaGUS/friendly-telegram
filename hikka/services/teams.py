@@ -31,6 +31,15 @@ class TeamService:
     def add_member(cls, team: Team, user: User):
         if user not in team.members:
             team.members.append(user)
+
+        team.save()
+
+    @classmethod
+    def remove_member(cls, team: Team, user: User):
+        if user in team.members:
+            index = team.members.index(user)
+            team.members.pop(index)
+
         team.save()
 
     @classmethod
@@ -42,13 +51,6 @@ class TeamService:
         team.save()
 
         return team
-
-    @classmethod
-    def remove_member(cls, team: Team, user: User):
-        if user in team.members:
-            index = team.members.index(user)
-            team.members.pop(index)
-        team.save()
 
     @classmethod
     def list(cls, page=0, limit=10) -> List[Team]:

@@ -10,7 +10,8 @@ errors = {
         "permission": "Account don't have corresponding permission",
         "not-found": "Account not found",
         "not-admin": "Account must be admin",
-        "login-failed": "Login failed"
+        "login-failed": "Login failed",
+        "not-team-member": "Account is not team member"
     },
     "team": {
         "slug-exists": "Team with this slug already exists",

@@ -31,7 +31,10 @@ class AddEpisode(Resource):
         if team is None:
             return abort("team", "not-found")
 
-        if not PermissionService.check(request.account, f"team-{team.slug}", "admin"):
+        if request.account not in team.members:
+            return abort("account", "not-team-member")
+
+        if not PermissionService.check(request.account, "global", "publishing"):
             return abort("account", "permission")
 
         release = ReleaseService.get_by_slug(args["slug"])
@@ -75,7 +78,10 @@ class UpdateEpisode(Resource):
         if team is None:
             return abort("team", "not-found")
 
-        if not PermissionService.check(request.account, f"team-{team.slug}", "admin"):
+        if request.account not in team.members:
+            return abort("account", "not-team-member")
+
+        if not PermissionService.check(request.account, "global", "publishing"):
             return abort("account", "permission")
 
         release = ReleaseService.get_by_slug(args["slug"])
@@ -134,7 +140,10 @@ class DeleteEpisode(Resource):
         if team is None:
             return abort("team", "not-found")
 
-        if not PermissionService.check(request.account, f"team-{team.slug}", "admin"):
+        if request.account not in team.members:
+            return abort("account", "not-team-member")
+
+        if not PermissionService.check(request.account, "global", "publishing"):
             return abort("account", "permission")
 
         release = ReleaseService.get_by_slug(args["slug"])

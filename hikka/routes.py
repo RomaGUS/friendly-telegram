@@ -12,6 +12,9 @@ api.add_resource(auth.Activate, "/auth/activate")
 
 # Team routes
 api.add_resource(teams.NewTeam, "/teams/new")
+api.add_resource(teams.GetTeam, "/teams/get/<string:slug>")
+api.add_resource(teams.AddMember, "/teams/member/add")
+api.add_resource(teams.RemoveMember, "/teams/member/remove")
 
 # Genre routes
 api.add_resource(descriptors.NewDescriptor, "/descriptors/new")

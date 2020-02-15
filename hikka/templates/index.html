@@ -55,14 +55,14 @@
 					var form = $('#fileUploadForm')[0];
 					var data = new FormData(form)
 
-					data.append("position", 0)
+					data.append("position", 1)
 					data.append("team", "fanvox")
 					data.append("slug", "kaguya-sama")
 
 					$.ajax({
 						type: "POST",
 						enctype: "multipart/form-data",
-						url: "/episodes/update",
+						url: "/episodes/add",
 						data: data,
 						processData: false,
 						contentType: false,
