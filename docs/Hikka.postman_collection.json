@@ -128,13 +128,13 @@
 							},
 							{
 								"key": "Authentication",
-								"value": "3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuYpbsSVbHxJnUepd.ZMKC1hNPqdfkmnGBbzBZRyFxaagjRewcWqBUd2dc72GrWwkAwFxBXG35FvfGc2WrNoNGMsY6L9V4cnzwrBV4j6.UtArtJ5ZQn3PJcd6WvTb6EgWNTZULwQt7wwbV5Qje3rR79UvUp4KgHtFM8HbgmpedyNjCLkndzhF4Nt7Dj72YJ9BveguY",
+								"value": "3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuYpbsSVbHxJnUepd.ZMKC1hNPqdfkmnGBbzBZRyFxaagjRewcWqBUd2dc72GrWwwUYr2zCD8qW26iGam2L24nqZhjU185Fo9eHb543M.8a8W37hgupTW7gn2a1NVyKgg1921jcUEg2Yxv7eUthjRaZaTmtkkD5CwtVRega44PRyJcrjQj7vsp5C9Z7r5wGqjWqABZ",
 								"type": "text"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"description\": \"FanVoxUA - Озвучуємо для вас!\", \"name\": \"FanVoxUA\", \"slug\": \"fanvox\"}"
+							"raw": "{\"description\": \"FanVoxUA - Озвучуємо для вас!\", \"name\": \"FanVoxUA\", \"slug\": \"fanvox2\", \"members\": [\"volbil\"], \"admins\": [\"volbil\"]}"
 						},
 						"url": {
 							"raw": "http://0.0.0.0:1234/teams/new",
@@ -149,6 +149,129 @@
 							"path": [
 								"teams",
 								"new"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Team Member",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authentication",
+								"type": "text",
+								"value": "3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuYpbsSVbHxJnUepd.ZMKC1hNPqdfkmnGBbzBZRyFxaagjRewcWqBUd2dc72GrWwwUYr2zCD8qW26iGam2L24nqZhjU185Fo9eHb543M.8a8W37hgupTW7gn2a1NVyKgg1921jcUEg2Yxv7eUthjRaZaTmtkkD5CwtVRega44PRyJcrjQj7vsp5C9Z7r5wGqjWqABZ"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"username\": \"volbil2\", \"admin\": false, \"slug\": \"fanvox2\"}"
+						},
+						"url": {
+							"raw": "http://0.0.0.0:1234/teams/member/add",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "1234",
+							"path": [
+								"teams",
+								"member",
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove Team Member",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authentication",
+								"type": "text",
+								"value": "3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuYpbsSVbHxJnUepd.ZMKC1hNPqdfkmnGBbzBZRyFxaagjRewcWqBUd2dc72GrWwwUYr2zCD8qW26iGam2L24nqZhjU185Fo9eHb543M.8a8W37hgupTW7gn2a1NVyKgg1921jcUEg2Yxv7eUthjRaZaTmtkkD5CwtVRega44PRyJcrjQj7vsp5C9Z7r5wGqjWqABZ"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"username\": \"volbil2\", \"slug\": \"fanvox2\"}"
+						},
+						"url": {
+							"raw": "http://0.0.0.0:1234/teams/member/remove",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "1234",
+							"path": [
+								"teams",
+								"member",
+								"remove"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Team",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authentication",
+								"type": "text",
+								"value": "3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuYpbsSVbHxJnUepd.ZMKC1hNPqdfkmnGBbzBZRyFxaagjRewcWqBUd2dc72GrWwkAwFxBXG35FvfGc2WrNoNGMsY6L9V4cnzwrBV4j6.UtArtJ5ZQn3PJcd6WvTb6EgWNTZULwQt7wwbV5Qje3rR79UvUp4KgHtFM8HbgmpedyNjCLkndzhF4Nt7Dj72YJ9BveguY"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"description\": \"Шіномія Каґуя та Шіроґане Міюкі — члени Учнівської ради елітної академії Шючіїн, генії з геніїв. Після часу проведеного разом часу, у них зародилися почуття один до одного. Але, на жаль, але їхня гордість не дозволить зізнатися одне одному про свої почуття. Кохання — це війна, це безжальна битва, метою якої є змусити супротивника освідчитися!\", \"title\": {\"ua\": \"Каґуя-сама, Кохання як війна\", \"jp\": \"TEST\"}, \"slug\": \"kaguya-sama\", \"state\": \"ongoing\", \"genres\": [\"romance\"], \"voiceover\": [\"volbil\"], \"category\": \"tv\", \"team\": \"fanvox\"}"
+						},
+						"url": {
+							"raw": "http://0.0.0.0:1234/teams/get/fanvox",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "1234",
+							"path": [
+								"teams",
+								"get",
+								"fanvox"
 							]
 						}
 					},
@@ -278,6 +401,42 @@
 							"path": [
 								"releases",
 								"new"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Releases",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://0.0.0.0:1234/releases",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "1234",
+							"path": [
+								"releases"
 							]
 						}
 					},
@@ -444,6 +603,92 @@
 							"path": [
 								"episodes",
 								"delete"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "System",
+			"item": [
+				{
+					"name": "User Permissions",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authentication",
+								"type": "text",
+								"value": "3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuYpbsSVbHxJnUepd.ZMKC1hNPqdfkmnGBbzBZRyFxaagjRewcWqBUd2dc72GrWwwUZRxWTZL195qn25a7ZYkHzCP6vzKZQ1F29bZHbi.SK44wVSTRYsy8W79y72RL6EiVW8T6Ekn5VGDuwacf9rmeSTxnx3jpbrGCbgBWFpnojmacsJbozdWysWFmVSnycJ7r9tQj"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"username\": \"volbil\"}"
+						},
+						"url": {
+							"raw": "http://0.0.0.0:1234/system/permissions/user",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "1234",
+							"path": [
+								"system",
+								"permissions",
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Manage Permissions",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authentication",
+								"type": "text",
+								"value": "3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuYpbsSVbHxJnUepd.ZMKC1hNPqdfkmnGBbzBZRyFxaagjRewcWqBUd2dc72GrWwwUZRxWTZL195qn25a7ZYkHzCP6vzKZQ1F29bZHbi.SK44wVSTRYsy8W79y72RL6EiVW8T6Ekn5VGDuwacf9rmeSTxnx3jpbrGCbgBWFpnojmacsJbozdWysWFmVSnycJ7r9tQj"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"username\": \"volbil\", \"action\": \"add\", \"scope\": \"test\", \"name\": \"permission\"}"
+						},
+						"url": {
+							"raw": "http://0.0.0.0:1234/system/permissions/manage",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "1234",
+							"path": [
+								"system",
+								"permissions",
+								"manage"
 							]
 						}
 					},
