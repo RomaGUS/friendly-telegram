@@ -12,3 +12,9 @@ class Permission(mongoengine.Document):
             "name",
         ]
     }
+
+    def dict(self):
+        return {
+            "scope": self.scope,
+            "name": self.name
+        }

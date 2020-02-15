@@ -13,17 +13,19 @@ class PermissionService:
 
     @classmethod
     def add(cls, user: User, scope: str, name: str):
-        permission = cls.get(name=name, scope=scope)
-        if permission.id not in user.permissions:
+        permission = cls.get(scope=scope, name=name)
+        if permission not in user.permissions:
             user.permissions.append(permission)
+
         user.save()
 
     @classmethod
     def remove(cls, user: User, scope: str, name: str):
         permission = cls.get(scope=scope, name=name)
-        if permission.id in user.permissions:
-            index = user.permission.index(permission.id)
-            user.permission.pop(index)
+        if permission in user.permissions:
+            index = user.permissions.index(permission)
+            user.permissions.pop(index)
+
         user.save()
 
     @classmethod

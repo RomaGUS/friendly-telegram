@@ -22,6 +22,13 @@ class User(mongoengine.Document):
         "ordering": ["-created"]
     }
 
+    def list_permissions(self):
+        result = []
+        for permission in self.permissions:
+            result.append(permission.dict())
+
+        return result
+
     def dict(self):
         avatar = self.avatar.link() if self.avatar is not None else None
         return {
