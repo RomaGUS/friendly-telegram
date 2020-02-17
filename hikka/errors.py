@@ -44,18 +44,19 @@ errors = {
         "not-square": "Image is not square",
         "small-image": "Image is way to slow"
     },
+    "episodes": {
+        "position-exists": "Episode with this number exists",
+        "not-found": "Episode not found"
+    },
     "general": {
         "token-invalid-type": "Invalid token type",
         "pagination-error": "Pagination is out of range",
         "missing-field": "Required field is missing",
         "empty-required": "Required field can't be empty",
         "out-of-range": "Number is out of range",
-        "method-not-allowed": "Method not allowed"
-    },
-    "episodes": {
-        "position-exists": "Episode with this number exists",
-        "not-found": "Episode not found"
-    },
+        "method-not-allowed": "Method not allowed",
+        "too-many-requests": "Too many requests"
+    }
 }
 
 class Api(flask_restful.Api):

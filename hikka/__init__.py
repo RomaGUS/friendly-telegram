@@ -1,4 +1,6 @@
-from flask import Flask, render_template, jsonify
+from flask_limiter.util import get_remote_address
+from flask import Flask, render_template
+from flask_limiter import Limiter
 from flask_cors import CORS
 from hikka import errors
 import flask_restful
@@ -11,6 +13,11 @@ api = errors.Api(app)
 CORS(app)
 
 flask_restful.abort = errors.reqparse_abort
+limiter = Limiter(
+    app,
+    key_func=get_remote_address,
+    default_limits=["6/second"]
+)
 
 db_settings = dict(
     username=config.db["username"],
@@ -32,4 +39,8 @@ def root():
 
 @app.errorhandler(405)
 def error405(error):
-    return jsonify(errors.get("general", "method-not-allowed"))
+    return errors.abort("general", "method-not-allowed", 405)
+
+@app.errorhandler(429)
+def error429(error):
+    return errors.abort("general", "too-many-requests", 429)
