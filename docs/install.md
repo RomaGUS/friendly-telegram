@@ -19,6 +19,7 @@ To start running Hikka backend you have to create `config.py` file in root of pr
 
 ```python
 debug = True
+limits = ["6/second"]
 secret = "Lorem ipsum dolor sit."
 host = "0.0.0.0"
 port = 1234

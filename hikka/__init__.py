@@ -1,8 +1,9 @@
 from flask_limiter.util import get_remote_address
-from flask import Flask, render_template
+from hikka.routes import init_routes
 from flask_limiter import Limiter
 from flask_cors import CORS
 from hikka import errors
+from flask import Flask
 import flask_restful
 import mongoengine
 import config
@@ -14,9 +15,9 @@ CORS(app)
 
 flask_restful.abort = errors.reqparse_abort
 limiter = Limiter(
-    app,
+    app=app,
     key_func=get_remote_address,
-    default_limits=["6/second"]
+    default_limits=config.limits
 )
 
 db_settings = dict(
@@ -31,16 +32,4 @@ mongoengine.register_connection(
     **db_settings
 )
 
-from hikka import routes
-
-@app.route("/")
-def root():
-    return render_template("index.html")
-
-@app.errorhandler(405)
-def error405(error):
-    return errors.abort("general", "method-not-allowed", 405)
-
-@app.errorhandler(429)
-def error429(error):
-    return errors.abort("general", "too-many-requests", 429)
+init_routes(api, app)

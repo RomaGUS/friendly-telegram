@@ -13,7 +13,6 @@ from flask_restful import reqparse
 from hikka.errors import abort
 from flask import Response
 from flask import request
-from hikka import limiter
 
 class NewRelease(Resource):
     @auth_required
