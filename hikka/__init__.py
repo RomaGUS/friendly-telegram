@@ -1,8 +1,8 @@
 from flask_limiter.util import get_remote_address
-from hikka.routes import init_routes
 from flask_limiter import Limiter
 from flask_cors import CORS
 from hikka import errors
+from hikka import routes
 from flask import Flask
 import flask_restful
 import mongoengine
@@ -32,4 +32,4 @@ mongoengine.register_connection(
     **db_settings
 )
 
-init_routes(api, app)
+routes.init(api, app)

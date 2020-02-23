@@ -7,7 +7,7 @@ from hikka.modules import teams
 from hikka.modules import auth
 from hikka import errors
 
-def init_routes(api, app):
+def init(api, app):
     # Auth routes
     api.add_resource(auth.Join, "/auth/join")
     api.add_resource(auth.Login, "/auth/login")
