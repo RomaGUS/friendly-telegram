@@ -77,15 +77,14 @@ def get(scope, message):
         "error": {
             "message": error_message,
             "code": error_code
-        },
-        "data": {}
+        }
     }
-
-def reqparse_abort(http_status_code, **kwargs):
-    response = abort("general", "missing-field")
-    flask_abort(response)
 
 def abort(scope, message, status_code=400):
     response = jsonify(get(scope, message))
     response.status_code = status_code
     return response
+
+def reqparse_abort(http_status_code, **kwargs):
+    response = abort("general", "missing-field")
+    flask_abort(response)
