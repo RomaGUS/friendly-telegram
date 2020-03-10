@@ -296,13 +296,13 @@
 							},
 							{
 								"key": "Authentication",
-								"value": "3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuYpbsSVbHxJnUepd.ZMKC1hNPqdfkmnGBbzBZRyFxaagjRewcWqBUd2dc72GrWwkAwFxBXG35FvfGc2WrNoNGMsY6L9V4cnzwrBV4j6.UtArtJ5ZQn3PJcd6WvTb6EgWNTZULwQt7wwbV5Qje3rR79UvUp4KgHtFM8HbgmpedyNjCLkndzhF4Nt7Dj72YJ9BveguY",
+								"value": "3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuYpbsSVbHxJnUepd.ZMKC1hNPqdfkmnGBbzBZRyFxaagjRewcWqBUd2dc72GrWxLiin8UYYZNjz2Bj3e7HJqeNoSDzSAaMNi4vwPZMr.VLU5k3TVJ6QrcVDGX9mUURjQVbamgymQfdRNDoi5UiLai8dTZD6qPhyG45yp3e7FfSq3yExizWkDKUbjshmVWk7Qg2v8C",
 								"type": "text"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"name\": \"Романтика\", \"slug\": \"romance\", \"service\": \"genre\"}"
+							"raw": "{\"name\": \"Онгоїнг\", \"slug\": \"ongoing\", \"service\": \"state\"}"
 						},
 						"url": {
 							"raw": "http://0.0.0.0:1234/descriptors/new",
@@ -380,13 +380,13 @@
 							},
 							{
 								"key": "Authentication",
-								"value": "3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuYpbsSVbHxJnUepd.ZMKC1hNPqdfkmnGBbzBZRyFxaagjRewcWqBUd2dc72GrWwkAwFxBXG35FvfGc2WrNoNGMsY6L9V4cnzwrBV4j6.UtArtJ5ZQn3PJcd6WvTb6EgWNTZULwQt7wwbV5Qje3rR79UvUp4KgHtFM8HbgmpedyNjCLkndzhF4Nt7Dj72YJ9BveguY",
+								"value": "3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuYpbsSVbHxJnUepd.ZMKC1hNPqdfkmnGBbzBZRyFxaagjRewcWqBUd2dc72GrWxLiin8UYYZNjz2Bj3e7HJqeNoSDzSAaMNi4vwPZMr.VLU5k3TVJ6QrcVDGX9mUURjQVbamgymQfdRNDoi5UiLai8dTZD6qPhyG45yp3e7FfSq3yExizWkDKUbjshmVWk7Qg2v8C",
 								"type": "text"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"description\": \"Шіномія Каґуя та Шіроґане Міюкі — члени Учнівської ради елітної академії Шючіїн, генії з геніїв. Після часу проведеного разом часу, у них зародилися почуття один до одного. Але, на жаль, але їхня гордість не дозволить зізнатися одне одному про свої почуття. Кохання — це війна, це безжальна битва, метою якої є змусити супротивника освідчитися!\", \"title\": {\"ua\": \"Каґуя-сама, Кохання як війна\", \"jp\": \"TEST\"}, \"slug\": \"kaguya-sama\", \"state\": \"ongoing\", \"genres\": [\"romance\"], \"voiceover\": [\"volbil\"], \"category\": \"tv\", \"team\": \"fanvox\"}"
+							"raw": "{\"description\": \"Шіномія Каґуя та Шіроґане Міюкі — члени Учнівської ради елітної академії Шючіїн, генії з геніїв. Після часу проведеного разом часу, у них зародилися почуття один до одного. Але, на жаль, але їхня гордість не дозволить зізнатися одне одному про свої почуття. Кохання — це війна, це безжальна битва, метою якої є змусити супротивника освідчитися!\", \"title\": {\"ua\": \"Каґуя-сама, Кохання як війна\", \"jp\": \"TEST\"}, \"state\": \"ongoing\", \"genres\": [\"romance\"], \"voiceover\": [\"volbil\"], \"category\": \"tv\", \"team\": \"fanvox\"}"
 						},
 						"url": {
 							"raw": "http://0.0.0.0:1234/releases/new",
@@ -407,20 +407,52 @@
 					"response": []
 				},
 				{
-					"name": "List Releases",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
+					"name": "Search",
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [
 							{
 								"key": "Content-Type",
 								"name": "Content-Type",
 								"type": "text",
 								"value": "application/json"
+							},
+							{
+								"key": "Authentication",
+								"type": "text",
+								"value": "3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuYpbsSVbHxJnUepd.ZMKC1hNPqdfkmnGBbzBZRyFxaagjRewcWqBUd2dc72GrWwkAwFxBXG35FvfGc2WrNoNGMsY6L9V4cnzwrBV4j6.UtArtJ5ZQn3PJcd6WvTb6EgWNTZULwQt7wwbV5Qje3rR79UvUp4KgHtFM8HbgmpedyNjCLkndzhF4Nt7Dj72YJ9BveguY"
 							}
 						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"query\": \"Каґуя\"}"
+						},
+						"url": {
+							"raw": "http://0.0.0.0:1234/releases/search",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "1234",
+							"path": [
+								"releases",
+								"search"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Releases",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
 						"body": {
 							"mode": "raw",
 							"raw": ""
