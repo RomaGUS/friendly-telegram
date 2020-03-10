@@ -1,14 +1,18 @@
 import mongoengine
 
-class Category(mongoengine.Document):
+choices = ("genre", "category", "state")
+
+class Descriptor(mongoengine.Document):
+    category = mongoengine.StringField(required=True, choices=choices)
     description = mongoengine.StringField(default=None)
     name = mongoengine.StringField(required=True)
     slug = mongoengine.StringField(required=True)
 
     meta = {
         "alias": "default",
-        "collection": "types",
+        "collection": "descriptors",
         "indexes": [
+            "category",
             "name",
             "slug",
         ]

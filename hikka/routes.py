@@ -19,7 +19,7 @@ def init(api, app):
     api.add_resource(teams.AddMember, "/teams/member/add")
     api.add_resource(teams.RemoveMember, "/teams/member/remove")
 
-    # Genre routes
+    # Descriptor routes
     api.add_resource(descriptors.NewDescriptor, "/descriptors/new")
     api.add_resource(descriptors.UpdateDescriptor, "/descriptors/update")
 
@@ -27,6 +27,7 @@ def init(api, app):
     api.add_resource(releases.NewRelease, "/releases/new")
     api.add_resource(releases.GetRelease, "/releases/get/<string:slug>")
     api.add_resource(releases.ReleasesList, "/releases")
+    api.add_resource(releases.Search, "/releases/search")
 
     api.add_resource(episodes.AddEpisode, "/episodes/add")
     api.add_resource(episodes.UpdateEpisode, "/episodes/update")

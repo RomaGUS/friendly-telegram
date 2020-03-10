@@ -1,9 +1,7 @@
 from hikka.services.permissions import PermissionService
-from hikka.services.categories import CategoryService
+from hikka.services.descriptors import DescriptorService
 from hikka.services.releases import ReleaseService
 from werkzeug.datastructures import FileStorage
-from hikka.services.genres import GenreService
-from hikka.services.states import StateService
 from hikka.services.teams import TeamService
 from hikka.services.users import UserService
 from hikka.decorators import auth_required
@@ -13,6 +11,7 @@ from flask_restful import reqparse
 from hikka.errors import abort
 from flask import Response
 from flask import request
+from hikka import utils
 
 class NewRelease(Resource):
     @auth_required
@@ -27,7 +26,6 @@ class NewRelease(Resource):
         parser.add_argument("description", type=str, required=True)
         parser.add_argument("category", type=str, required=True)
         parser.add_argument("title", type=dict, required=True)
-        parser.add_argument("slug", type=str, required=True)
         parser.add_argument("team", type=str, required=True)
         parser.add_argument("state", type=str, default=None)
         args = parser.parse_args()
@@ -47,15 +45,16 @@ class NewRelease(Resource):
         if not PermissionService.check(request.account, "global", "publishing"):
             return abort("account", "permission")
 
-        release = ReleaseService.get_by_slug(args["slug"])
+        slug = utils.create_slug(title_args["ua"])
+        release = ReleaseService.get_by_slug(slug)
         if release is not None:
             return abort("release", "slug-exists")
 
-        category = CategoryService.get_by_slug(args["category"])
+        category = DescriptorService.get_by_slug("category", args["category"])
         if category is None:
             return abort("category", "not-found")
 
-        state = StateService.get_by_slug(args["state"])
+        state = DescriptorService.get_by_slug("state", args["state"])
         if state is None:
             return abort("state", "not-found")
 
@@ -74,10 +73,9 @@ class NewRelease(Resource):
 
         genres = []
         for slug in args["genres"]:
-            genre = GenreService.get_by_slug(slug)
+            genre = DescriptorService.get_by_slug("genre", slug)
             if genre is not None:
                 genres.append(genre)
-
             else:
                 return abort("genre", "not-found")
 
@@ -102,7 +100,7 @@ class NewRelease(Resource):
         title = ReleaseService.get_title(title_args["ua"], title_args["jp"])
         release = ReleaseService.create(
             title,
-            args["slug"],
+            slug,
             args["description"],
             category,
             state,
@@ -135,6 +133,22 @@ class ReleasesList(Resource):
         args = parser.parse_args()
 
         releases = ReleaseService.list(args["page"])
+        for release in releases:
+            result["data"].append(release.dict())
+
+        return result
+
+class Search(Resource):
+    def post(self):
+        result = {"error": None, "data": []}
+
+        parser = reqparse.RequestParser()
+        parser.add_argument("genres", type=list, default=[], location="json")
+        parser.add_argument("query", type=str, default=None)
+        parser.add_argument("page", type=int, default=0)
+        args = parser.parse_args()
+
+        releases = ReleaseService.search(args["query"], args["page"])
         for release in releases:
             result["data"].append(release.dict())
 

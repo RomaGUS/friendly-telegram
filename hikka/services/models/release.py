@@ -32,18 +32,19 @@ class Episode(mongoengine.EmbeddedDocument):
 class Release(mongoengine.Document):
     title = mongoengine.EmbeddedDocumentField(Title, required=True)
     hidden = mongoengine.BooleanField(required=True, default=False)
-    category = mongoengine.ReferenceField("Category", required=True)
     description = mongoengine.StringField(required=True, default=None)
     subtitles = mongoengine.ListField(mongoengine.ReferenceField("User"))
     voiceover = mongoengine.ListField(mongoengine.ReferenceField("User"))
-    genres = mongoengine.ListField(mongoengine.ReferenceField("Genre"))
     teams = mongoengine.ListField(mongoengine.ReferenceField("Team"))
-    state = mongoengine.ReferenceField("State", required=True)
     created = mongoengine.DateTimeField(default=datetime.now)
     comments = mongoengine.EmbeddedDocumentListField(Comment)
     slug = mongoengine.StringField(required=True)
     poster = mongoengine.ReferenceField("File")
     views = mongoengine.IntField(default=0)
+
+    genres = mongoengine.ListField(mongoengine.ReferenceField("Descriptor", reverse_delete_rule=4))
+    category = mongoengine.ReferenceField("Descriptor", reverse_delete_rule=4, required=True)
+    state = mongoengine.ReferenceField("Descriptor", reverse_delete_rule=4, required=True)
 
     episodes = mongoengine.SortedListField(
         mongoengine.EmbeddedDocumentField(Episode),

@@ -1,22 +1,11 @@
 from hikka.decorators import auth_required, permission_required
-from hikka.services.categories import CategoryService
+from hikka.services.descriptors import DescriptorService
+from hikka.services.models.descriptor import choices
 from hikka.services.func import update_document
-from hikka.services.genres import GenreService
-from hikka.services.states import StateService
 from flask_restful import Resource
 from flask_restful import reqparse
 from hikka.errors import abort
 from hikka import utils
-
-choices = ("genre", "category", "state")
-
-def get_service(service):
-    if service == "genre":
-        return GenreService
-    elif service == "category":
-        return CategoryService
-    elif service == "state":
-        return StateService
 
 class NewDescriptor(Resource):
     @auth_required
@@ -31,14 +20,17 @@ class NewDescriptor(Resource):
         parser.add_argument("slug", type=str, required=True)
         args = parser.parse_args()
 
-        service = get_service(args["service"])
-        check = service.get_by_slug(args["slug"])
+        check = DescriptorService.get_by_slug(args["service"], args["slug"])
         if check is not None:
             return abort(args["service"], "slug-exists")
 
-        descriptor = service.create(args["name"], args["slug"], args["description"])
-        result["data"] = descriptor.dict()
+        descriptor = DescriptorService.create(
+            args["service"],
+            args["name"],
+            args["slug"],
+            args["description"])
 
+        result["data"] = descriptor.dict()
         return result
 
 class UpdateDescriptor(Resource):
@@ -53,8 +45,7 @@ class UpdateDescriptor(Resource):
         parser.add_argument("params", type=dict, default={})
         args = parser.parse_args()
 
-        service = get_service(args["service"])
-        descriptor = service.get_by_slug(args["slug"])
+        descriptor = DescriptorService.get_by_slug(args["service"], args["slug"])
         if descriptor is None:
             return abort(args["service"], "not-found")
 
@@ -68,5 +59,4 @@ class UpdateDescriptor(Resource):
             return abort("general", "empty-required")
 
         result["data"] = descriptor.dict()
-
         return result
