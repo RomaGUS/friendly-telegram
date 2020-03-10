@@ -24,7 +24,7 @@
 							"raw": "{\"username\": \"volbil\", \"password\": \"thisispassword\", \"email\": \"volbilnexus@gmail.com\"}"
 						},
 						"url": {
-							"raw": "http://0.0.0.0:1234/auth/join",
+							"raw": "https://api.hikka.io/auth/join",
 							"protocol": "http",
 							"host": [
 								"0",
@@ -58,7 +58,7 @@
 							"raw": "{\"email\": \"volbilnexus@gmail.com\", \"password\": \"thisispassword\"}"
 						},
 						"url": {
-							"raw": "http://0.0.0.0:1234/auth/login",
+							"raw": "https://api.hikka.io/auth/login",
 							"protocol": "http",
 							"host": [
 								"0",
@@ -92,7 +92,7 @@
 							"raw": "{\"token\": \"3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuaKHVFGSweqHCNPp.H7MGKU95BMZZ2tUjHy5JkLevZFKZGYfUu6gzsQLe4825QPQiUBHBaRY4dGNnK3pSyMroKvXdCpSaUUvSY9t3LGdwW6nWT.GYfvzpc9ovBDiyBsTbd5Wpz4xXYaM5Y876Dg2sfuXVSHeFz62\"}"
 						},
 						"url": {
-							"raw": "http://0.0.0.0:1234/auth/activate",
+							"raw": "https://api.hikka.io/auth/activate",
 							"protocol": "http",
 							"host": [
 								"0",
@@ -137,7 +137,7 @@
 							"raw": "{\"description\": \"FanVoxUA - Озвучуємо для вас!\", \"name\": \"FanVoxUA\", \"slug\": \"fanvox2\", \"members\": [\"volbil\"], \"admins\": [\"volbil\"]}"
 						},
 						"url": {
-							"raw": "http://0.0.0.0:1234/teams/new",
+							"raw": "https://api.hikka.io/teams/new",
 							"protocol": "http",
 							"host": [
 								"0",
@@ -176,7 +176,7 @@
 							"raw": "{\"username\": \"volbil2\", \"admin\": false, \"slug\": \"fanvox2\"}"
 						},
 						"url": {
-							"raw": "http://0.0.0.0:1234/teams/member/add",
+							"raw": "https://api.hikka.io/teams/member/add",
 							"protocol": "http",
 							"host": [
 								"0",
@@ -216,7 +216,7 @@
 							"raw": "{\"username\": \"volbil2\", \"slug\": \"fanvox2\"}"
 						},
 						"url": {
-							"raw": "http://0.0.0.0:1234/teams/member/remove",
+							"raw": "https://api.hikka.io/teams/member/remove",
 							"protocol": "http",
 							"host": [
 								"0",
@@ -259,7 +259,7 @@
 							"raw": "{\"description\": \"Шіномія Каґуя та Шіроґане Міюкі — члени Учнівської ради елітної академії Шючіїн, генії з геніїв. Після часу проведеного разом часу, у них зародилися почуття один до одного. Але, на жаль, але їхня гордість не дозволить зізнатися одне одному про свої почуття. Кохання — це війна, це безжальна битва, метою якої є змусити супротивника освідчитися!\", \"title\": {\"ua\": \"Каґуя-сама, Кохання як війна\", \"jp\": \"TEST\"}, \"slug\": \"kaguya-sama\", \"state\": \"ongoing\", \"genres\": [\"romance\"], \"voiceover\": [\"volbil\"], \"category\": \"tv\", \"team\": \"fanvox\"}"
 						},
 						"url": {
-							"raw": "http://0.0.0.0:1234/teams/get/fanvox",
+							"raw": "https://api.hikka.io/teams/get/fanvox",
 							"protocol": "http",
 							"host": [
 								"0",
@@ -305,7 +305,7 @@
 							"raw": "{\"name\": \"Онгоїнг\", \"slug\": \"ongoing\", \"service\": \"state\"}"
 						},
 						"url": {
-							"raw": "http://0.0.0.0:1234/descriptors/new",
+							"raw": "https://api.hikka.io/descriptors/new",
 							"protocol": "http",
 							"host": [
 								"0",
@@ -344,7 +344,7 @@
 							"raw": "{\"slug\": \"romance\", \"service\": \"genre\", \"params\": {\"description\": \"111\"}}"
 						},
 						"url": {
-							"raw": "http://0.0.0.0:1234/descriptors/update",
+							"raw": "https://api.hikka.io/descriptors/update",
 							"protocol": "http",
 							"host": [
 								"0",
@@ -389,7 +389,7 @@
 							"raw": "{\"description\": \"Шіномія Каґуя та Шіроґане Міюкі — члени Учнівської ради елітної академії Шючіїн, генії з геніїв. Після часу проведеного разом часу, у них зародилися почуття один до одного. Але, на жаль, але їхня гордість не дозволить зізнатися одне одному про свої почуття. Кохання — це війна, це безжальна битва, метою якої є змусити супротивника освідчитися!\", \"title\": {\"ua\": \"Каґуя-сама, Кохання як війна\", \"jp\": \"TEST\"}, \"state\": \"ongoing\", \"genres\": [\"romance\"], \"voiceover\": [\"volbil\"], \"category\": \"tv\", \"team\": \"fanvox\"}"
 						},
 						"url": {
-							"raw": "http://0.0.0.0:1234/releases/new",
+							"raw": "https://api.hikka.io/releases/new",
 							"protocol": "http",
 							"host": [
 								"0",
@@ -428,7 +428,7 @@
 							"raw": "{\"query\": \"Каґуя\"}"
 						},
 						"url": {
-							"raw": "http://0.0.0.0:1234/releases/search",
+							"raw": "https://api.hikka.io/releases/search",
 							"protocol": "http",
 							"host": [
 								"0",
@@ -458,7 +458,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://0.0.0.0:1234/releases",
+							"raw": "https://api.hikka.io/releases",
 							"protocol": "http",
 							"host": [
 								"0",
@@ -499,7 +499,7 @@
 							"raw": "{\"description\": \"Шіномія Каґуя та Шіроґане Міюкі — члени Учнівської ради елітної академії Шючіїн, генії з геніїв. Після часу проведеного разом часу, у них зародилися почуття один до одного. Але, на жаль, але їхня гордість не дозволить зізнатися одне одному про свої почуття. Кохання — це війна, це безжальна битва, метою якої є змусити супротивника освідчитися!\", \"title\": {\"ua\": \"Каґуя-сама, Кохання як війна\", \"jp\": \"TEST\"}, \"slug\": \"kaguya-sama\", \"state\": \"ongoing\", \"genres\": [\"romance\"], \"voiceover\": [\"volbil\"], \"category\": \"tv\", \"team\": \"fanvox\"}"
 						},
 						"url": {
-							"raw": "http://0.0.0.0:1234/releases/get/kaguya-sama",
+							"raw": "https://api.hikka.io/releases/get/kaguya-sama",
 							"protocol": "http",
 							"host": [
 								"0",
@@ -545,7 +545,7 @@
 							"raw": "{\"video\": null, \"position\": 0, \"team\": \"fanvox\", \"slug\": \"kaguya-sama\", \"name\": \"Перша серія\"}"
 						},
 						"url": {
-							"raw": "http://0.0.0.0:1234/episodes/add",
+							"raw": "https://api.hikka.io/episodes/add",
 							"protocol": "http",
 							"host": [
 								"0",
@@ -584,7 +584,7 @@
 							"raw": "{\"position\": 0, \"team\": \"fanvox\", \"slug\": \"kaguya-sama\", \"params\": {\"name\": \"TEST\", \"video\": \"HUI\"}}"
 						},
 						"url": {
-							"raw": "http://0.0.0.0:1234/episodes/update",
+							"raw": "https://api.hikka.io/episodes/update",
 							"protocol": "http",
 							"host": [
 								"0",
@@ -623,7 +623,7 @@
 							"raw": "{\"position\": 0, \"team\": \"fanvox\", \"slug\": \"kaguya-sama\"}"
 						},
 						"url": {
-							"raw": "http://0.0.0.0:1234/episodes/delete",
+							"raw": "https://api.hikka.io/episodes/delete",
 							"protocol": "http",
 							"host": [
 								"0",
@@ -668,7 +668,7 @@
 							"raw": "{\"username\": \"volbil\"}"
 						},
 						"url": {
-							"raw": "http://0.0.0.0:1234/system/permissions/user",
+							"raw": "https://api.hikka.io/system/permissions/user",
 							"protocol": "http",
 							"host": [
 								"0",
@@ -708,7 +708,7 @@
 							"raw": "{\"username\": \"volbil\", \"action\": \"add\", \"scope\": \"test\", \"name\": \"permission\"}"
 						},
 						"url": {
-							"raw": "http://0.0.0.0:1234/system/permissions/manage",
+							"raw": "https://api.hikka.io/system/permissions/manage",
 							"protocol": "http",
 							"host": [
 								"0",
