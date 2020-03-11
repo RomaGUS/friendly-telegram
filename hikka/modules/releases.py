@@ -151,13 +151,57 @@ class Search(Resource):
         result = {"error": None, "data": []}
 
         parser = reqparse.RequestParser()
+        parser.add_argument("categories", type=list, default=[], location="json")
+        parser.add_argument("states", type=list, default=[], location="json")
         parser.add_argument("genres", type=list, default=[], location="json")
+        parser.add_argument("teams", type=list, default=[], location="json")
         parser.add_argument("query", type=str, default=None)
         parser.add_argument("page", type=int, default=0)
         args = parser.parse_args()
 
         query = utils.search_query(args["query"])
-        releases = ReleaseService.search(query, args["page"])
+        categories = []
+        genres = []
+        states = []
+        teams = []
+
+        for slug in args["categories"]:
+            category = DescriptorService.get_by_slug("category", slug)
+            if category is not None:
+                categories.append(category)
+            else:
+                return abort("category", "not-found")
+
+        for slug in args["genres"]:
+            genre = DescriptorService.get_by_slug("genre", slug)
+            if genre is not None:
+                genres.append(genre)
+            else:
+                return abort("genre", "not-found")
+
+        for slug in args["states"]:
+            state = DescriptorService.get_by_slug("state", slug)
+            if state is not None:
+                genres.append(state)
+            else:
+                return abort("state", "not-found")
+
+        for slug in args["teams"]:
+            team = TeamService.get_by_slug(slug)
+            if team is not None:
+                teams.append(team)
+            else:
+                return abort("team", "not-found")
+
+        releases = ReleaseService.search(
+            query,
+            categories,
+            genres,
+            states,
+            teams,
+            args["page"]
+        )
+
         for release in releases:
             result["data"].append(release.dict())
 

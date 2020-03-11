@@ -85,8 +85,23 @@ class ReleaseService:
         return list(releases)
 
     @classmethod
-    def search(cls, query, page=0, limit=20) -> List[Release]:
+    def search(cls, query, categories=[], genres=[],
+                states=[], teams=[], page=0, limit=20) -> List[Release]:
+
         offset = page * limit
         releases = Release.objects(search__contains=query)
+
+        if len(categories) > 0:
+            releases = releases.filter(category__in=categories)
+
+        if len(genres) > 0:
+            releases = releases.filter(genres__in=genres)
+
+        if len(states) > 0:
+            releases = releases.filter(state__in=states)
+
+        if len(teams) > 0:
+            releases = releases.filter(teams__in=teams)
+
         releases = releases.limit(limit).skip(offset)
         return list(releases)
