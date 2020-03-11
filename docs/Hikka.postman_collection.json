@@ -729,6 +729,50 @@
 				}
 			],
 			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Vote",
+			"item": [
+				{
+					"name": "Make Vote",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authentication",
+								"type": "text",
+								"value": "3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuYpbsSVbHxJnUepd.ZMKC1hNPqdfkmnGBbzBZRyFxaagjRewcWqBUd2dc72GrWxLouS4f4zaUe3z6hXJmN37bq4jfdEfvD61h6xum3t.4z2jZg7QkpCgkvkQzhd8N7RKENUEUpKn4pjYx4oSMcJETWbBKSy6TDh7kK8QoA1Y7YyK88pgbf78rbNRmrR2UaPY7BxHT"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"rating\": 9, \"subject\": \"anime\", \"slug\": \"kaguya-sama-kohannya-yak-viyna-e4f5e425\"}"
+						},
+						"url": {
+							"raw": "https://api.hikka.io/vote",
+							"protocol": "http",
+							"host": [
+								"0",
+								"0",
+								"0",
+								"0"
+							],
+							"port": "1234",
+							"path": [
+								"vote"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
 		}
 	],
 	"protocolProfileBehavior": {}
