@@ -50,6 +50,7 @@ errors = {
     },
     "general": {
         "token-invalid-type": "Invalid token type",
+        "alias-invalid-type": "Alias must be string",
         "pagination-error": "Pagination is out of range",
         "missing-field": "Required field is missing",
         "empty-required": "Required field can't be empty",

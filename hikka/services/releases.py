@@ -4,7 +4,6 @@ from hikka.services.files import FileService
 from hikka.services.models.team import Team
 from hikka.services.models.user import User
 from hikka.services.models.file import File
-from mongoengine.queryset.visitor import Q
 from typing import List
 
 class ReleaseService:
@@ -20,20 +19,23 @@ class ReleaseService:
 
     @classmethod
     def create(cls, title: Title, slug: str, description: str,
-                category: Descriptor, state: Descriptor,
+                search: str, category: Descriptor, state: Descriptor,
                 genres=List[Descriptor], teams=[Team],
-                subtitles=[User], voiceover=[User]) -> Release:
+                subtitles=[User], voiceover=[User],
+                aliases=[]) -> Release:
 
         release = Release(
             title=title,
             slug=slug,
             description=description,
+            search=search,
             category=category,
             state=state,
             genres=genres,
             teams=teams,
             subtitles=subtitles,
-            voiceover=voiceover
+            voiceover=voiceover,
+            aliases=aliases
         )
 
         release.save()
@@ -85,6 +87,6 @@ class ReleaseService:
     @classmethod
     def search(cls, query, page=0, limit=20) -> List[Release]:
         offset = page * limit
-        releases = Release.objects(Q(title__ua__contains=query) | Q(title__jp__contains=query))
+        releases = Release.objects(search__contains=query)
         releases = releases.limit(limit).skip(offset)
         return list(releases)

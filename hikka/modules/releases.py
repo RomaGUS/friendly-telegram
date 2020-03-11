@@ -21,6 +21,7 @@ class NewRelease(Resource):
         parser = reqparse.RequestParser()
         parser.add_argument("subtitles", type=list, default=[], location="json")
         parser.add_argument("voiceover", type=list, default=[], location="json")
+        parser.add_argument("aliases", type=list, default=[], location="json")
         parser.add_argument("genres", type=list, default=[], location="json")
         parser.add_argument("poster", type=FileStorage, location="files")
         parser.add_argument("description", type=str, required=True)
@@ -34,6 +35,10 @@ class NewRelease(Resource):
         title_parser.add_argument("jp", type=str, default=None, location=("title",))
         title_parser.add_argument("ua", type=str, location=("title",))
         title_args = title_parser.parse_args(req=args)
+
+        for alias in args["aliases"]:
+            if type(alias) is not str:
+                return abort("general", "alias-invalid-type")
 
         team = TeamService.get_by_slug(args["team"])
         if team is None:
@@ -98,16 +103,19 @@ class NewRelease(Resource):
                 return abort("account", "not-found")
 
         title = ReleaseService.get_title(title_args["ua"], title_args["jp"])
+        search = utils.create_search(title_args["ua"], title_args["jp"], args["aliases"])
         release = ReleaseService.create(
             title,
             slug,
             args["description"],
+            search,
             category,
             state,
             genres,
             [team],
             subtitles,
-            voiceover
+            voiceover,
+            args["aliases"]
         )
 
         if poster is not None:
@@ -148,7 +156,8 @@ class Search(Resource):
         parser.add_argument("page", type=int, default=0)
         args = parser.parse_args()
 
-        releases = ReleaseService.search(args["query"], args["page"])
+        query = utils.search_query(args["query"])
+        releases = ReleaseService.search(query, args["page"])
         for release in releases:
             result["data"].append(release.dict())
 

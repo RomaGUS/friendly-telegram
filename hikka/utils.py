@@ -3,6 +3,7 @@ import secrets
 import re
 
 def blake2b(data: str, size=32, key=""):
+    """Hash wrapper for blake2b"""
     return hashlib.blake2b(
         str.encode(data),
         key=str.encode(key),
@@ -10,9 +11,7 @@ def blake2b(data: str, size=32, key=""):
     ).digest()
 
 def check_fields(fields: list, data: dict):
-    """
-    Check if given dict `data` contain given list of keys from list `fields`.
-    """
+    """Check if given dict :data contain given list of keys from list :fields"""
     for field in fields:
         if field not in data:
             return f"{field.title()} is not set"
@@ -20,9 +19,7 @@ def check_fields(fields: list, data: dict):
     return None
 
 def filter_dict(data, keys):
-    """
-    Filter dict by given keys
-    """
+    """Filter dict :data by given :keys"""
     result = {}
     for key in keys:
         if key in data:
@@ -31,6 +28,7 @@ def filter_dict(data, keys):
     return result
 
 def create_slug(text):
+    """Create human readable URL based on :text"""
     text = text.strip()
     text = " ".join(text.split())
     text = text.lower()
@@ -62,6 +60,7 @@ def create_slug(text):
                 i = i + len(s)
                 match = True
                 break
+
         if not match:
             buffer.append(text[i])
             i = i + 1
@@ -76,3 +75,19 @@ def create_slug(text):
     text = "{}-{}".format(text, secrets.token_hex(4))
 
     return text
+
+def search_query(query):
+    """Process search query"""
+    return re.sub(r"[^\w]", r"", query.lower())
+
+def create_search(*args):
+    """Create search string based on :args"""
+    result = []
+    for item in args:
+        if type(item) is str:
+            result.append(search_query(item))
+        elif type(item) is list:
+            for alias in item:
+                result.append(search_query(alias))
+
+    return " ".join(result)

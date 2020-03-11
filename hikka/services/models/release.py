@@ -46,6 +46,9 @@ class Release(mongoengine.Document):
     category = mongoengine.ReferenceField("Descriptor", reverse_delete_rule=4, required=True)
     state = mongoengine.ReferenceField("Descriptor", reverse_delete_rule=4, required=True)
 
+    aliases = mongoengine.ListField(mongoengine.StringField())
+    search = mongoengine.StringField()
+
     episodes = mongoengine.SortedListField(
         mongoengine.EmbeddedDocumentField(Episode),
         ordering="position"
