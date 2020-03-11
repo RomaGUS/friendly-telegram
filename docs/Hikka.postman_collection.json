@@ -365,10 +365,10 @@
 			"protocolProfileBehavior": {}
 		},
 		{
-			"name": "Releases",
+			"name": "Anime",
 			"item": [
 				{
-					"name": "New Release",
+					"name": "New Anime",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -389,7 +389,7 @@
 							"raw": "{\"description\": \"Шіномія Каґуя та Шіроґане Міюкі — члени Учнівської ради елітної академії Шючіїн, генії з геніїв. Після часу проведеного разом часу, у них зародилися почуття один до одного. Але, на жаль, але їхня гордість не дозволить зізнатися одне одному про свої почуття. Кохання — це війна, це безжальна битва, метою якої є змусити супротивника освідчитися!\", \"title\": {\"ua\": \"Каґуя-сама, Кохання як війна\", \"jp\": \"TEST\"}, \"state\": \"ongoing\", \"genres\": [\"romance\"], \"voiceover\": [\"volbil\"], \"category\": \"tv\", \"team\": \"fanvox\", \"aliases\": [\"кагуя\"]}"
 						},
 						"url": {
-							"raw": "https://api.hikka.io/releases/new",
+							"raw": "https://api.hikka.io/anime/new",
 							"protocol": "http",
 							"host": [
 								"0",
@@ -399,7 +399,7 @@
 							],
 							"port": "1234",
 							"path": [
-								"releases",
+								"anime",
 								"new"
 							]
 						}
@@ -425,10 +425,10 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"query\": \"кохання як війна\", \"genres\": [\"romance\"], \"teams\": [\"fanvox\"], \"categories\": [\"tv\", \"ova\"], \"states\": [\"ongoing\"]}"
+							"raw": "{\"query\": \"кохання як війна\", \"genres\": [\"romance\"], \"teams\": [\"fanvox\"], \"categories\": [\"tv\", \"ova\"]}"
 						},
 						"url": {
-							"raw": "https://api.hikka.io/releases/search",
+							"raw": "https://api.hikka.io/anime/search",
 							"protocol": "http",
 							"host": [
 								"0",
@@ -438,7 +438,7 @@
 							],
 							"port": "1234",
 							"path": [
-								"releases",
+								"anime",
 								"search"
 							]
 						}
@@ -446,7 +446,7 @@
 					"response": []
 				},
 				{
-					"name": "List Releases",
+					"name": "List Anime",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -458,7 +458,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "https://api.hikka.io/releases",
+							"raw": "https://api.hikka.io/anime/list",
 							"protocol": "http",
 							"host": [
 								"0",
@@ -468,14 +468,15 @@
 							],
 							"port": "1234",
 							"path": [
-								"releases"
+								"anime",
+								"list"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "Get Release",
+					"name": "Get Anime",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -499,7 +500,7 @@
 							"raw": "{\"description\": \"Шіномія Каґуя та Шіроґане Міюкі — члени Учнівської ради елітної академії Шючіїн, генії з геніїв. Після часу проведеного разом часу, у них зародилися почуття один до одного. Але, на жаль, але їхня гордість не дозволить зізнатися одне одному про свої почуття. Кохання — це війна, це безжальна битва, метою якої є змусити супротивника освідчитися!\", \"title\": {\"ua\": \"Каґуя-сама, Кохання як війна\", \"jp\": \"TEST\"}, \"slug\": \"kaguya-sama\", \"state\": \"ongoing\", \"genres\": [\"romance\"], \"voiceover\": [\"volbil\"], \"category\": \"tv\", \"team\": \"fanvox\"}"
 						},
 						"url": {
-							"raw": "https://api.hikka.io/releases/get/kaguya-sama",
+							"raw": "https://api.hikka.io/anime/get/kaguya-sama-kohannya-yak-viyna-e4f5e425",
 							"protocol": "http",
 							"host": [
 								"0",
@@ -509,9 +510,9 @@
 							],
 							"port": "1234",
 							"path": [
-								"releases",
+								"anime",
 								"get",
-								"kaguya-sama"
+								"kaguya-sama-kohannya-yak-viyna-e4f5e425"
 							]
 						}
 					},
