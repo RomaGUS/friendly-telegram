@@ -29,7 +29,7 @@ class Episode(mongoengine.EmbeddedDocument):
             "name": self.name
         }
 
-class Release(mongoengine.Document):
+class Anime(mongoengine.Document):
     title = mongoengine.EmbeddedDocumentField(Title, required=True)
     hidden = mongoengine.BooleanField(required=True, default=False)
     description = mongoengine.StringField(required=True, default=None)
@@ -56,7 +56,7 @@ class Release(mongoengine.Document):
 
     meta = {
         "alias": "default",
-        "collection": "releases",
+        "collection": "anime",
         "indexes": [
             "slug",
             "genres",

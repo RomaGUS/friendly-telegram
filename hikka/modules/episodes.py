@@ -1,5 +1,5 @@
 from hikka.services.permissions import PermissionService
-from hikka.services.releases import ReleaseService
+from hikka.services.anime import AnimeService
 from werkzeug.datastructures import FileStorage
 from hikka.services.teams import TeamService
 from hikka.services.files import FileService
@@ -37,11 +37,11 @@ class AddEpisode(Resource):
         if not PermissionService.check(request.account, "global", "publishing"):
             return abort("account", "permission")
 
-        release = ReleaseService.get_by_slug(args["slug"])
-        if release is None:
-            return abort("release", "not-found")
+        anime = AnimeService.get_by_slug(args["slug"])
+        if anime is None:
+            return abort("anime", "not-found")
 
-        episode = ReleaseService.find_position(release, args["position"])
+        episode = AnimeService.find_position(anime, args["position"])
         if episode is not None:
             return abort("episodes", "position-exists")
 
@@ -55,10 +55,10 @@ class AddEpisode(Resource):
             return data
 
         video = data
-        episode = ReleaseService.get_episode(args["name"], args["position"], video)
-        ReleaseService.add_episode(release, episode)
+        episode = AnimeService.get_episode(args["name"], args["position"], video)
+        AnimeService.add_episode(anime, episode)
 
-        result["data"] = release.dict(True)
+        result["data"] = anime.dict(True)
         return result
 
 class UpdateEpisode(Resource):
@@ -84,11 +84,11 @@ class UpdateEpisode(Resource):
         if not PermissionService.check(request.account, "global", "publishing"):
             return abort("account", "permission")
 
-        release = ReleaseService.get_by_slug(args["slug"])
-        if release is None:
-            return abort("release", "not-found")
+        anime = AnimeService.get_by_slug(args["slug"])
+        if anime is None:
+            return abort("anime", "not-found")
 
-        episode = ReleaseService.find_position(release, args["position"])
+        episode = AnimeService.find_position(anime, args["position"])
         if episode is None:
             return abort("episodes", "not-found")
 
@@ -112,17 +112,17 @@ class UpdateEpisode(Resource):
             if args["position"] < 0:
                 return abort("general", "out-of-range")
 
-            episode_check = ReleaseService.find_position(release, args["position"])
+            episode_check = AnimeService.find_position(anime, args["position"])
             if episode_check is not None:
                 return abort("episodes", "position-exists")
 
             position = args["params"]["position"]
 
-        ReleaseService.remove_episode(release, episode)
-        episode = ReleaseService.get_episode(name, position, video)
-        ReleaseService.add_episode(release, episode)
+        AnimeService.remove_episode(anime, episode)
+        episode = AnimeService.get_episode(name, position, video)
+        AnimeService.add_episode(anime, episode)
 
-        result["data"] = release.dict(True)
+        result["data"] = anime.dict(True)
         return result
 
 class DeleteEpisode(Resource):
@@ -146,16 +146,16 @@ class DeleteEpisode(Resource):
         if not PermissionService.check(request.account, "global", "publishing"):
             return abort("account", "permission")
 
-        release = ReleaseService.get_by_slug(args["slug"])
-        if release is None:
-            return abort("release", "not-found")
+        anime = AnimeService.get_by_slug(args["slug"])
+        if anime is None:
+            return abort("anime", "not-found")
 
-        episode = ReleaseService.find_position(release, args["position"])
+        episode = AnimeService.find_position(anime, args["position"])
         if episode is None:
             return abort("episodes", "not-found")
 
         FileService.destroy(episode.video)
-        ReleaseService.remove_episode(release, episode)
+        AnimeService.remove_episode(anime, episode)
 
-        result["data"] = release.dict(True)
+        result["data"] = anime.dict(True)
         return result

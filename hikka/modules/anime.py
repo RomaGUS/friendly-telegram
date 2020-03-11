@@ -1,6 +1,6 @@
 from hikka.services.permissions import PermissionService
 from hikka.services.descriptors import DescriptorService
-from hikka.services.releases import ReleaseService
+from hikka.services.anime import AnimeService
 from werkzeug.datastructures import FileStorage
 from hikka.services.teams import TeamService
 from hikka.services.users import UserService
@@ -13,7 +13,7 @@ from flask import Response
 from flask import request
 from hikka import utils
 
-class NewRelease(Resource):
+class NewAnime(Resource):
     @auth_required
     def post(self):
         result = {"error": None, "data": {}}
@@ -49,11 +49,6 @@ class NewRelease(Resource):
 
         if not PermissionService.check(request.account, "global", "publishing"):
             return abort("account", "permission")
-
-        slug = utils.create_slug(title_args["ua"])
-        release = ReleaseService.get_by_slug(slug)
-        if release is not None:
-            return abort("release", "slug-exists")
 
         category = DescriptorService.get_by_slug("category", args["category"])
         if category is None:
@@ -102,9 +97,11 @@ class NewRelease(Resource):
             else:
                 return abort("account", "not-found")
 
-        title = ReleaseService.get_title(title_args["ua"], title_args["jp"])
+        title = AnimeService.get_title(title_args["ua"], title_args["jp"])
         search = utils.create_search(title_args["ua"], title_args["jp"], args["aliases"])
-        release = ReleaseService.create(
+        slug = utils.create_slug(title_args["ua"])
+
+        anime = AnimeService.create(
             title,
             slug,
             args["description"],
@@ -119,20 +116,20 @@ class NewRelease(Resource):
         )
 
         if poster is not None:
-            ReleaseService.update_poster(release, poster)
+            AnimeService.update_poster(anime, poster)
 
-        result["data"] = release.dict()
+        result["data"] = anime.dict()
         return result
 
-class GetRelease(Resource):
+class GetAnime(Resource):
     def get(self, slug):
-        release = ReleaseService.get_by_slug(slug)
-        if release is None:
-            return abort("release", "not-found")
+        anime = AnimeService.get_by_slug(slug)
+        if anime is None:
+            return abort("anime", "not-found")
 
-        return release.dict(True)
+        return anime.dict(True)
 
-class ReleasesList(Resource):
+class AnimesList(Resource):
     def get(self):
         result = {"error": None, "data": []}
 
@@ -140,9 +137,9 @@ class ReleasesList(Resource):
         parser.add_argument("page", type=int, default=0)
         args = parser.parse_args()
 
-        releases = ReleaseService.list(args["page"])
-        for release in releases:
-            result["data"].append(release.dict())
+        anime = AnimeService.list(args["page"])
+        for anime in anime:
+            result["data"].append(anime.dict())
 
         return result
 
@@ -193,7 +190,7 @@ class Search(Resource):
             else:
                 return abort("team", "not-found")
 
-        releases = ReleaseService.search(
+        anime = AnimeService.search(
             query,
             categories,
             genres,
@@ -202,7 +199,7 @@ class Search(Resource):
             args["page"]
         )
 
-        for release in releases:
-            result["data"].append(release.dict())
+        for anime in anime:
+            result["data"].append(anime.dict())
 
         return result

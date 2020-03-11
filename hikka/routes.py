@@ -1,5 +1,5 @@
 from hikka.modules import descriptors
-from hikka.modules import releases
+from hikka.modules import anime
 from hikka.modules import episodes
 from flask import render_template
 from hikka.modules import system
@@ -23,11 +23,11 @@ def init(api, app):
     api.add_resource(descriptors.NewDescriptor, "/descriptors/new")
     api.add_resource(descriptors.UpdateDescriptor, "/descriptors/update")
 
-    # Release routes
-    api.add_resource(releases.NewRelease, "/releases/new")
-    api.add_resource(releases.GetRelease, "/releases/get/<string:slug>")
-    api.add_resource(releases.ReleasesList, "/releases")
-    api.add_resource(releases.Search, "/releases/search")
+    # Anime routes
+    api.add_resource(anime.NewAnime, "/anime/new")
+    api.add_resource(anime.GetAnime, "/anime/get/<string:slug>")
+    api.add_resource(anime.AnimesList, "/anime/list")
+    api.add_resource(anime.Search, "/anime/search")
 
     api.add_resource(episodes.AddEpisode, "/episodes/add")
     api.add_resource(episodes.UpdateEpisode, "/episodes/update")

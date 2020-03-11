@@ -29,9 +29,9 @@ errors = {
         "slug-exists": "Category with this slug already exists",
         "not-found": "Category not found"
     },
-    "release": {
-        "slug-exists": "Release with this slug already exists",
-        "not-found": "Release not found"
+    "anime": {
+        "slug-exists": "Anime with this slug already exists",
+        "not-found": "Anime not found"
     },
     "file": {
         "not-found": "File not provided",
