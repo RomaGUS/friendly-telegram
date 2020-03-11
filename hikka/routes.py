@@ -1,9 +1,10 @@
 from hikka.modules import descriptors
-from hikka.modules import anime
 from hikka.modules import episodes
 from flask import render_template
 from hikka.modules import system
+from hikka.modules import anime
 from hikka.modules import teams
+from hikka.modules import votes
 from hikka.modules import auth
 from hikka import errors
 
@@ -29,12 +30,17 @@ def init(api, app):
     api.add_resource(anime.AnimesList, "/anime/list")
     api.add_resource(anime.Search, "/anime/search")
 
+    # Episode routes
     api.add_resource(episodes.AddEpisode, "/episodes/add")
     api.add_resource(episodes.UpdateEpisode, "/episodes/update")
     api.add_resource(episodes.DeleteEpisode, "/episodes/delete")
 
+    # System routes
     api.add_resource(system.ManagePermissions, "/system/permissions/manage")
     api.add_resource(system.UserPermissions, "/system/permissions/user")
+
+    # Voting routes
+    api.add_resource(votes.MakeVote, "/vote")
 
     @app.route("/")
     def root():
