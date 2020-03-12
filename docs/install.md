@@ -10,7 +10,7 @@ $ git clone https://github.com/hkkio/hikka.git
 
 ## Prerequisites
 
-You have to [install]((https://www.digitalocean.com/community/tutorials/how-to-install-mongodb-on-ubuntu-18-04)) MongoDB and set up DigitalOcean [Spaces](https://www.digitalocean.com/products/spaces/) or any other S3 compatible service.
+You have to [install]((https://www.digitalocean.com/community/tutorials/how-to-install-mongodb-on-ubuntu-18-04)) MongoDB and set up any [S3](https://en.wikipedia.org/wiki/Amazon_S3) copmatible storage.
 
 
 ## Config file
@@ -27,12 +27,13 @@ port = 1234
 cdn = "CDN_LINK"
 url = "FRONTEND_URL"
 
-spaces = {
+storage = {
     "app": "APP_ID",
     "secret": "APP_SECRET",
     "endpoint": "APP_ENDPOINT",
     "region": "APP_REGION",
-    "space": "APP_SPACE"
+    "branch": "APP_BRANCH",
+    "name": "APP_NAME"
 }
 
 db = {
@@ -53,9 +54,9 @@ smtp = {
 Here is some key points overview:
 
 - `secret`: Flask [SECRET_KEY](https://stackoverflow.com/a/22463969/9217774).
-- `cdn`: link to spaces cdn domain.
+- `cdn`: link to storage cdn domain.
 - `url`: website frontend url.
-- `spaces`: this object contains DigitalOcean spaces credentials, but you should be able to use any S3 compatible services.
+- `storage`: this object contains DigitalOcean storage credentials, but you should be able to use any S3 compatible services.
 - `smtp`: SMTP credentials.
 - `db`: MongoDB credentials.
 

@@ -25,6 +25,6 @@ class File(mongoengine.Document):
 
         return config.cdn + self.path
 
-    def spaces(self):
-        """Return Spaces path"""
-        return config.spaces["name"] + self.path
+    def storage(self):
+        """Return S3 path"""
+        return config.storage["name"] + self.path

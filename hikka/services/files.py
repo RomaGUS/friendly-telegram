@@ -1,6 +1,6 @@
 from hikka.services.models.file import File
 from hikka.services.models.user import User
-from hikka.tools import spaces
+from hikka.tools import storage
 
 class FileService:
     @classmethod
@@ -17,7 +17,7 @@ class FileService:
     @classmethod
     def destroy(cls, file: File):
         if file.uploaded and file.path is not None:
-            fs = spaces.init_fs()
-            fs.rm(file.spaces())
+            fs = storage.init_fs()
+            fs.rm(file.storage())
 
         file.delete()

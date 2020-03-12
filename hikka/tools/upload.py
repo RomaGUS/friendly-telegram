@@ -1,6 +1,6 @@
 from hikka.services.files import FileService
+from hikka.tools import storage
 from hikka.errors import abort
-from hikka.tools import spaces
 from hikka import utils
 from PIL import Image
 import secrets
@@ -17,17 +17,18 @@ class UploadHelper(object):
     def __init__(self, account, upload, upload_type):
         self.name = secrets.token_hex(16)
         self.file_type = upload.filename.rsplit('.', 1)[1]
-        self.spaces_name = config.spaces["name"]
+        self.storage_name = config.storage["name"]
+        self.branch = config.storage["branch"]
         self.upload_type = upload_type
         self.account = account
         self.upload = upload
 
         self.file = FileService.create(self.name, self.account)
         self.folder = utils.blake2b(self.file.created.strftime("%Y/%m"), 16, config.secret).hex()
-        self.fs = spaces.init_fs()
+        self.fs = storage.init_fs()
 
-        self.spaces_dir = f"{self.spaces_name}/{self.upload_type}/{self.folder}/"
-        self.tmp_dir = f"/tmp/{self.spaces_name}/{self.file.name}/"
+        self.storage_dir = f"{self.storage_name}/{self.branch}/{self.upload_type}/{self.folder}/"
+        self.tmp_dir = f"/tmp/{self.storage_name}/{self.file.name}/"
 
     def upload_image(self):
         if not self.is_image():
@@ -36,7 +37,7 @@ class UploadHelper(object):
         if self.size() > image_max_size:
             return abort("file", "too-big")
 
-        spaces_file_name = self.file.name + "." + "jpg"
+        storage_file_name = self.file.name + "." + "jpg"
         os.makedirs(self.tmp_dir)
 
         self.upload.save(self.tmp_dir + self.file.name + "." + self.file_type)
@@ -63,16 +64,16 @@ class UploadHelper(object):
                 new_height = int(new_width * height / width)
                 pil = pil.resize((new_width, new_height), Image.LANCZOS)
 
-        tmp_path = self.tmp_dir + spaces_file_name
+        tmp_path = self.tmp_dir + storage_file_name
         pil.save(tmp_path, optimize=True, quality=95)
 
-        spaces_path = self.spaces_dir + spaces_file_name
-        self.fs.put(tmp_path, spaces_path)
-        self.fs.chmod(spaces_path, 'public-read')
+        storage_path = self.storage_dir + storage_file_name
+        self.fs.put(tmp_path, storage_path)
+        self.fs.chmod(storage_path, 'public-read')
 
         self.clean()
 
-        self.file.path = f"/{self.upload_type}/{self.folder}/{spaces_file_name}"
+        self.file.path = f"/{self.upload_type}/{self.folder}/{storage_file_name}"
         self.file.uploaded = True
         self.file.save()
 
@@ -82,20 +83,20 @@ class UploadHelper(object):
         if not self.is_video():
             return abort("file", "bad-mime-type")
 
-        spaces_file_name = self.file.name + "." + "mp4"
+        storage_file_name = self.file.name + "." + "mp4"
 
         os.makedirs(self.tmp_dir)
         self.upload.save(self.tmp_dir + self.file.name + "." + self.file_type)
 
-        spaces_path = self.spaces_dir + spaces_file_name
-        tmp_path = self.tmp_dir + spaces_file_name
+        storage_path = self.storage_dir + storage_file_name
+        tmp_path = self.tmp_dir + storage_file_name
 
-        self.fs.put(tmp_path, spaces_path)
-        self.fs.chmod(spaces_path, 'public-read')
+        self.fs.put(tmp_path, storage_path)
+        self.fs.chmod(storage_path, "public-read")
 
         shutil.rmtree(self.tmp_dir)
 
-        self.file.path = f"/{self.upload_type}/{self.folder}/{spaces_file_name}"
+        self.file.path = f"/{self.branch}/{self.upload_type}/{self.folder}/{storage_file_name}"
         self.file.uploaded = True
         self.file.save()
 
