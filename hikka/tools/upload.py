@@ -1,6 +1,6 @@
 from hikka.services.files import FileService
 from hikka.errors import abort
-from hikka import spaces
+from hikka.tools import spaces
 from hikka import utils
 from PIL import Image
 import secrets

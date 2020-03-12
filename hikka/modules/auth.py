@@ -1,11 +1,11 @@
 from hikka.services.permissions import PermissionService
 from hikka.services.users import UserService
+from hikka.tools.mail import Email
 from flask_restful import Resource
 from flask_restful import reqparse
 from hikka.errors import abort
 from datetime import datetime
 from hikka.auth import Token
-from hikka.mail import Email
 import config
 
 class Join(Resource):

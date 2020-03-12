@@ -1,6 +1,6 @@
 from hikka.services.models.file import File
 from hikka.services.models.user import User
-from hikka import spaces
+from hikka.tools import spaces
 
 class FileService:
     @classmethod

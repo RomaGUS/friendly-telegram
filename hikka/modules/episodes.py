@@ -3,8 +3,8 @@ from hikka.services.anime import AnimeService
 from werkzeug.datastructures import FileStorage
 from hikka.services.teams import TeamService
 from hikka.services.files import FileService
+from hikka.tools.upload import UploadHelper
 from hikka.decorators import auth_required
-from hikka.upload import UploadHelper
 from flask_restful import Resource
 from flask_restful import reqparse
 from hikka.errors import abort

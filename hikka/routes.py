@@ -1,12 +1,12 @@
 from hikka.modules import descriptors
 from hikka.modules import episodes
-from flask import render_template
 from hikka.modules import system
 from hikka.modules import anime
 from hikka.modules import teams
 from hikka.modules import votes
 from hikka.modules import auth
 from hikka import errors
+import flask
 
 def init(api, app):
     # Auth routes
@@ -44,7 +44,7 @@ def init(api, app):
 
     @app.route("/")
     def root():
-        return render_template("index.html")
+        return flask.render_template("index.html")
 
     @app.errorhandler(404)
     def error404(error):

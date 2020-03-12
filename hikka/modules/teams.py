@@ -3,7 +3,7 @@ from hikka.services.permissions import PermissionService
 from werkzeug.datastructures import FileStorage
 from hikka.services.users import UserService
 from hikka.services.teams import TeamService
-from hikka.upload import UploadHelper
+from hikka.tools.upload import UploadHelper
 from flask_restful import Resource
 from flask_restful import reqparse
 from hikka.errors import abort
