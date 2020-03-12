@@ -36,7 +36,7 @@
 		<hr>
 
 		<video id=example-video width=960 height=540 class="video-js vjs-default-skin" controls>
-			<source src="https://cdn.hikka.io/video/54ea7ceddf3ee8a574a5d1f721da7ced/bfc40344235372b8964a66f6a93d34e5.mp4" type="video/mp4">
+			<source src="https://cdn.hikka.io/development/video/65ef0b34246d6bf0f52d0555e257b513/bfb0c1b61e5bfa5da4b2662b2f7f62a1.mp4" type="video/mp4">
 		</video>
 
 		<script>
@@ -55,9 +55,9 @@
 					var form = $('#fileUploadForm')[0];
 					var data = new FormData(form)
 
-					data.append("position", 1)
+					data.append("position", 2)
 					data.append("team", "fanvox")
-					data.append("slug", "kaguya-sama")
+					data.append("slug", "kaguya-sama-kohannya-yak-viyna-da7f37fc")
 
 					$.ajax({
 						type: "POST",
@@ -69,7 +69,7 @@
 						cache: false,
 						timeout: 600000,
 						beforeSend: function(request) {
-							request.setRequestHeader("Authentication", "3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuYpbsSVbHxJnUepd.ZMKC1hNPqdfkmnGBbzBZRyFxaagjRewcWqBUd2dc72GrWwkGDtq5LS4dnnL5n8BWk79o7e4xHHfdXZKZaPJsxu.Ns4b38iy3JN2P5aPi6FJ7RkayTjMkE7CfsxHnnEb5Sows8ejiFks59EcgTBYPbGvR7em3iaagQTq7NY6oDBmGaH2rLKhf");
+							request.setRequestHeader("Authentication", "3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuYpbsSVbHxJnUepd.ZMKC1hNPqdfkmnGBbzBZRyFxaagjRewcWqBUd2dc72GrWxLoy2UT4hk6ArnqbRHLU9JvPWUvvFP38G4WztG3xd.ZgJdFHek23pU5pALiif8ukyUGAUSfoJEh57TjkP6h4jJFqegivTdoXYEXzPrJbW7ZJkGKijrv8RG3XqphXyqwWGzJUKsf");
 						},
 						xhr: function() {
 								var myXhr = $.ajaxSettings.xhr();
