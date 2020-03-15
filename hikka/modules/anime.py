@@ -19,6 +19,7 @@ class NewAnime(Resource):
         result = {"error": None, "data": {}}
 
         parser = reqparse.RequestParser()
+        parser.add_argument("franchises", type=list, default=[], location="json")
         parser.add_argument("subtitles", type=list, default=[], location="json")
         parser.add_argument("voiceover", type=list, default=[], location="json")
         parser.add_argument("aliases", type=list, default=[], location="json")
@@ -79,6 +80,14 @@ class NewAnime(Resource):
             else:
                 return abort("genre", "not-found")
 
+        franchises = []
+        for slug in args["franchises"]:
+            franchise = DescriptorService.get_by_slug("franchise", slug)
+            if franchise is not None:
+                franchises.append(franchise)
+            else:
+                return abort("franchise", "not-found")
+
         subtitles = []
         for username in args["subtitles"]:
             subtitles_account = UserService.get_by_username(username)
@@ -109,6 +118,7 @@ class NewAnime(Resource):
             category,
             state,
             genres,
+            franchises,
             [team],
             subtitles,
             voiceover,
@@ -148,16 +158,18 @@ class Search(Resource):
         result = {"error": None, "data": []}
 
         parser = reqparse.RequestParser()
+        parser.add_argument("franchises", type=list, default=[], location="json")
         parser.add_argument("categories", type=list, default=[], location="json")
         parser.add_argument("states", type=list, default=[], location="json")
         parser.add_argument("genres", type=list, default=[], location="json")
         parser.add_argument("teams", type=list, default=[], location="json")
-        parser.add_argument("query", type=str, default=None)
+        parser.add_argument("query", type=str, default="")
         parser.add_argument("page", type=int, default=0)
         args = parser.parse_args()
 
         query = utils.search_query(args["query"])
         categories = []
+        franchises = []
         genres = []
         states = []
         teams = []
@@ -175,6 +187,13 @@ class Search(Resource):
                 genres.append(genre)
             else:
                 return abort("genre", "not-found")
+
+        for slug in args["franchises"]:
+            franchise = DescriptorService.get_by_slug("franchise", slug)
+            if franchise is not None:
+                franchises.append(franchise)
+            else:
+                return abort("franchise", "not-found")
 
         for slug in args["states"]:
             state = DescriptorService.get_by_slug("state", slug)
@@ -194,6 +213,7 @@ class Search(Resource):
             query,
             categories,
             genres,
+            franchises,
             states,
             teams,
             args["page"]

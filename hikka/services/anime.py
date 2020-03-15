@@ -20,8 +20,8 @@ class AnimeService:
     @classmethod
     def create(cls, title: Title, slug: str, description: str,
                 search: str, category: Descriptor, state: Descriptor,
-                genres=List[Descriptor], teams=[Team],
-                subtitles=[User], voiceover=[User],
+                genres=List[Descriptor], franchises=List[Descriptor],
+                teams=[Team], subtitles=[User], voiceover=[User],
                 aliases=[]) -> Anime:
 
         anime = Anime(
@@ -32,6 +32,7 @@ class AnimeService:
             category=category,
             state=state,
             genres=genres,
+            franchises=franchises,
             teams=teams,
             subtitles=subtitles,
             voiceover=voiceover,
@@ -85,7 +86,7 @@ class AnimeService:
         return list(anime)
 
     @classmethod
-    def search(cls, query, categories=[], genres=[],
+    def search(cls, query, categories=[], genres=[], franchises=[],
                 states=[], teams=[], page=0, limit=20) -> List[Anime]:
 
         offset = page * limit
@@ -96,6 +97,9 @@ class AnimeService:
 
         if len(genres) > 0:
             anime = anime.filter(genres__in=genres)
+
+        if len(franchises) > 0:
+            anime = anime.filter(franchises__in=franchises)
 
         if len(states) > 0:
             anime = anime.filter(state__in=states)

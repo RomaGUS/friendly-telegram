@@ -1,11 +1,11 @@
 from datetime import datetime
 import mongoengine
 
-class Comment(mongoengine.EmbeddedDocument):
-    text = mongoengine.StringField(required=True)
-    created = mongoengine.DateTimeField(default=datetime.now)
-    hidden = mongoengine.BooleanField(required=True, default=False)
-    account = mongoengine.ReferenceField("User")
+# class Comment(mongoengine.EmbeddedDocument):
+#     text = mongoengine.StringField(required=True)
+#     created = mongoengine.DateTimeField(default=datetime.now)
+#     hidden = mongoengine.BooleanField(required=True, default=False)
+#     account = mongoengine.ReferenceField("User")
 
 class Title(mongoengine.EmbeddedDocument):
     ua = mongoengine.StringField(required=True)
@@ -37,12 +37,12 @@ class Anime(mongoengine.Document):
     voiceover = mongoengine.ListField(mongoengine.ReferenceField("User"))
     teams = mongoengine.ListField(mongoengine.ReferenceField("Team"))
     created = mongoengine.DateTimeField(default=datetime.now)
-    comments = mongoengine.EmbeddedDocumentListField(Comment)
     slug = mongoengine.StringField(required=True)
     poster = mongoengine.ReferenceField("File")
     views = mongoengine.IntField(default=0)
 
     genres = mongoengine.ListField(mongoengine.ReferenceField("Descriptor", reverse_delete_rule=4))
+    franchises = mongoengine.ListField(mongoengine.ReferenceField("Descriptor", reverse_delete_rule=4))
     category = mongoengine.ReferenceField("Descriptor", reverse_delete_rule=4, required=True)
     state = mongoengine.ReferenceField("Descriptor", reverse_delete_rule=4, required=True)
 
@@ -60,8 +60,11 @@ class Anime(mongoengine.Document):
         "indexes": [
             "slug",
             "genres",
+            "category",
+            "state",
             "title.jp",
             "title.ua",
+            "search",
         ]
     }
 
@@ -76,6 +79,7 @@ class Anime(mongoengine.Document):
             "subtitles": [],
             "voiceover": [],
             "genres": [],
+            "franchises": [],
             "teams": []
         }
 
@@ -87,6 +91,9 @@ class Anime(mongoengine.Document):
 
         for genre in self.genres:
             data["genres"].append(genre.dict())
+
+        for franchise in self.franchises:
+            data["franchises"].append(franchise.dict())
 
         for team in self.teams:
             data["teams"].append(team.dict())
