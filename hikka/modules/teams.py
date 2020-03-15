@@ -110,8 +110,11 @@ class RemoveMember(Resource):
 
 class GetTeam(Resource):
     def get(self, slug):
+        result = {"error": None, "data": {}}
+
         team = TeamService.get_by_slug(slug)
         if team is None:
             return abort("team", "not-found")
 
-        return team.dict(True)
+        result["data"] = team.dict(True)
+        return result
