@@ -66,6 +66,7 @@ class Anime(mongoengine.Document):
             "title.jp",
             "title.ua",
             "search",
+            "rating",
         ]
     }
 

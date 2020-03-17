@@ -14,6 +14,7 @@ class Vote(mongoengine.Document):
         "indexes": [
             "subject",
             "account",
+            "rating",
         ]
     }
 
