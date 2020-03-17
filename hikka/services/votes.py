@@ -15,8 +15,10 @@ class VoteService:
             vote.updated = datetime.now()
             vote.rating = rating
 
-        average = Vote.objects(subject=subject).average("rating")
-        subject.rating = average
-        subject.save()
+        # Only if subject has rating field
+        if hasattr(subject, "rating"):
+            average = Vote.objects(subject=subject).average("rating")
+            subject.rating = average
+            subject.save()
 
         return vote
