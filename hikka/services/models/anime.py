@@ -46,8 +46,8 @@ class Anime(mongoengine.Document):
     category = mongoengine.ReferenceField("Descriptor", reverse_delete_rule=4, required=True)
     state = mongoengine.ReferenceField("Descriptor", reverse_delete_rule=4, required=True)
 
-    rating = mongoengine.DecimalField(default=0, min_value=1, max_value=10)
     aliases = mongoengine.ListField(mongoengine.StringField())
+    rating = mongoengine.DecimalField(default=0)
     search = mongoengine.StringField()
 
     episodes = mongoengine.SortedListField(
