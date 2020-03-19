@@ -59,6 +59,7 @@ class NewTeam(Resource):
 
 class AddMember(Resource):
     @auth_required
+    @permission_required("global", "admin")
     def post(self):
         result = {"error": None, "data": {}}
 
@@ -85,6 +86,7 @@ class AddMember(Resource):
 
 class RemoveMember(Resource):
     @auth_required
+    @permission_required("global", "admin")
     def post(self):
         result = {"error": None, "data": {}}
 
