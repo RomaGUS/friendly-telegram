@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "41df396f-b62f-4243-9e7c-8170774625b5",
+		"_postman_id": "3a1cc77f-2a39-4298-ab59-659df8d1752f",
 		"name": "Hikka",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -24,12 +24,9 @@
 							"raw": "{\"username\": \"volbil\", \"password\": \"thisispassword\", \"email\": \"volbilnexus@gmail.com\"}"
 						},
 						"url": {
-							"raw": "https://api.hikka.io/auth/join",
-							"protocol": "https",
+							"raw": "{{url}}/auth/join",
 							"host": [
-								"api",
-								"hikka",
-								"io"
+								"{{url}}"
 							],
 							"path": [
 								"auth",
@@ -56,12 +53,9 @@
 							"raw": "{\"email\": \"volbilnexus@gmail.com\", \"password\": \"thisispassword\"}"
 						},
 						"url": {
-							"raw": "https://api.hikka.io/auth/login",
-							"protocol": "https",
+							"raw": "{{url}}/auth/login",
 							"host": [
-								"api",
-								"hikka",
-								"io"
+								"{{url}}"
 							],
 							"path": [
 								"auth",
@@ -88,12 +82,9 @@
 							"raw": "{\"token\": \"3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuaKHVFGSweqHCNPp.H7MGKU95BMZZ2tUjHy5JkLevZFKZGYfUu6gzsQLe4825QPQiUBHBaRY4dGNnK3pSyMroKvXdCpSaUUvSY9t3LGdwW6nWT.GYfvzpc9ovBDiyBsTbd5Wpz4xXYaM5Y876Dg2sfuXVSHeFz62\"}"
 						},
 						"url": {
-							"raw": "https://api.hikka.io/auth/activate",
-							"protocol": "https",
+							"raw": "{{url}}/auth/activate",
 							"host": [
-								"api",
-								"hikka",
-								"io"
+								"{{url}}"
 							],
 							"path": [
 								"auth",
@@ -122,7 +113,7 @@
 							},
 							{
 								"key": "Authentication",
-								"value": "3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuYpbsSVbHxJnUepd.ZMKC1hNPqdfkmnGBbzBZRyFxaagjRewcWqBUd2dc72GrWxLowq19wnJB2yJJJ3mixH221QNMdwrWCFj52LjxKe.9MVy9ncmHqQeMUFHSvXE4t66rYHMaY4kC5Lz6ST5miEpnawNpkRadAUdQJmNDQxFqeVyfx6rxaueBiYpRH1XbhYfesu1N",
+								"value": "{{token}}",
 								"type": "text"
 							}
 						],
@@ -131,12 +122,9 @@
 							"raw": "{\"description\": \"FanVoxUA - Озвучуємо для вас!\", \"name\": \"FanVoxUA\", \"slug\": \"fanvox2\", \"members\": [\"volbil\"], \"admins\": [\"volbil\"]}"
 						},
 						"url": {
-							"raw": "https://api.hikka.io/teams/new",
-							"protocol": "https",
+							"raw": "{{url}}/teams/new",
 							"host": [
-								"api",
-								"hikka",
-								"io"
+								"{{url}}"
 							],
 							"path": [
 								"teams",
@@ -160,7 +148,7 @@
 							{
 								"key": "Authentication",
 								"type": "text",
-								"value": "3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuYpbsSVbHxJnUepd.ZMKC1hNPqdfkmnGBbzBZRyFxaagjRewcWqBUd2dc72GrWxLowq19wnJB2yJJJ3mixH221QNMdwrWCFj52LjxKe.9MVy9ncmHqQeMUFHSvXE4t66rYHMaY4kC5Lz6ST5miEpnawNpkRadAUdQJmNDQxFqeVyfx6rxaueBiYpRH1XbhYfesu1N"
+								"value": "{{token}}"
 							}
 						],
 						"body": {
@@ -168,12 +156,9 @@
 							"raw": "{\"username\": \"volbil2\", \"admin\": false, \"slug\": \"fanvox2\"}"
 						},
 						"url": {
-							"raw": "https://api.hikka.io/teams/member/add",
-							"protocol": "https",
+							"raw": "{{url}}/teams/member/add",
 							"host": [
-								"api",
-								"hikka",
-								"io"
+								"{{url}}"
 							],
 							"path": [
 								"teams",
@@ -198,7 +183,7 @@
 							{
 								"key": "Authentication",
 								"type": "text",
-								"value": "3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuYpbsSVbHxJnUepd.ZMKC1hNPqdfkmnGBbzBZRyFxaagjRewcWqBUd2dc72GrWxLowq19wnJB2yJJJ3mixH221QNMdwrWCFj52LjxKe.9MVy9ncmHqQeMUFHSvXE4t66rYHMaY4kC5Lz6ST5miEpnawNpkRadAUdQJmNDQxFqeVyfx6rxaueBiYpRH1XbhYfesu1N"
+								"value": "{{token}}"
 							}
 						],
 						"body": {
@@ -206,12 +191,9 @@
 							"raw": "{\"username\": \"volbil2\", \"slug\": \"fanvox2\"}"
 						},
 						"url": {
-							"raw": "https://api.hikka.io/teams/member/remove",
-							"protocol": "https",
+							"raw": "{{url}}/teams/member/remove",
 							"host": [
-								"api",
-								"hikka",
-								"io"
+								"{{url}}"
 							],
 							"path": [
 								"teams",
@@ -235,24 +217,16 @@
 								"name": "Content-Type",
 								"type": "text",
 								"value": "application/json"
-							},
-							{
-								"key": "Authentication",
-								"type": "text",
-								"value": "3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuYpbsSVbHxJnUepd.ZMKC1hNPqdfkmnGBbzBZRyFxaagjRewcWqBUd2dc72GrWxLowq19wnJB2yJJJ3mixH221QNMdwrWCFj52LjxKe.9MVy9ncmHqQeMUFHSvXE4t66rYHMaY4kC5Lz6ST5miEpnawNpkRadAUdQJmNDQxFqeVyfx6rxaueBiYpRH1XbhYfesu1N"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"description\": \"Шіномія Каґуя та Шіроґане Міюкі — члени Учнівської ради елітної академії Шючіїн, генії з геніїв. Після часу проведеного разом часу, у них зародилися почуття один до одного. Але, на жаль, але їхня гордість не дозволить зізнатися одне одному про свої почуття. Кохання — це війна, це безжальна битва, метою якої є змусити супротивника освідчитися!\", \"title\": {\"ua\": \"Каґуя-сама, Кохання як війна\", \"jp\": \"TEST\"}, \"slug\": \"kaguya-sama\", \"state\": \"ongoing\", \"genres\": [\"romance\"], \"voiceover\": [\"volbil\"], \"category\": \"tv\", \"team\": \"fanvox\"}"
+							"raw": ""
 						},
 						"url": {
-							"raw": "https://api.hikka.io/teams/get/fanvox",
-							"protocol": "https",
+							"raw": "{{url}}/teams/get/fanvox",
 							"host": [
-								"api",
-								"hikka",
-								"io"
+								"{{url}}"
 							],
 							"path": [
 								"teams",
@@ -282,21 +256,18 @@
 							},
 							{
 								"key": "Authentication",
-								"value": "3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuYpbsSVbHxJnUepd.ZMKC1hNPqdfkmnGBbzBZRyFxaagjRewcWqBUd2dc72GrWxLowq19wnJB2yJJJ3mixH221QNMdwrWCFj52LjxKe.9MVy9ncmHqQeMUFHSvXE4t66rYHMaY4kC5Lz6ST5miEpnawNpkRadAUdQJmNDQxFqeVyfx6rxaueBiYpRH1XbhYfesu1N",
+								"value": "{{token}}",
 								"type": "text"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"name\": \"ОВА\", \"slug\": \"ova\", \"service\": \"category\"}"
+							"raw": "{\"name\": \"Хорор\", \"slug\": \"horror\", \"service\": \"genre\"}"
 						},
 						"url": {
-							"raw": "https://api.hikka.io/descriptors/new",
-							"protocol": "https",
+							"raw": "{{url}}/descriptors/new",
 							"host": [
-								"api",
-								"hikka",
-								"io"
+								"{{url}}"
 							],
 							"path": [
 								"descriptors",
@@ -319,7 +290,7 @@
 							},
 							{
 								"key": "Authentication",
-								"value": "3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuYpbsSVbHxJnUepd.ZMKC1hNPqdfkmnGBbzBZRyFxaagjRewcWqBUd2dc72GrWxLowq19wnJB2yJJJ3mixH221QNMdwrWCFj52LjxKe.9MVy9ncmHqQeMUFHSvXE4t66rYHMaY4kC5Lz6ST5miEpnawNpkRadAUdQJmNDQxFqeVyfx6rxaueBiYpRH1XbhYfesu1N",
+								"value": "{{token}}",
 								"type": "text"
 							}
 						],
@@ -328,16 +299,47 @@
 							"raw": "{\"slug\": \"romance\", \"service\": \"genre\", \"params\": {\"description\": \"111\"}}"
 						},
 						"url": {
-							"raw": "https://api.hikka.io/descriptors/update",
-							"protocol": "https",
+							"raw": "{{url}}/descriptors/update",
 							"host": [
-								"api",
-								"hikka",
-								"io"
+								"{{url}}"
 							],
 							"path": [
 								"descriptors",
 								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Descriptors",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authentication",
+								"type": "text",
+								"value": "{{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"service\": \"genre\"}"
+						},
+						"url": {
+							"raw": "{{url}}/descriptors/list",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"descriptors",
+								"list"
 							]
 						}
 					},
@@ -362,21 +364,18 @@
 							},
 							{
 								"key": "Authentication",
-								"value": "3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuYpbsSVbHxJnUepd.ZMKC1hNPqdfkmnGBbzBZRyFxaagjRewcWqBUd2dc72GrWxLowq19wnJB2yJJJ3mixH221QNMdwrWCFj52LjxKe.9MVy9ncmHqQeMUFHSvXE4t66rYHMaY4kC5Lz6ST5miEpnawNpkRadAUdQJmNDQxFqeVyfx6rxaueBiYpRH1XbhYfesu1N",
+								"value": "{{token}}",
 								"type": "text"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"description\": \"Шіномія Каґуя та Шіроґане Міюкі — члени Учнівської ради елітної академії Шючіїн, генії з геніїв. Після часу проведеного разом часу, у них зародилися почуття один до одного. Але, на жаль, але їхня гордість не дозволить зізнатися одне одному про свої почуття. Кохання — це війна, це безжальна битва, метою якої є змусити супротивника освідчитися!\", \"title\": {\"ua\": \"Каґуя-сама, Кохання як війна\", \"jp\": \"TEST\"}, \"state\": \"ongoing\", \"genres\": [\"romance\"], \"voiceover\": [\"volbil\"], \"category\": \"tv\", \"team\": \"fanvox\", \"aliases\": [\"кагуя\"]}"
+							"raw": "{\"description\": \"Шіномія Каґуя та Шіроґане Міюкі — члени Учнівської ради елітної академії Шючіїн, генії з геніїв. Після часу проведеного разом часу, у них зародилися почуття один до одного. Але, на жаль, але їхня гордість не дозволить зізнатися одне одному про свої почуття. Кохання — це війна, це безжальна битва, метою якої є змусити супротивника освідчитися!\", \"title\": {\"ua\": \"Каґуя-сама, Кохання як війна\", \"jp\": \"TEST\"}, \"state\": \"ongoing\", \"genres\": [\"romance\", \"horror\"], \"franchises\": [\"boku_no_piko\"], \"voiceover\": [\"volbil\"], \"category\": \"tv\", \"team\": \"fanvox\", \"aliases\": [\"кагуя\"]}"
 						},
 						"url": {
-							"raw": "https://api.hikka.io/anime/new",
-							"protocol": "https",
+							"raw": "{{url}}/anime/new",
 							"host": [
-								"api",
-								"hikka",
-								"io"
+								"{{url}}"
 							],
 							"path": [
 								"anime",
@@ -387,7 +386,77 @@
 					"response": []
 				},
 				{
-					"name": "Search",
+					"name": "New Anime Copy",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "multipart/form-data"
+							},
+							{
+								"key": "Authentication",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "description",
+									"value": "Шіномія Каґуя та Шіроґане Міюкі — члени Учнівської ради елітної академії Шючіїн, генії з геніїв. Після часу проведеного разом часу, у них зародилися почуття один до одного. Але, на жаль, але їхня гордість не дозволить зізнатися одне одному про свої почуття. Кохання — це війна, це безжальна битва, метою якої є змусити супротивника освідчитися!",
+									"type": "text"
+								},
+								{
+									"key": "title[ua]",
+									"value": "Каґуя-сама, Кохання як війна",
+									"type": "text"
+								},
+								{
+									"key": "title[jp]",
+									"value": "TEST",
+									"type": "text"
+								},
+								{
+									"key": "state",
+									"value": "ongoing",
+									"type": "text"
+								},
+								{
+									"key": "genres[]",
+									"value": "romance",
+									"type": "text"
+								},
+								{
+									"key": "category",
+									"value": "tv",
+									"type": "text"
+								},
+								{
+									"key": "team",
+									"value": "fanvox",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{url}}/anime/new",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"anime",
+								"new"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Anime List",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -396,52 +465,16 @@
 								"name": "Content-Type",
 								"type": "text",
 								"value": "application/json"
-							},
-							{
-								"key": "Authentication",
-								"type": "text",
-								"value": "3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuYpbsSVbHxJnUepd.ZMKC1hNPqdfkmnGBbzBZRyFxaagjRewcWqBUd2dc72GrWxLowq19wnJB2yJJJ3mixH221QNMdwrWCFj52LjxKe.9MVy9ncmHqQeMUFHSvXE4t66rYHMaY4kC5Lz6ST5miEpnawNpkRadAUdQJmNDQxFqeVyfx6rxaueBiYpRH1XbhYfesu1N"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"query\": \"кохання як війна\", \"genres\": [\"romance\"], \"teams\": [\"fanvox\"], \"categories\": [\"tv\", \"ova\"]}"
+							"raw": "{}"
 						},
 						"url": {
-							"raw": "https://api.hikka.io/anime/search",
-							"protocol": "https",
+							"raw": "{{url}}/anime/list",
 							"host": [
-								"api",
-								"hikka",
-								"io"
-							],
-							"path": [
-								"anime",
-								"search"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "List Anime",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "https://api.hikka.io/anime/list",
-							"protocol": "https",
-							"host": [
-								"api",
-								"hikka",
-								"io"
+								"{{url}}"
 							],
 							"path": [
 								"anime",
@@ -464,11 +497,6 @@
 								"name": "Content-Type",
 								"type": "text",
 								"value": "application/json"
-							},
-							{
-								"key": "Authentication",
-								"value": "3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuYpbsSVbHxJnUepd.ZMKC1hNPqdfkmnGBbzBZRyFxaagjRewcWqBUd2dc72GrWwkAwFxBXG35FvfGc2WrNoNGMsY6L9V4cnzwrBV4j6.UtArtJ5ZQn3PJcd6WvTb6EgWNTZULwQt7wwbV5Qje3rR79UvUp4KgHtFM8HbgmpedyNjCLkndzhF4Nt7Dj72YJ9BveguY",
-								"type": "text"
 							}
 						],
 						"body": {
@@ -476,12 +504,9 @@
 							"raw": "{\"description\": \"Шіномія Каґуя та Шіроґане Міюкі — члени Учнівської ради елітної академії Шючіїн, генії з геніїв. Після часу проведеного разом часу, у них зародилися почуття один до одного. Але, на жаль, але їхня гордість не дозволить зізнатися одне одному про свої почуття. Кохання — це війна, це безжальна битва, метою якої є змусити супротивника освідчитися!\", \"title\": {\"ua\": \"Каґуя-сама, Кохання як війна\", \"jp\": \"TEST\"}, \"slug\": \"kaguya-sama\", \"state\": \"ongoing\", \"genres\": [\"romance\"], \"voiceover\": [\"volbil\"], \"category\": \"tv\", \"team\": \"fanvox\"}"
 						},
 						"url": {
-							"raw": "https://api.hikka.io/anime/get/kaguya-sama-kohannya-yak-viyna-e4f5e425",
-							"protocol": "https",
+							"raw": "{{url}}/anime/get/kaguya-sama-kohannya-yak-viyna-e4f5e425",
 							"host": [
-								"api",
-								"hikka",
-								"io"
+								"{{url}}"
 							],
 							"path": [
 								"anime",
@@ -511,7 +536,7 @@
 							},
 							{
 								"key": "Authentication",
-								"value": "3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuYpbsSVbHxJnUepd.ZMKC1hNPqdfkmnGBbzBZRyFxaagjRewcWqBUd2dc72GrWxLowq19wnJB2yJJJ3mixH221QNMdwrWCFj52LjxKe.9MVy9ncmHqQeMUFHSvXE4t66rYHMaY4kC5Lz6ST5miEpnawNpkRadAUdQJmNDQxFqeVyfx6rxaueBiYpRH1XbhYfesu1N",
+								"value": "{{token}}",
 								"type": "text"
 							}
 						],
@@ -520,12 +545,9 @@
 							"raw": "{\"video\": null, \"position\": 0, \"team\": \"fanvox\", \"slug\": \"kaguya-sama\", \"name\": \"Перша серія\"}"
 						},
 						"url": {
-							"raw": "https://api.hikka.io/episodes/add",
-							"protocol": "https",
+							"raw": "{{url}}/episodes/add",
 							"host": [
-								"api",
-								"hikka",
-								"io"
+								"{{url}}"
 							],
 							"path": [
 								"episodes",
@@ -549,7 +571,7 @@
 							{
 								"key": "Authentication",
 								"type": "text",
-								"value": "3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuYpbsSVbHxJnUepd.ZMKC1hNPqdfkmnGBbzBZRyFxaagjRewcWqBUd2dc72GrWxLowq19wnJB2yJJJ3mixH221QNMdwrWCFj52LjxKe.9MVy9ncmHqQeMUFHSvXE4t66rYHMaY4kC5Lz6ST5miEpnawNpkRadAUdQJmNDQxFqeVyfx6rxaueBiYpRH1XbhYfesu1N"
+								"value": "{{token}}"
 							}
 						],
 						"body": {
@@ -557,12 +579,9 @@
 							"raw": "{\"position\": 0, \"team\": \"fanvox\", \"slug\": \"kaguya-sama\", \"params\": {\"name\": \"TEST\", \"video\": \"HUI\"}}"
 						},
 						"url": {
-							"raw": "https://api.hikka.io/episodes/update",
-							"protocol": "https",
+							"raw": "{{url}}/episodes/update",
 							"host": [
-								"api",
-								"hikka",
-								"io"
+								"{{url}}"
 							],
 							"path": [
 								"episodes",
@@ -586,7 +605,7 @@
 							{
 								"key": "Authentication",
 								"type": "text",
-								"value": "3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuYpbsSVbHxJnUepd.ZMKC1hNPqdfkmnGBbzBZRyFxaagjRewcWqBUd2dc72GrWxLowq19wnJB2yJJJ3mixH221QNMdwrWCFj52LjxKe.9MVy9ncmHqQeMUFHSvXE4t66rYHMaY4kC5Lz6ST5miEpnawNpkRadAUdQJmNDQxFqeVyfx6rxaueBiYpRH1XbhYfesu1N"
+								"value": "{{token}}"
 							}
 						],
 						"body": {
@@ -594,12 +613,9 @@
 							"raw": "{\"position\": 0, \"team\": \"fanvox\", \"slug\": \"kaguya-sama\"}"
 						},
 						"url": {
-							"raw": "https://api.hikka.io/episodes/delete",
-							"protocol": "https",
+							"raw": "{{url}}/episodes/delete",
 							"host": [
-								"api",
-								"hikka",
-								"io"
+								"{{url}}"
 							],
 							"path": [
 								"episodes",
@@ -629,7 +645,7 @@
 							{
 								"key": "Authentication",
 								"type": "text",
-								"value": "3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuYpbsSVbHxJnUepd.ZMKC1hNPqdfkmnGBbzBZRyFxaagjRewcWqBUd2dc72GrWxLowq19wnJB2yJJJ3mixH221QNMdwrWCFj52LjxKe.9MVy9ncmHqQeMUFHSvXE4t66rYHMaY4kC5Lz6ST5miEpnawNpkRadAUdQJmNDQxFqeVyfx6rxaueBiYpRH1XbhYfesu1N"
+								"value": "{{token}}"
 							}
 						],
 						"body": {
@@ -637,12 +653,9 @@
 							"raw": "{\"username\": \"volbil\"}"
 						},
 						"url": {
-							"raw": "https://api.hikka.io/system/permissions/user",
-							"protocol": "https",
+							"raw": "{{url}}/system/permissions/user",
 							"host": [
-								"api",
-								"hikka",
-								"io"
+								"{{url}}"
 							],
 							"path": [
 								"system",
@@ -667,7 +680,7 @@
 							{
 								"key": "Authentication",
 								"type": "text",
-								"value": "3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuYpbsSVbHxJnUepd.ZMKC1hNPqdfkmnGBbzBZRyFxaagjRewcWqBUd2dc72GrWxLowq19wnJB2yJJJ3mixH221QNMdwrWCFj52LjxKe.9MVy9ncmHqQeMUFHSvXE4t66rYHMaY4kC5Lz6ST5miEpnawNpkRadAUdQJmNDQxFqeVyfx6rxaueBiYpRH1XbhYfesu1N"
+								"value": "{{token}}"
 							}
 						],
 						"body": {
@@ -675,12 +688,9 @@
 							"raw": "{\"username\": \"volbil\", \"action\": \"add\", \"scope\": \"test\", \"name\": \"permission\"}"
 						},
 						"url": {
-							"raw": "https://api.hikka.io/system/permissions/manage",
-							"protocol": "https",
+							"raw": "{{url}}/system/permissions/manage",
 							"host": [
-								"api",
-								"hikka",
-								"io"
+								"{{url}}"
 							],
 							"path": [
 								"system",
@@ -711,23 +721,60 @@
 							{
 								"key": "Authentication",
 								"type": "text",
+								"value": "{{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"rating\": 9, \"subject\": \"anime\", \"slug\": \"kaguya-sama-kohannya-yak-viyna-c6422ca3\"}"
+						},
+						"url": {
+							"raw": "{{url}}/vote",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"vote"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Jikan",
+			"item": [
+				{
+					"name": "Search",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authentication",
+								"type": "text",
 								"value": "3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuYpbsSVbHxJnUepd.ZMKC1hNPqdfkmnGBbzBZRyFxaagjRewcWqBUd2dc72GrWxLowq19wnJB2yJJJ3mixH221QNMdwrWCFj52LjxKe.9MVy9ncmHqQeMUFHSvXE4t66rYHMaY4kC5Lz6ST5miEpnawNpkRadAUdQJmNDQxFqeVyfx6rxaueBiYpRH1XbhYfesu1N"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"rating\": 9, \"subject\": \"anime\", \"slug\": \"kaguya-sama-kohannya-yak-viyna-e4f5e425\"}"
+							"raw": "{\"query\": \"Fate\"}"
 						},
 						"url": {
-							"raw": "https://api.hikka.io/vote",
-							"protocol": "https",
+							"raw": "{{url}}/jikan/search",
 							"host": [
-								"api",
-								"hikka",
-								"io"
+								"{{url}}"
 							],
 							"path": [
-								"vote"
+								"jikan",
+								"search"
 							]
 						}
 					},
