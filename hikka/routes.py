@@ -20,6 +20,7 @@ def init(api, app):
     api.add_resource(teams.GetTeam, "/teams/get/<string:slug>")
     api.add_resource(teams.AddMember, "/teams/member/add")
     api.add_resource(teams.RemoveMember, "/teams/member/remove")
+    api.add_resource(teams.ListTeams, "/teams/list")
 
     # Descriptor routes
     api.add_resource(descriptors.NewDescriptor, "/descriptors/new")
@@ -49,6 +50,10 @@ def init(api, app):
     @app.route("/")
     def root():
         return flask.render_template("index.html")
+
+    @app.errorhandler(400)
+    def error400(error):
+        return errors.abort("general", "bad-request", 400)
 
     @app.errorhandler(404)
     def error404(error):

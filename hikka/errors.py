@@ -61,6 +61,7 @@ errors = {
         "out-of-range": "Number is out of range",
         "method-not-allowed": "Method not allowed",
         "too-many-requests": "Too many requests",
+        "bad-request": "Bad Request",
         "not-found": "Not Found"
     }
 }
