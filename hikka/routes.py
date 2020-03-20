@@ -24,6 +24,7 @@ def init(api, app):
     # Descriptor routes
     api.add_resource(descriptors.NewDescriptor, "/descriptors/new")
     api.add_resource(descriptors.UpdateDescriptor, "/descriptors/update")
+    api.add_resource(descriptors.ListDescriptors, "/descriptors/list")
 
     # Anime routes
     api.add_resource(anime.NewAnime, "/anime/new")

@@ -60,3 +60,18 @@ class UpdateDescriptor(Resource):
 
         result["data"] = descriptor.dict()
         return result
+
+class ListDescriptors(Resource):
+    def post(self):
+        result = {"error": None, "data": []}
+
+        parser = reqparse.RequestParser()
+        parser.add_argument("service", type=str, required=True, choices=choices)
+        args = parser.parse_args()
+
+        descriptors = DescriptorService.list(args["service"])
+
+        for descriptor in descriptors:
+            result["data"].append(descriptor.dict())
+
+        return result

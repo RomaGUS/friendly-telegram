@@ -20,7 +20,6 @@ class DescriptorService:
         return descriptor
 
     @classmethod
-    def list(cls, category: str, page=0, limit=10) -> List[Descriptor]:
-        offset = page * limit
-        descriptors = Descriptor.objects().filter(category=category).limit(limit).skip(offset)
+    def list(cls, category: str) -> List[Descriptor]:
+        descriptors = Descriptor.objects().filter(category=category)
         return list(descriptors)
