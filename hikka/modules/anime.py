@@ -139,20 +139,6 @@ class GetAnime(Resource):
 
         return anime.dict(True)
 
-class AnimesList(Resource):
-    def get(self):
-        result = {"error": None, "data": []}
-
-        parser = reqparse.RequestParser()
-        parser.add_argument("page", type=int, default=0)
-        args = parser.parse_args()
-
-        anime = AnimeService.list(args["page"])
-        for anime in anime:
-            result["data"].append(anime.dict())
-
-        return result
-
 class Search(Resource):
     def post(self):
         result = {"error": None, "data": []}

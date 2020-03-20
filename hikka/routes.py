@@ -28,8 +28,7 @@ def init(api, app):
     # Anime routes
     api.add_resource(anime.NewAnime, "/anime/new")
     api.add_resource(anime.GetAnime, "/anime/get/<string:slug>")
-    api.add_resource(anime.AnimesList, "/anime/list")
-    api.add_resource(anime.Search, "/anime/search")
+    api.add_resource(anime.Search, "/anime/list")
 
     # Episode routes
     api.add_resource(episodes.AddEpisode, "/episodes/add")
