@@ -62,7 +62,7 @@ class UpdateDescriptor(Resource):
         return result
 
 class ListDescriptors(Resource):
-    def post(self):
+    def get(self):
         result = {"error": None, "data": []}
 
         parser = reqparse.RequestParser()

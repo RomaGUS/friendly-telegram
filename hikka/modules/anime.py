@@ -140,7 +140,7 @@ class GetAnime(Resource):
         return anime.dict(True)
 
 class Search(Resource):
-    def post(self):
+    def get(self):
         result = {"error": None, "data": []}
 
         parser = reqparse.RequestParser()
