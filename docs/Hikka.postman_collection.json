@@ -205,6 +205,38 @@
 					"response": []
 				},
 				{
+					"name": "List Teams",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{}"
+						},
+						"url": {
+							"raw": "{{url}}/teams/list",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"teams",
+								"list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Get Team",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
@@ -313,8 +345,11 @@
 				},
 				{
 					"name": "List Descriptors",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
-						"method": "POST",
+						"method": "GET",
 						"header": [
 							{
 								"key": "Content-Type",
@@ -456,9 +491,12 @@
 					"response": []
 				},
 				{
-					"name": "Anime List",
+					"name": "List Anime",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
-						"method": "POST",
+						"method": "GET",
 						"header": [
 							{
 								"key": "Content-Type",
@@ -469,7 +507,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{}"
+							"raw": "{\"query\": \"кохання як війна\", \"genres\": [\"romance\", \"horror\"], \"teams\": [\"fanvox\"], \"categories\": [\"tv\", \"ova\"]}"
 						},
 						"url": {
 							"raw": "{{url}}/anime/list",
