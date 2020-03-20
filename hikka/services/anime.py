@@ -96,10 +96,10 @@ class AnimeService:
             anime = anime.filter(category__in=categories)
 
         if len(genres) > 0:
-            anime = anime.filter(genres__in=genres)
+            anime = anime.filter(genres__all=genres)
 
         if len(franchises) > 0:
-            anime = anime.filter(franchises__in=franchises)
+            anime = anime.filter(franchises__all=franchises)
 
         if len(states) > 0:
             anime = anime.filter(state__in=states)
