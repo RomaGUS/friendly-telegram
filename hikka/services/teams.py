@@ -53,9 +53,8 @@ class TeamService:
         return team
 
     @classmethod
-    def list(cls, page=0, limit=10) -> List[Team]:
-        offset = page * limit
-        teams = Team.objects().filter().limit(limit).skip(offset)
+    def list(cls) -> List[Team]:
+        teams = Team.objects().filter()
         return list(teams)
 
     @classmethod

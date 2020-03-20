@@ -120,3 +120,13 @@ class GetTeam(Resource):
 
         result["data"] = team.dict(True)
         return result
+
+class ListTeams(Resource):
+    def get(self):
+        result = {"error": None, "data": []}
+
+        teams = TeamService.list()
+        for team in teams:
+            result["data"].append(team.dict())
+
+        return result
