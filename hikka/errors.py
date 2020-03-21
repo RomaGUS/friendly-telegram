@@ -56,6 +56,7 @@ errors = {
         "token-invalid-type": "Invalid token type",
         "alias-invalid-type": "Alias must be string",
         "pagination-error": "Pagination is out of range",
+        "service-not-found": "Descriptor service not found",
         "missing-field": "Required field is missing",
         "empty-required": "Required field can't be empty",
         "out-of-range": "Number is out of range",

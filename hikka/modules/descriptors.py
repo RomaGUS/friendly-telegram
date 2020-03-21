@@ -62,16 +62,20 @@ class UpdateDescriptor(Resource):
         return result
 
 class ListDescriptors(Resource):
-    def get(self):
-        result = {"error": None, "data": []}
+    def post(self):
+        result = {"error": None, "data": {}}
 
         parser = reqparse.RequestParser()
-        parser.add_argument("service", type=str, required=True, choices=choices)
+        parser.add_argument("services", type=list, default=[], location="json")
         args = parser.parse_args()
 
-        descriptors = DescriptorService.list(args["service"])
+        for service in args["services"]:
+            if service not in choices:
+                return abort("general", "service-not-found")
 
-        for descriptor in descriptors:
-            result["data"].append(descriptor.dict())
+            result["data"][service] = []
+            descriptors = DescriptorService.list(service)
+            for descriptor in descriptors:
+                result["data"][service].append(descriptor.dict())
 
         return result
