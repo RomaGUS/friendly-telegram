@@ -1,5 +1,6 @@
 import hashlib
 import secrets
+import git
 import re
 
 def blake2b(data: str, size=32, key=""):
@@ -91,3 +92,16 @@ def create_search(*args):
                 result.append(search_query(alias))
 
     return " ".join(result)
+
+def commit():
+    try:
+        repo = git.Repo()
+        commit = repo.head.object.hexsha[0:7]
+
+        if repo.is_dirty:
+            commit += "-dirty"
+
+    except:
+        commit = None
+
+    return commit

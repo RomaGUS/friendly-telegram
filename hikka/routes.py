@@ -25,7 +25,6 @@ def init(api, app):
     # Descriptor routes
     api.add_resource(descriptors.NewDescriptor, "/descriptors/new")
     api.add_resource(descriptors.UpdateDescriptor, "/descriptors/update")
-    api.add_resource(descriptors.ListDescriptors, "/descriptors/list")
 
     # Anime routes
     api.add_resource(anime.NewAnime, "/anime/new")
@@ -40,6 +39,7 @@ def init(api, app):
     # System routes
     api.add_resource(system.ManagePermissions, "/system/permissions/manage")
     api.add_resource(system.UserPermissions, "/system/permissions/user")
+    api.add_resource(system.App, "/system/app")
 
     # Jikan routes
     api.add_resource(jikan.JikanSearch, "/jikan/search")

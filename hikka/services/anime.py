@@ -87,6 +87,23 @@ class AnimeService:
         return list(anime)
 
     @classmethod
+    def years(cls) -> dict:
+        data = list(
+            Anime.objects().aggregate({
+                "$group": {
+                    "_id": "$total",
+                    "min": {"$min": "$year"},
+                    "max": {"$max": "$year"}
+                }
+            })
+        )
+
+        return {
+            "min": data[0]["min"],
+            "max": data[0]["max"]
+        }
+
+    @classmethod
     def search(cls, query, year: dict, categories=[], genres=[], franchises=[],
                 states=[], teams=[], page=0, limit=20) -> List[Anime]:
 
