@@ -7,7 +7,6 @@ from hikka.services.users import UserService
 from flask_restful import Resource
 from flask_restful import reqparse
 from hikka.errors import abort
-from hikka import utils
 
 class ManagePermissions(Resource):
     @auth_required
@@ -74,6 +73,5 @@ class App(Resource):
 
         result["data"]["search"]["descriptors"] = data
         result["data"]["search"]["years"] = AnimeService.years()
-        result["data"]["commit"] = utils.commit()
 
         return result
