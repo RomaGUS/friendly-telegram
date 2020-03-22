@@ -342,40 +342,6 @@
 						}
 					},
 					"response": []
-				},
-				{
-					"name": "List Descriptors",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"name": "Content-Type",
-								"type": "text",
-								"value": "application/json"
-							},
-							{
-								"key": "Authentication",
-								"type": "text",
-								"value": "{{token}}"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\"services\": [\"genre\", \"category\"]}"
-						},
-						"url": {
-							"raw": "{{url}}/descriptors/list",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"descriptors",
-								"list"
-							]
-						}
-					},
-					"response": []
 				}
 			],
 			"protocolProfileBehavior": {}
@@ -402,77 +368,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"description\": \"Шіномія Каґуя та Шіроґане Міюкі — члени Учнівської ради елітної академії Шючіїн, генії з геніїв. Після часу проведеного разом часу, у них зародилися почуття один до одного. Але, на жаль, але їхня гордість не дозволить зізнатися одне одному про свої почуття. Кохання — це війна, це безжальна битва, метою якої є змусити супротивника освідчитися!\", \"title\": {\"ua\": \"Каґуя-сама, Кохання як війна\", \"jp\": \"TEST\"}, \"state\": \"ongoing\", \"genres\": [\"romance\", \"horror\"], \"franchises\": [\"boku_no_piko\"], \"voiceover\": [\"volbil\"], \"category\": \"tv\", \"team\": \"fanvox\", \"aliases\": [\"кагуя\"]}"
-						},
-						"url": {
-							"raw": "{{url}}/anime/new",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"anime",
-								"new"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "New Anime Copy",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"name": "Content-Type",
-								"type": "text",
-								"value": "multipart/form-data"
-							},
-							{
-								"key": "Authentication",
-								"value": "{{token}}",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "description",
-									"value": "Шіномія Каґуя та Шіроґане Міюкі — члени Учнівської ради елітної академії Шючіїн, генії з геніїв. Після часу проведеного разом часу, у них зародилися почуття один до одного. Але, на жаль, але їхня гордість не дозволить зізнатися одне одному про свої почуття. Кохання — це війна, це безжальна битва, метою якої є змусити супротивника освідчитися!",
-									"type": "text"
-								},
-								{
-									"key": "title[ua]",
-									"value": "Каґуя-сама, Кохання як війна",
-									"type": "text"
-								},
-								{
-									"key": "title[jp]",
-									"value": "TEST",
-									"type": "text"
-								},
-								{
-									"key": "state",
-									"value": "ongoing",
-									"type": "text"
-								},
-								{
-									"key": "genres[]",
-									"value": "romance",
-									"type": "text"
-								},
-								{
-									"key": "category",
-									"value": "tv",
-									"type": "text"
-								},
-								{
-									"key": "team",
-									"value": "fanvox",
-									"type": "text"
-								}
-							]
+							"raw": "{\"description\": \"Шіномія Каґуя та Шіроґане Міюкі — члени Учнівської ради елітної академії Шючіїн, генії з геніїв. Після часу проведеного разом часу, у них зародилися почуття один до одного. Але, на жаль, але їхня гордість не дозволить зізнатися одне одному про свої почуття. Кохання — це війна, це безжальна битва, метою якої є змусити супротивника освідчитися!\", \"title\": {\"ua\": \"Каґуя-сама, Кохання як війна\", \"jp\": \"TEST\"}, \"state\": \"ongoing\", \"genres\": [\"romance\", \"horror\"], \"franchises\": [\"boku_no_piko\"], \"voiceover\": [\"volbil\"], \"category\": \"tv\", \"team\": \"fanvox\", \"aliases\": [\"кагуя\"], \"year\": 2019}"
 						},
 						"url": {
 							"raw": "{{url}}/anime/new",
@@ -501,7 +397,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"query\": \"кохання як війна\", \"genres\": [\"romance\", \"horror\"], \"teams\": [\"fanvox\"], \"categories\": [\"tv\", \"ova\"]}"
+							"raw": "{\"query\": \"кохання як війна\", \"genres\": [\"romance\", \"horror\"], \"teams\": [\"fanvox\"], \"categories\": [\"tv\", \"ova\"], \"year\": {\"min\": 2020}}"
 						},
 						"url": {
 							"raw": "{{url}}/anime/list",
@@ -728,6 +624,40 @@
 								"system",
 								"permissions",
 								"manage"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "App",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authentication",
+								"type": "text",
+								"value": "{{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"descriptors\": [\"genre\", \"category\"]}"
+						},
+						"url": {
+							"raw": "{{url}}/system/app",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"system",
+								"app"
 							]
 						}
 					},
