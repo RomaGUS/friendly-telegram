@@ -345,11 +345,8 @@
 				},
 				{
 					"name": "List Descriptors",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [
 							{
 								"key": "Content-Type",
@@ -365,7 +362,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"service\": \"genre\"}"
+							"raw": "{\"services\": [\"genre\", \"category\"]}"
 						},
 						"url": {
 							"raw": "{{url}}/descriptors/list",
@@ -492,11 +489,8 @@
 				},
 				{
 					"name": "List Anime",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [
 							{
 								"key": "Content-Type",

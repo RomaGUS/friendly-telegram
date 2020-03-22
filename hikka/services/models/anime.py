@@ -37,6 +37,7 @@ class Anime(mongoengine.Document):
     voiceover = mongoengine.ListField(mongoengine.ReferenceField("User"))
     teams = mongoengine.ListField(mongoengine.ReferenceField("Team"))
     created = mongoengine.DateTimeField(default=datetime.now)
+    year = mongoengine.IntField(default=datetime.now().year)
     slug = mongoengine.StringField(required=True)
     poster = mongoengine.ReferenceField("File")
     views = mongoengine.IntField(default=0)
@@ -79,6 +80,7 @@ class Anime(mongoengine.Document):
             "rating": float(self.rating),
             "state": self.state.dict(),
             "slug": self.slug,
+            "year": self.year,
             "poster": None,
             "subtitles": [],
             "voiceover": [],

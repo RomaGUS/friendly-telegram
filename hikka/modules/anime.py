@@ -29,6 +29,7 @@ class NewAnime(Resource):
         parser.add_argument("category", type=str, required=True)
         parser.add_argument("title", type=dict, required=True)
         parser.add_argument("team", type=str, required=True)
+        parser.add_argument("year", type=int, required=True)
         parser.add_argument("state", type=str, default=None)
         args = parser.parse_args()
 
@@ -114,6 +115,7 @@ class NewAnime(Resource):
             title,
             slug,
             args["description"],
+            args["year"],
             search,
             category,
             state,
@@ -151,7 +153,13 @@ class Search(Resource):
         parser.add_argument("teams", type=list, default=[], location="json")
         parser.add_argument("query", type=str, default="")
         parser.add_argument("page", type=int, default=0)
+        parser.add_argument("year", type=dict)
         args = parser.parse_args()
+
+        year_parser = reqparse.RequestParser()
+        year_parser.add_argument("min", type=int, default=None, location=("year",))
+        year_parser.add_argument("max", type=int, default=None, location=("year",))
+        year_args = year_parser.parse_args(req=args)
 
         query = utils.search_query(args["query"])
         categories = []
@@ -197,6 +205,7 @@ class Search(Resource):
 
         anime = AnimeService.search(
             query,
+            year_args,
             categories,
             genres,
             franchises,
