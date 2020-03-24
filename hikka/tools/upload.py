@@ -73,7 +73,7 @@ class UploadHelper(object):
 
         self.clean()
 
-        self.file.path = f"/{self.upload_type}/{self.folder}/{storage_file_name}"
+        self.file.path = f"/{self.branch}/{self.upload_type}/{self.folder}/{storage_file_name}"
         self.file.uploaded = True
         self.file.save()
 

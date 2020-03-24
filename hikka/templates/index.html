@@ -26,7 +26,7 @@
 		</div>
 
 		<form method="post" enctype="multipart/form-data" id="fileUploadForm">
-			<input name="video" type="file">
+			<input name="file" type="file">
 		</form>
 
 		<img id="upload-preview" src="" alt="">
@@ -55,21 +55,20 @@
 					var form = $('#fileUploadForm')[0];
 					var data = new FormData(form)
 
-					data.append("position", 1)
-					data.append("team", "fanvox")
-					data.append("slug", "kaguya-sama-kohannya-yak-viyna-da7f37fc")
+					data.append("type", "poster")
+					data.append("slug", "kaguya-sama-kohannya-yak-viyna-9ae400cb")
 
 					$.ajax({
-						type: "POST",
+						type: "PUT",
 						enctype: "multipart/form-data",
-						url: "/episodes/add",
+						url: "/anime/upload",
 						data: data,
 						processData: false,
 						contentType: false,
 						cache: false,
 						timeout: 600000,
 						beforeSend: function(request) {
-							request.setRequestHeader("Authentication", "3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuYpbsSVbHxJnUepd.ZMKC1hNPqdfkmnGBbzBZRyFxaagjRewcWqBUd2dc72GrWxLoy2UT4hk6ArnqbRHLU9JvPWUvvFP38G4WztG3xd.ZgJdFHek23pU5pALiif8ukyUGAUSfoJEh57TjkP6h4jJFqegivTdoXYEXzPrJbW7ZJkGKijrv8RG3XqphXyqwWGzJUKsf");
+							request.setRequestHeader("Authentication", "3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuYpbsSVbHxJnUepd.ZMKC1hNPqdfkmnGBbzBZRyFxaagjRewcWqBUd2dc72GvKB8Be41fErVHbGbBu9a8vKeSwB1mr3CjejiofNpFFs.aFQ2QEBZr8wCsCw23fXWdZNEqwnUcu3pXBryi7f8gtxjn34dsw9MJZiNXsCaQD9mnyqWc4gdP3k56nyCoTPBiZ8XjJYCd");
 						},
 						xhr: function() {
 								var myXhr = $.ajaxSettings.xhr();

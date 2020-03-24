@@ -40,6 +40,7 @@ class Anime(mongoengine.Document):
     year = mongoengine.IntField(default=datetime.now().year)
     slug = mongoengine.StringField(required=True)
     poster = mongoengine.ReferenceField("File")
+    banner = mongoengine.ReferenceField("File")
     views = mongoengine.IntField(default=0)
 
     genres = mongoengine.ListField(mongoengine.ReferenceField("Descriptor", reverse_delete_rule=4))

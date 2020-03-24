@@ -1,6 +1,5 @@
 from hikka.services.models.anime import Anime, Title, Episode
 from hikka.services.models.descriptor import Descriptor
-from hikka.services.files import FileService
 from hikka.services.models.team import Team
 from hikka.services.models.user import User
 from hikka.services.models.file import File
@@ -41,16 +40,6 @@ class AnimeService:
         )
 
         anime.save()
-        return anime
-
-    @classmethod
-    def update_poster(cls, anime: Anime, file: File):
-        if anime.poster is not None:
-            FileService.destroy(anime.poster)
-
-        anime.poster = file
-        anime.save()
-
         return anime
 
     @classmethod
