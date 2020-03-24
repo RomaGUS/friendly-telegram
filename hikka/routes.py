@@ -4,7 +4,6 @@ from hikka.modules import system
 from hikka.modules import anime
 from hikka.modules import teams
 from hikka.modules import votes
-from hikka.modules import jikan
 from hikka.modules import auth
 from hikka import errors
 import flask
@@ -41,9 +40,6 @@ def init(api, app):
     api.add_resource(system.ManagePermissions, "/system/permissions/manage")
     api.add_resource(system.UserPermissions, "/system/permissions/user")
     api.add_resource(system.App, "/system/app")
-
-    # Jikan routes
-    api.add_resource(jikan.JikanSearch, "/jikan/search")
 
     # Voting routes
     api.add_resource(votes.MakeVote, "/vote")
