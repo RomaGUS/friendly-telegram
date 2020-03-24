@@ -83,6 +83,7 @@ class Anime(mongoengine.Document):
             "slug": self.slug,
             "year": self.year,
             "poster": None,
+            "banner": None,
             "subtitles": [],
             "voiceover": [],
             "genres": [],
@@ -108,6 +109,10 @@ class Anime(mongoengine.Document):
         if self.poster is not None:
             if self.poster.uploaded is True:
                 data["poster"] = self.poster.link()
+
+        if self.banner is not None:
+            if self.poster.uploaded is True:
+                data["banner"] = self.banner.link()
 
         if episodes:
             data["episodes"] = []
