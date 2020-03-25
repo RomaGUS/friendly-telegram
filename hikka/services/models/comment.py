@@ -7,6 +7,7 @@ class Comment(mongoengine.Document):
     created = mongoengine.DateTimeField(default=datetime.now)
     updated = mongoengine.DateTimeField(default=datetime.now)
     text = mongoengine.StringField(required=True)
+    counter = mongoengine.SequenceField()
 
     meta = {
         "alias": "default",
@@ -14,7 +15,6 @@ class Comment(mongoengine.Document):
         "indexes": [
             "subject",
             "account",
-            "rating",
         ]
     }
 
@@ -23,5 +23,6 @@ class Comment(mongoengine.Document):
             "created": int(datetime.timestamp(self.created)),
             "updated": int(datetime.timestamp(self.updated)),
             "account": self.account.dict(),
+            "counter": self.counter,
             "text": self.text
         }

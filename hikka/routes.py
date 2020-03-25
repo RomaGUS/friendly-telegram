@@ -1,4 +1,5 @@
 from hikka.modules import descriptors
+from hikka.modules import comments
 from hikka.modules import episodes
 from hikka.modules import system
 from hikka.modules import anime
@@ -40,6 +41,9 @@ def init(api, app):
     api.add_resource(system.ManagePermissions, "/system/permissions/manage")
     api.add_resource(system.UserPermissions, "/system/permissions/user")
     api.add_resource(system.App, "/system/app")
+
+    # Comment routes
+    api.add_resource(comments.NewComment, "/comments/new")
 
     # Voting routes
     api.add_resource(votes.MakeVote, "/vote")
