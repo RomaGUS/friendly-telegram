@@ -52,7 +52,7 @@ class NewTeam(Resource):
 
             TeamService.add_member(team, account)
             if account.username in args["admins"]:
-                PermissionService.add(account, f"team-{team.slug}", "admin")
+                PermissionService.add(account, "global", "publishing")
 
         result["data"] = team.dict(True)
         return result
@@ -79,7 +79,7 @@ class AddMember(Resource):
 
         TeamService.add_member(team, account)
         if args["admin"]:
-            PermissionService.add(account, f"team-{team.slug}", "admin")
+            PermissionService.add(account, "global", "publishing")
 
         result["data"] = team.dict(True)
         return result
@@ -105,7 +105,7 @@ class RemoveMember(Resource):
             return abort("account", "not-found")
 
         TeamService.remove_member(team, account)
-        PermissionService.remove(account, f"team-{team.slug}", "admin")
+        PermissionService.remove(account, "global", "publishing")
 
         result["data"] = team.dict(True)
         return result

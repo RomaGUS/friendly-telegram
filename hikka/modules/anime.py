@@ -1,3 +1,4 @@
+from hikka.decorators import auth_required, permission_required
 from hikka.services.permissions import PermissionService
 from hikka.services.descriptors import DescriptorService
 from werkzeug.datastructures import FileStorage
@@ -6,7 +7,6 @@ from hikka.services.files import FileService
 from hikka.services.teams import TeamService
 from hikka.services.users import UserService
 from hikka.tools.upload import UploadHelper
-from hikka.decorators import auth_required
 from flask_restful import Resource
 from flask_restful import reqparse
 from hikka.errors import abort
@@ -16,6 +16,7 @@ from hikka import utils
 
 class NewAnime(Resource):
     @auth_required
+    @permission_required("global", "publishing")
     def post(self):
         result = {"error": None, "data": {}}
 
@@ -120,6 +121,39 @@ class NewAnime(Resource):
         result["data"] = anime.dict()
         return result
 
+class Upload(Resource):
+    @auth_required
+    @permission_required("global", "publishing")
+    def put(self):
+        result = {"error": None, "data": []}
+        choices = ("poster", "banner")
+
+        parser = reqparse.RequestParser()
+        parser.add_argument("file", type=FileStorage, location="files")
+        parser.add_argument("type", type=str, choices=choices)
+        parser.add_argument("slug", type=str, required=True)
+        args = parser.parse_args()
+
+        anime = AnimeService.get_by_slug(args["slug"])
+        if anime is None:
+            return abort("anime", "not-found")
+
+        if args["file"] is not None:
+            helper = UploadHelper(request.account, args["file"], args["type"])
+            data = helper.upload_image()
+
+            if type(data) is Response:
+                return data
+
+            if anime[args["type"]] is not None:
+                FileService.destroy(anime[args["type"]])
+
+            anime[args["type"]] = data
+            anime.save()
+
+        result["data"] = anime.dict()
+        return result
+
 class GetAnime(Resource):
     def get(self, slug):
         anime = AnimeService.get_by_slug(slug)
@@ -204,36 +238,4 @@ class Search(Resource):
         for anime in anime:
             result["data"].append(anime.dict())
 
-        return result
-
-class Upload(Resource):
-    @auth_required
-    def put(self):
-        result = {"error": None, "data": []}
-        choices = ("poster", "banner")
-
-        parser = reqparse.RequestParser()
-        parser.add_argument("file", type=FileStorage, location="files")
-        parser.add_argument("type", type=str, choices=choices)
-        parser.add_argument("slug", type=str, required=True)
-        args = parser.parse_args()
-
-        anime = AnimeService.get_by_slug(args["slug"])
-        if anime is None:
-            return abort("anime", "not-found")
-
-        if args["file"] is not None:
-            helper = UploadHelper(request.account, args["file"], args["type"])
-            data = helper.upload_image()
-
-            if type(data) is Response:
-                return data
-
-            if anime[args["type"]] is not None:
-                FileService.destroy(anime[args["type"]])
-
-            anime[args["type"]] = data
-            anime.save()
-
-        result["data"] = anime.dict()
         return result

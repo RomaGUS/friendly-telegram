@@ -1,10 +1,10 @@
+from hikka.decorators import auth_required, permission_required
 from hikka.services.permissions import PermissionService
 from hikka.services.anime import AnimeService
 from werkzeug.datastructures import FileStorage
 from hikka.services.teams import TeamService
 from hikka.services.files import FileService
 from hikka.tools.upload import UploadHelper
-from hikka.decorators import auth_required
 from flask_restful import Resource
 from flask_restful import reqparse
 from hikka.errors import abort
@@ -13,6 +13,7 @@ from flask import request
 
 class AddEpisode(Resource):
     @auth_required
+    @permission_required("global", "publishing")
     def post(self):
         result = {"error": None, "data": {}}
 
@@ -33,9 +34,6 @@ class AddEpisode(Resource):
 
         if request.account not in team.members:
             return abort("account", "not-team-member")
-
-        if not PermissionService.check(request.account, "global", "publishing"):
-            return abort("account", "permission")
 
         anime = AnimeService.get_by_slug(args["slug"])
         if anime is None:
@@ -63,6 +61,7 @@ class AddEpisode(Resource):
 
 class UpdateEpisode(Resource):
     @auth_required
+    @permission_required("global", "publishing")
     def post(self):
         result = {"error": None, "data": {}}
 
@@ -80,9 +79,6 @@ class UpdateEpisode(Resource):
 
         if request.account not in team.members:
             return abort("account", "not-team-member")
-
-        if not PermissionService.check(request.account, "global", "publishing"):
-            return abort("account", "permission")
 
         anime = AnimeService.get_by_slug(args["slug"])
         if anime is None:
@@ -127,6 +123,7 @@ class UpdateEpisode(Resource):
 
 class DeleteEpisode(Resource):
     @auth_required
+    @permission_required("global", "publishing")
     def post(self):
         result = {"error": None, "data": {}}
 
@@ -142,9 +139,6 @@ class DeleteEpisode(Resource):
 
         if request.account not in team.members:
             return abort("account", "not-team-member")
-
-        if not PermissionService.check(request.account, "global", "publishing"):
-            return abort("account", "permission")
 
         anime = AnimeService.get_by_slug(args["slug"])
         if anime is None:
