@@ -1,12 +1,6 @@
 from datetime import datetime
 import mongoengine
 
-# class Comment(mongoengine.EmbeddedDocument):
-#     text = mongoengine.StringField(required=True)
-#     created = mongoengine.DateTimeField(default=datetime.now)
-#     hidden = mongoengine.BooleanField(required=True, default=False)
-#     account = mongoengine.ReferenceField("User")
-
 class Title(mongoengine.EmbeddedDocument):
     ua = mongoengine.StringField(required=True)
     jp = mongoengine.StringField(default=None)
