@@ -1,5 +1,4 @@
 from hikka.decorators import auth_required, permission_required
-from hikka.services.permissions import PermissionService
 from hikka.services.anime import AnimeService
 from werkzeug.datastructures import FileStorage
 from hikka.services.teams import TeamService

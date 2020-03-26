@@ -52,6 +52,10 @@ errors = {
         "position-exists": "Episode with this number exists",
         "not-found": "Episode not found"
     },
+    "comments": {
+        "not-found": "Comment not found",
+        "not-editable": "Comment not editable"
+    },
     "general": {
         "token-invalid-type": "Invalid token type",
         "alias-invalid-type": "Alias must be string",

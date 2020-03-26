@@ -44,6 +44,8 @@ def init(api, app):
 
     # Comment routes
     api.add_resource(comments.NewComment, "/comments/new")
+    api.add_resource(comments.UpdateComment, "/comments/update")
+    api.add_resource(comments.ListComments, "/comments/list")
 
     # Voting routes
     api.add_resource(votes.MakeVote, "/vote")

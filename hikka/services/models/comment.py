@@ -15,7 +15,8 @@ class Comment(mongoengine.Document):
         "indexes": [
             "subject",
             "account",
-        ]
+        ],
+        "ordering": ["-counter"]
     }
 
     def dict(self):
