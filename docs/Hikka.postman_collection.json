@@ -153,7 +153,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"account\": \"volbil\", \"admin\": false, \"team\": \"fanvox\"}"
+							"raw": "{\"account\": \"volbil\", \"admin\": false, \"slug\": \"fanvox\"}"
 						},
 						"url": {
 							"raw": "{{url}}/teams/member/add",
@@ -188,7 +188,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"account\": \"volbil\", \"team\": \"fanvox\"}",
+							"raw": "{\"account\": \"volbil\", \"slug\": \"fanvox\"}",
 							"options": {
 								"raw": {}
 							}

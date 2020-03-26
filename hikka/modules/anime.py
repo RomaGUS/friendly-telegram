@@ -101,11 +101,11 @@ class Upload(Resource):
 
         parser = RequestParser()
         parser.add_argument("file", type=FileStorage, location="files")
-        parser.add_argument("anime", type=helpers.anime, required=True)
+        parser.add_argument("slug", type=helpers.anime, required=True)
         parser.add_argument("type", type=str, choices=choices)
         args = parser.parse_args()
 
-        anime = args["anime"]
+        anime = args["slug"]
 
         if args["file"] is not None:
             helper = UploadHelper(request.account, args["file"], args["type"])

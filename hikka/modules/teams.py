@@ -62,12 +62,12 @@ class AddMember(Resource):
 
         parser = RequestParser()
         parser.add_argument("account", type=helpers.account, required=True)
-        parser.add_argument("team", type=helpers.team, required=True)
+        parser.add_argument("slug", type=helpers.team, required=True)
         parser.add_argument("admin", type=bool, default=False)
         args = parser.parse_args()
 
         account = args["account"]
-        team = args["team"]
+        team = args["slug"]
 
         TeamService.add_member(team, account)
         if args["admin"]:
@@ -84,12 +84,12 @@ class RemoveMember(Resource):
 
         parser = RequestParser()
         parser.add_argument("account", type=helpers.account, required=True)
-        parser.add_argument("team", type=helpers.team, required=True)
+        parser.add_argument("slug", type=helpers.team, required=True)
         parser.add_argument("admin", type=bool, default=False)
         args = parser.parse_args()
 
         account = args["account"]
-        team = args["team"]
+        team = args["slug"]
 
         TeamService.remove_member(team, account)
         PermissionService.remove(account, "global", "publishing")

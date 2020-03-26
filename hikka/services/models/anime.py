@@ -11,6 +11,12 @@ class Title(mongoengine.EmbeddedDocument):
             "jp": self.jp
         }
 
+class ExternalData(mongoengine.EmbeddedDocument):
+    updated = mongoengine.DateTimeField(default=datetime.now)
+    score = mongoengine.DecimalField(default=0)
+    code = mongoengine.IntField(required=True)
+    episodes = mongoengine.IntField(default=1)
+
 class Episode(mongoengine.EmbeddedDocument):
     position = mongoengine.IntField(required=True)
     name = mongoengine.StringField(default=None)
@@ -42,6 +48,7 @@ class Anime(mongoengine.Document):
     category = mongoengine.ReferenceField("Descriptor", reverse_delete_rule=4, required=True)
     state = mongoengine.ReferenceField("Descriptor", reverse_delete_rule=4, required=True)
 
+    external = mongoengine.EmbeddedDocumentField(ExternalData)
     aliases = mongoengine.ListField(mongoengine.StringField())
     rating = mongoengine.DecimalField(default=0)
     search = mongoengine.StringField()
