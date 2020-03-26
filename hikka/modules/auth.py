@@ -14,9 +14,9 @@ class Join(Resource):
         result = {"error": None, "data": {}}
 
         parser = RequestParser()
+        parser.add_argument("email", type=helpers.email, required=True)
         parser.add_argument("username", type=str, required=True)
         parser.add_argument("password", type=str, required=True)
-        parser.add_argument("email", type=str, required=True)
         args = parser.parse_args()
 
         account = UserService.get_by_username(args["username"])
@@ -55,8 +55,8 @@ class Login(Resource):
         result = {"error": None, "data": {}}
 
         parser = RequestParser()
+        parser.add_argument("email", type=helpers.email, required=True)
         parser.add_argument("password", type=str, required=True)
-        parser.add_argument("email", type=str, required=True)
         args = parser.parse_args()
 
         account = UserService.get_by_email(args["email"])

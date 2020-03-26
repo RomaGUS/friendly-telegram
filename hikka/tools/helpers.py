@@ -3,10 +3,17 @@ from hikka.services.anime import AnimeService
 from hikka.services.teams import TeamService
 from hikka.services.users import UserService
 from hikka.errors import abort
+import re
 
 def string(data):
     if not data:
-        raise ValueError("Must not be empty string")
+        abort("general", "empty-string")
+
+    return data
+
+def email(data):
+    if not bool(re.search(r"[^@]+@[^@]+\.[^@]+", data)):
+        abort("general", "invalid-email")
 
     return data
 

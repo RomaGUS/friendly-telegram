@@ -7,7 +7,7 @@ class User(mongoengine.Document):
     login = mongoengine.DateTimeField(default=datetime.now)
     username = mongoengine.StringField(required=True)
     password = mongoengine.StringField(required=True, max_length=64)
-    email = mongoengine.StringField(required=True)
+    email = mongoengine.EmailField(required=True)
     avatar = mongoengine.ReferenceField("File")
 
     meta = {
