@@ -3,9 +3,9 @@ from hikka.services.permissions import PermissionService
 from hikka.services.descriptors import DescriptorService
 from hikka.services.models.descriptor import choices
 from hikka.services.anime import AnimeService
-from hikka.services.users import UserService
+from hikka.tools.parser import RequestParser
 from flask_restful import Resource
-from flask_restful import reqparse
+from hikka.tools import helpers
 from hikka.errors import abort
 
 class ManagePermissions(Resource):
@@ -14,16 +14,14 @@ class ManagePermissions(Resource):
     def post(self):
         result = {"error": None, "data": {}}
 
-        parser = reqparse.RequestParser()
+        parser = RequestParser()
         parser.add_argument("action", type=str, required=True, choices=("add", "remove"))
-        parser.add_argument("username", type=str, required=True)
+        parser.add_argument("account", type=helpers.account, required=True)
         parser.add_argument("scope", type=str, required=True)
         parser.add_argument("name", type=str, required=True)
         args = parser.parse_args()
 
-        account = UserService.get_by_username(args["username"])
-        if account is None:
-            return abort("account", "not-found")
+        account = args["account"]
 
         if args["action"] == "add":
             PermissionService.add(account, args["scope"], args["name"])
@@ -32,6 +30,7 @@ class ManagePermissions(Resource):
             PermissionService.remove(account, args["scope"], args["name"])
 
         result["data"] = account.list_permissions()
+
         return result
 
 class UserPermissions(Resource):
@@ -40,22 +39,20 @@ class UserPermissions(Resource):
     def post(self):
         result = {"error": None, "data": {}}
 
-        parser = reqparse.RequestParser()
-        parser.add_argument("username", type=str, required=True)
+        parser = RequestParser()
+        parser.add_argument("account", type=helpers.account, required=True)
         args = parser.parse_args()
 
-        account = UserService.get_by_username(args["username"])
-        if account is None:
-            return abort("account", "not-found")
-
+        account = args["account"]
         result["data"] = account.list_permissions()
+
         return result
 
 class App(Resource):
     def post(self):
         result = {"error": None, "data": {}}
 
-        parser = reqparse.RequestParser()
+        parser = RequestParser()
         parser.add_argument("descriptors", type=list, default=[], location="json")
         args = parser.parse_args()
 

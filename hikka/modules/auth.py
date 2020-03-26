@@ -1,8 +1,9 @@
 from hikka.services.permissions import PermissionService
 from hikka.services.users import UserService
+from hikka.tools.parser import RequestParser
 from hikka.tools.mail import Email
 from flask_restful import Resource
-from flask_restful import reqparse
+from hikka.tools import helpers
 from hikka.errors import abort
 from datetime import datetime
 from hikka.auth import Token
@@ -12,7 +13,7 @@ class Join(Resource):
     def post(self):
         result = {"error": None, "data": {}}
 
-        parser = reqparse.RequestParser()
+        parser = RequestParser()
         parser.add_argument("username", type=str, required=True)
         parser.add_argument("password", type=str, required=True)
         parser.add_argument("email", type=str, required=True)
@@ -53,7 +54,7 @@ class Login(Resource):
     def post(self):
         result = {"error": None, "data": {}}
 
-        parser = reqparse.RequestParser()
+        parser = RequestParser()
         parser.add_argument("password", type=str, required=True)
         parser.add_argument("email", type=str, required=True)
         args = parser.parse_args()
@@ -82,7 +83,7 @@ class Activate(Resource):
     def post(self):
         result = {"error": None, "data": {}}
 
-        parser = reqparse.RequestParser()
+        parser = RequestParser()
         parser.add_argument("token", type=str, required=True)
         args = parser.parse_args()
 
@@ -90,9 +91,7 @@ class Activate(Resource):
         if not data["valid"]:
             return abort("general", "token-invalid-type")
 
-        account = UserService.get_by_username(data["payload"]["meta"])
-        if account is None:
-            return abort("account", "not-found")
+        account = helpers.account(data["payload"]["meta"])
 
         if data["payload"]["action"] != "activation":
             return abort("general", "token-invalid-type")

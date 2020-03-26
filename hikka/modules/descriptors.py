@@ -2,8 +2,8 @@ from hikka.decorators import auth_required, permission_required
 from hikka.services.descriptors import DescriptorService
 from hikka.services.models.descriptor import choices
 from hikka.services.func import update_document
+from hikka.tools.parser import RequestParser
 from flask_restful import Resource
-from flask_restful import reqparse
 from hikka.errors import abort
 from hikka import utils
 
@@ -13,7 +13,7 @@ class NewDescriptor(Resource):
     def post(self):
         result = {"error": None, "data": {}}
 
-        parser = reqparse.RequestParser()
+        parser = RequestParser()
         parser.add_argument("service", type=str, required=True, choices=choices)
         parser.add_argument("description", type=str, default=None)
         parser.add_argument("name", type=str, required=True)
@@ -39,7 +39,7 @@ class UpdateDescriptor(Resource):
     def post(self):
         result = {"error": None, "data": {}}
 
-        parser = reqparse.RequestParser()
+        parser = RequestParser()
         parser.add_argument("service", type=str, required=True, choices=choices)
         parser.add_argument("slug", type=str, required=True)
         parser.add_argument("params", type=dict, default={})

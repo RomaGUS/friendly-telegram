@@ -1,14 +1,12 @@
 from hikka.decorators import auth_required, permission_required
 from hikka.services.permissions import PermissionService
-from hikka.services.descriptors import DescriptorService
 from werkzeug.datastructures import FileStorage
 from hikka.services.anime import AnimeService
 from hikka.services.files import FileService
-from hikka.services.teams import TeamService
-from hikka.services.users import UserService
+from hikka.tools.parser import RequestParser
 from hikka.tools.upload import UploadHelper
 from flask_restful import Resource
-from flask_restful import reqparse
+from hikka.tools import helpers
 from hikka.errors import abort
 from flask import Response
 from flask import request
@@ -20,21 +18,21 @@ class NewAnime(Resource):
     def post(self):
         result = {"error": None, "data": {}}
 
-        parser = reqparse.RequestParser()
+        parser = RequestParser()
         parser.add_argument("franchises", type=list, default=[], location="json")
         parser.add_argument("subtitles", type=list, default=[], location="json")
         parser.add_argument("voiceover", type=list, default=[], location="json")
         parser.add_argument("aliases", type=list, default=[], location="json")
         parser.add_argument("genres", type=list, default=[], location="json")
-        parser.add_argument("description", type=str, required=True)
-        parser.add_argument("category", type=str, required=True)
+        parser.add_argument("category", type=helpers.category, required=True)
+        parser.add_argument("description", type=helpers.string, required=True)
+        parser.add_argument("state", type=helpers.state, default=None)
+        parser.add_argument("team", type=helpers.team, required=True)
         parser.add_argument("title", type=dict, required=True)
-        parser.add_argument("team", type=str, required=True)
         parser.add_argument("year", type=int, required=True)
-        parser.add_argument("state", type=str, default=None)
         args = parser.parse_args()
 
-        title_parser = reqparse.RequestParser()
+        title_parser = RequestParser()
         title_parser.add_argument("jp", type=str, default=None, location=("title",))
         title_parser.add_argument("ua", type=str, location=("title",))
         title_args = title_parser.parse_args(req=args)
@@ -43,9 +41,7 @@ class NewAnime(Resource):
             if type(alias) is not str:
                 return abort("general", "alias-invalid-type")
 
-        team = TeamService.get_by_slug(args["team"])
-        if team is None:
-            return abort("team", "not-found")
+        team = args["team"]
 
         if request.account not in team.members:
             return abort("account", "not-team-member")
@@ -53,50 +49,25 @@ class NewAnime(Resource):
         if not PermissionService.check(request.account, "global", "publishing"):
             return abort("account", "permission")
 
-        category = DescriptorService.get_by_slug("category", args["category"])
-        if category is None:
-            return abort("category", "not-found")
-
-        state = DescriptorService.get_by_slug("state", args["state"])
-        if state is None:
-            return abort("state", "not-found")
-
-        if args["description"] is None:
-            return abort("general", "missing-field")
-
         genres = []
         for slug in args["genres"]:
-            genre = DescriptorService.get_by_slug("genre", slug)
-            if genre is not None:
-                genres.append(genre)
-            else:
-                return abort("genre", "not-found")
+            genre = helpers.genre(slug)
+            genres.append(genre)
 
         franchises = []
         for slug in args["franchises"]:
-            franchise = DescriptorService.get_by_slug("franchise", slug)
-            if franchise is not None:
-                franchises.append(franchise)
-            else:
-                return abort("franchise", "not-found")
+            franchise = helpers.franchise(slug)
+            franchises.append(franchise)
 
         subtitles = []
         for username in args["subtitles"]:
-            subtitles_account = UserService.get_by_username(username)
-            if subtitles_account is not None:
-                subtitles.append(subtitles_account)
-
-            else:
-                return abort("account", "not-found")
+            subtitles_account = helpers.account(username)
+            subtitles.append(subtitles_account)
 
         voiceover = []
         for username in args["voiceover"]:
-            voiceover_account = UserService.get_by_username(username)
-            if voiceover_account is not None:
-                voiceover.append(voiceover_account)
-
-            else:
-                return abort("account", "not-found")
+            voiceover_account = helpers.account(username)
+            voiceover.append(voiceover_account)
 
         title = AnimeService.get_title(title_args["ua"], title_args["jp"])
         search = utils.create_search(title_args["ua"], title_args["jp"], args["aliases"])
@@ -108,8 +79,8 @@ class NewAnime(Resource):
             args["description"],
             args["year"],
             search,
-            category,
-            state,
+            args["category"],
+            args["state"],
             genres,
             franchises,
             [team],
@@ -128,15 +99,13 @@ class Upload(Resource):
         result = {"error": None, "data": []}
         choices = ("poster", "banner")
 
-        parser = reqparse.RequestParser()
+        parser = RequestParser()
         parser.add_argument("file", type=FileStorage, location="files")
+        parser.add_argument("anime", type=helpers.anime, required=True)
         parser.add_argument("type", type=str, choices=choices)
-        parser.add_argument("slug", type=str, required=True)
         args = parser.parse_args()
 
-        anime = AnimeService.get_by_slug(args["slug"])
-        if anime is None:
-            return abort("anime", "not-found")
+        anime = args["anime"]
 
         if args["file"] is not None:
             helper = UploadHelper(request.account, args["file"], args["type"])
@@ -156,17 +125,18 @@ class Upload(Resource):
 
 class GetAnime(Resource):
     def get(self, slug):
-        anime = AnimeService.get_by_slug(slug)
-        if anime is None:
-            return abort("anime", "not-found")
+        result = {"error": None, "data": {}}
 
-        return anime.dict(True)
+        anime = helpers.anime(slug)
+        result["data"] = anime.dict(True)
+
+        return result
 
 class Search(Resource):
     def post(self):
         result = {"error": None, "data": []}
 
-        parser = reqparse.RequestParser()
+        parser = RequestParser()
         parser.add_argument("franchises", type=list, default=[], location="json")
         parser.add_argument("categories", type=list, default=[], location="json")
         parser.add_argument("states", type=list, default=[], location="json")
@@ -177,7 +147,7 @@ class Search(Resource):
         parser.add_argument("year", type=dict)
         args = parser.parse_args()
 
-        year_parser = reqparse.RequestParser()
+        year_parser = RequestParser()
         year_parser.add_argument("min", type=int, default=None, location=("year",))
         year_parser.add_argument("max", type=int, default=None, location=("year",))
         year_args = year_parser.parse_args(req=args)
@@ -190,39 +160,24 @@ class Search(Resource):
         teams = []
 
         for slug in args["categories"]:
-            category = DescriptorService.get_by_slug("category", slug)
-            if category is not None:
-                categories.append(category)
-            else:
-                return abort("category", "not-found")
+            category = helpers.category(slug)
+            categories.append(category)
 
         for slug in args["genres"]:
-            genre = DescriptorService.get_by_slug("genre", slug)
-            if genre is not None:
-                genres.append(genre)
-            else:
-                return abort("genre", "not-found")
+            genre = helpers.genre(slug)
+            genres.append(genre)
 
         for slug in args["franchises"]:
-            franchise = DescriptorService.get_by_slug("franchise", slug)
-            if franchise is not None:
-                franchises.append(franchise)
-            else:
-                return abort("franchise", "not-found")
+            franchise = helpers.franchise(slug)
+            franchises.append(franchise)
 
         for slug in args["states"]:
-            state = DescriptorService.get_by_slug("state", slug)
-            if state is not None:
-                genres.append(state)
-            else:
-                return abort("state", "not-found")
+            state = helpers.state(slug)
+            genres.append(state)
 
         for slug in args["teams"]:
-            team = TeamService.get_by_slug(slug)
-            if team is not None:
-                teams.append(team)
-            else:
-                return abort("team", "not-found")
+            team = helpers.team(slug)
+            teams.append(team)
 
         anime = AnimeService.search(
             query,

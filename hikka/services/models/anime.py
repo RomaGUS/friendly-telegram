@@ -67,7 +67,6 @@ class Anime(mongoengine.Document):
     }
 
     def dict(self, episodes=False):
-        print()
         data = {
             "description": self.description,
             "title": self.title.dict(),
@@ -109,9 +108,9 @@ class Anime(mongoengine.Document):
                 data["banner"] = self.banner.link()
 
         if episodes:
-            data["episodes"] = []
+            data["episode"] = []
 
             for episode in self.episodes:
-                data["episodes"].append(episode.dict())
+                data["episode"].append(episode.dict())
 
         return data

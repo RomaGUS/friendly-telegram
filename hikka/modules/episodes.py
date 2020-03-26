@@ -1,11 +1,11 @@
 from hikka.decorators import auth_required, permission_required
-from hikka.services.anime import AnimeService
 from werkzeug.datastructures import FileStorage
-from hikka.services.teams import TeamService
+from hikka.services.anime import AnimeService
+from hikka.tools.parser import RequestParser
 from hikka.services.files import FileService
 from hikka.tools.upload import UploadHelper
 from flask_restful import Resource
-from flask_restful import reqparse
+from hikka.tools import helpers
 from hikka.errors import abort
 from flask import Response
 from flask import request
@@ -16,31 +16,24 @@ class AddEpisode(Resource):
     def post(self):
         result = {"error": None, "data": {}}
 
-        parser = reqparse.RequestParser()
+        parser = RequestParser()
         parser.add_argument("video", type=FileStorage, location="files")
+        parser.add_argument("slug", type=helpers.anime, required=True)
         parser.add_argument("position", type=int, required=True)
-        parser.add_argument("team", type=str, required=True)
-        parser.add_argument("slug", type=str, required=True)
         parser.add_argument("name", type=str, default=None)
         args = parser.parse_args()
 
         if args["position"] < 0:
             return abort("general", "out-of-range")
 
-        team = TeamService.get_by_slug(args["team"])
-        if team is None:
-            return abort("team", "not-found")
+        anime = args["slug"]
 
-        if request.account not in team.members:
+        if request.account not in anime.team.members:
             return abort("account", "not-team-member")
-
-        anime = AnimeService.get_by_slug(args["slug"])
-        if anime is None:
-            return abort("anime", "not-found")
 
         episode = AnimeService.find_position(anime, args["position"])
         if episode is not None:
-            return abort("episodes", "position-exists")
+            return abort("episode", "position-exists")
 
         if args["video"] is None:
             return abort("file", "not-found")
@@ -64,28 +57,21 @@ class UpdateEpisode(Resource):
     def post(self):
         result = {"error": None, "data": {}}
 
-        parser = reqparse.RequestParser()
+        parser = RequestParser()
         parser.add_argument("video", type=FileStorage, location="files")
+        parser.add_argument("slug", type=helpers.anime, required=True)
         parser.add_argument("position", type=int, required=True)
-        parser.add_argument("team", type=str, required=True)
-        parser.add_argument("slug", type=str, required=True)
         parser.add_argument("params", type=dict, default={})
         args = parser.parse_args()
 
-        team = TeamService.get_by_slug(args["team"])
-        if team is None:
-            return abort("team", "not-found")
+        anime = args["slug"]
 
-        if request.account not in team.members:
+        if request.account not in anime.team.members:
             return abort("account", "not-team-member")
-
-        anime = AnimeService.get_by_slug(args["slug"])
-        if anime is None:
-            return abort("anime", "not-found")
 
         episode = AnimeService.find_position(anime, args["position"])
         if episode is None:
-            return abort("episodes", "not-found")
+            return abort("episode", "not-found")
 
         video = episode.video
         if args["video"] is not None:
@@ -109,7 +95,7 @@ class UpdateEpisode(Resource):
 
             episode_check = AnimeService.find_position(anime, args["position"])
             if episode_check is not None:
-                return abort("episodes", "position-exists")
+                return abort("episode", "position-exists")
 
             position = args["params"]["position"]
 
@@ -126,26 +112,19 @@ class DeleteEpisode(Resource):
     def post(self):
         result = {"error": None, "data": {}}
 
-        parser = reqparse.RequestParser()
+        parser = RequestParser()
+        parser.add_argument("slug", type=helpers.anime, required=True)
         parser.add_argument("position", type=int, required=True)
-        parser.add_argument("team", type=str, required=True)
-        parser.add_argument("slug", type=str, required=True)
         args = parser.parse_args()
 
-        team = TeamService.get_by_slug(args["team"])
-        if team is None:
-            return abort("team", "not-found")
+        anime = args["slug"]
 
-        if request.account not in team.members:
+        if request.account not in anime.team.members:
             return abort("account", "not-team-member")
-
-        anime = AnimeService.get_by_slug(args["slug"])
-        if anime is None:
-            return abort("anime", "not-found")
 
         episode = AnimeService.find_position(anime, args["position"])
         if episode is None:
-            return abort("episodes", "not-found")
+            return abort("episode", "not-found")
 
         FileService.destroy(episode.video)
         AnimeService.remove_episode(anime, episode)

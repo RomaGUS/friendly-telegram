@@ -48,11 +48,11 @@ errors = {
         "not-square": "Image is not square",
         "small-image": "Image is way to slow"
     },
-    "episodes": {
+    "episode": {
         "position-exists": "Episode with this number exists",
         "not-found": "Episode not found"
     },
-    "comments": {
+    "comment": {
         "not-found": "Comment not found",
         "not-editable": "Comment not editable"
     },
@@ -93,10 +93,9 @@ def get(scope, message):
     }
 
 def reqparse_abort(http_status_code, **kwargs):
-    response = abort("general", "missing-field")
-    flask_abort(response)
+    abort("general", "missing-field")
 
 def abort(scope, message, status_code=422):
     response = jsonify(get(scope, message))
     response.status_code = status_code
-    return response
+    flask_abort(response)

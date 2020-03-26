@@ -1,11 +1,11 @@
 from hikka.decorators import auth_required, permission_required
 from hikka.services.permissions import PermissionService
 from werkzeug.datastructures import FileStorage
-from hikka.services.users import UserService
 from hikka.services.teams import TeamService
+from hikka.tools.parser import RequestParser
 from hikka.tools.upload import UploadHelper
 from flask_restful import Resource
-from flask_restful import reqparse
+from hikka.tools import helpers
 from hikka.errors import abort
 from flask import Response
 from flask import request
@@ -16,7 +16,7 @@ class NewTeam(Resource):
     def post(self):
         result = {"error": None, "data": {}}
 
-        parser = reqparse.RequestParser()
+        parser = RequestParser()
         parser.add_argument("members", type=list, default=[], location="json")
         parser.add_argument("admins", type=list, default=[], location="json")
         parser.add_argument("avatar", type=FileStorage, location="files")
@@ -45,10 +45,7 @@ class NewTeam(Resource):
             TeamService.update_avatar(team, avatar)
 
         for username in args["members"]:
-            account = UserService.get_by_username(username)
-
-            if account is None:
-                return abort("account", "not-found")
+            account = helpers.account(username)
 
             TeamService.add_member(team, account)
             if account.username in args["admins"]:
@@ -63,19 +60,14 @@ class AddMember(Resource):
     def post(self):
         result = {"error": None, "data": {}}
 
-        parser = reqparse.RequestParser()
-        parser.add_argument("username", type=str, required=True)
+        parser = RequestParser()
+        parser.add_argument("account", type=helpers.account, required=True)
+        parser.add_argument("team", type=helpers.team, required=True)
         parser.add_argument("admin", type=bool, default=False)
-        parser.add_argument("slug", type=str, required=True)
         args = parser.parse_args()
 
-        team = TeamService.get_by_slug(args["slug"])
-        if team is None:
-            return abort("team", "not-found")
-
-        account = UserService.get_by_username(args["username"])
-        if account is None:
-            return abort("account", "not-found")
+        account = args["account"]
+        team = args["team"]
 
         TeamService.add_member(team, account)
         if args["admin"]:
@@ -90,19 +82,14 @@ class RemoveMember(Resource):
     def post(self):
         result = {"error": None, "data": {}}
 
-        parser = reqparse.RequestParser()
-        parser.add_argument("username", type=str, required=True)
+        parser = RequestParser()
+        parser.add_argument("account", type=helpers.account, required=True)
+        parser.add_argument("team", type=helpers.team, required=True)
         parser.add_argument("admin", type=bool, default=False)
-        parser.add_argument("slug", type=str, required=True)
         args = parser.parse_args()
 
-        team = TeamService.get_by_slug(args["slug"])
-        if team is None:
-            return abort("team", "not-found")
-
-        account = UserService.get_by_username(args["username"])
-        if account is None:
-            return abort("account", "not-found")
+        account = args["account"]
+        team = args["team"]
 
         TeamService.remove_member(team, account)
         PermissionService.remove(account, "global", "publishing")
@@ -114,11 +101,9 @@ class GetTeam(Resource):
     def get(self, slug):
         result = {"error": None, "data": {}}
 
-        team = TeamService.get_by_slug(slug)
-        if team is None:
-            return abort("team", "not-found")
-
+        team = helpers.teams(slug)
         result["data"] = team.dict(True)
+
         return result
 
 class ListTeams(Resource):
