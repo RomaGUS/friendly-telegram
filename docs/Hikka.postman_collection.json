@@ -153,7 +153,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"username\": \"volbil2\", \"admin\": false, \"slug\": \"fanvox2\"}"
+							"raw": "{\"account\": \"volbil\", \"admin\": false, \"team\": \"fanvox\"}"
 						},
 						"url": {
 							"raw": "{{url}}/teams/member/add",
@@ -188,7 +188,10 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"username\": \"volbil2\", \"slug\": \"fanvox2\"}"
+							"raw": "{\"account\": \"volbil\", \"team\": \"fanvox\"}",
+							"options": {
+								"raw": {}
+							}
 						},
 						"url": {
 							"raw": "{{url}}/teams/member/remove",
@@ -397,7 +400,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"query\": \"кохання як війна\", \"genres\": [\"romance\", \"horror\"], \"teams\": [\"fanvox\"], \"categories\": [\"tv\", \"ova\"], \"year\": {\"min\": 2020}}"
+							"raw": "{\"query\": \"кохання як війна\", \"genres\": [\"romance\", \"horror\"], \"teams\": [\"fanvox\"], \"categories\": [\"tv\", \"ova\"], \"year\": {\"min\": 2015}}"
 						},
 						"url": {
 							"raw": "{{url}}/anime/list",
@@ -557,6 +560,114 @@
 			"protocolProfileBehavior": {}
 		},
 		{
+			"name": "Comments",
+			"item": [
+				{
+					"name": "New Comment",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authentication",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"subject\": \"anime\", \"text\": \"Тестовий коментар\", \"slug\": \"kaguya-sama-kohannya-yak-viyna-f7549480\"}"
+						},
+						"url": {
+							"raw": "{{url}}/comments/new",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"comments",
+								"new"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Comment",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authentication",
+								"type": "text",
+								"value": "{{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"counter\": 7, \"params\": {\"text\": \"Оновлений тестовий коментар\"}}"
+						},
+						"url": {
+							"raw": "{{url}}/comments/update",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"comments",
+								"update"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List Comments",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authentication",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"subject\": \"anime\", \"slug\": \"kaguya-sama-kohannya-yak-viyna-f7549480\"}"
+						},
+						"url": {
+							"raw": "{{url}}/comments/list",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"comments",
+								"list"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
 			"name": "System",
 			"item": [
 				{
@@ -578,7 +689,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"username\": \"volbil\"}"
+							"raw": "{\"account\": \"volbil\"}"
 						},
 						"url": {
 							"raw": "{{url}}/system/permissions/user",
@@ -613,7 +724,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"username\": \"volbil\", \"action\": \"add\", \"scope\": \"test\", \"name\": \"permission\"}"
+							"raw": "{\"account\": \"volbil\", \"action\": \"add\", \"scope\": \"test\", \"name\": \"permission\"}"
 						},
 						"url": {
 							"raw": "{{url}}/system/permissions/manage",
@@ -697,46 +808,6 @@
 							],
 							"path": [
 								"vote"
-							]
-						}
-					},
-					"response": []
-				}
-			],
-			"protocolProfileBehavior": {}
-		},
-		{
-			"name": "Jikan",
-			"item": [
-				{
-					"name": "Search",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"name": "Content-Type",
-								"type": "text",
-								"value": "application/json"
-							},
-							{
-								"key": "Authentication",
-								"type": "text",
-								"value": "3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuYpbsSVbHxJnUepd.ZMKC1hNPqdfkmnGBbzBZRyFxaagjRewcWqBUd2dc72GrWxLowq19wnJB2yJJJ3mixH221QNMdwrWCFj52LjxKe.9MVy9ncmHqQeMUFHSvXE4t66rYHMaY4kC5Lz6ST5miEpnawNpkRadAUdQJmNDQxFqeVyfx6rxaueBiYpRH1XbhYfesu1N"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\"query\": \"Fate\"}"
-						},
-						"url": {
-							"raw": "{{url}}/jikan/search",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"jikan",
-								"search"
 							]
 						}
 					},
