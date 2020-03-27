@@ -30,6 +30,7 @@ class NewAnime(Resource):
         parser.add_argument("team", type=helpers.team, required=True)
         parser.add_argument("title", type=dict, required=True)
         parser.add_argument("year", type=int, required=True)
+        parser.add_argument("total", type=int, default=None)
         args = parser.parse_args()
 
         title_parser = RequestParser()
@@ -78,6 +79,7 @@ class NewAnime(Resource):
             slug,
             args["description"],
             args["year"],
+            args["total"],
             search,
             args["category"],
             args["state"],

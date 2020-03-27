@@ -18,8 +18,8 @@ class AnimeService:
 
     @classmethod
     def create(cls, title: Title, slug: str, description: str,
-                year: int, search: str, category: Descriptor, state: Descriptor,
-                genres=List[Descriptor], franchises=List[Descriptor],
+                year: int, total: int, search: str, category: Descriptor,
+                state: Descriptor, genres=List[Descriptor], franchises=List[Descriptor],
                 teams=[Team], subtitles=[User], voiceover=[User],
                 aliases=[]) -> Anime:
 
@@ -28,6 +28,7 @@ class AnimeService:
             slug=slug,
             description=description,
             year=year,
+            total=total,
             search=search,
             category=category,
             state=state,

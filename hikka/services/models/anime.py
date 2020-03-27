@@ -1,6 +1,23 @@
 from datetime import datetime
 import mongoengine
 
+class ExternalData(mongoengine.EmbeddedDocument):
+    mal = mongoengine.IntField(default=1)
+
+class Episode(mongoengine.EmbeddedDocument):
+    description = mongoengine.StringField(default=None)
+    position = mongoengine.IntField(required=True)
+    name = mongoengine.StringField(default=None)
+    video = mongoengine.ReferenceField("File")
+
+    def dict(self):
+        return {
+            "description": self.description,
+            "video": self.video.link(),
+            "position": self.position,
+            "name": self.name
+        }
+
 class Title(mongoengine.EmbeddedDocument):
     ua = mongoengine.StringField(required=True)
     jp = mongoengine.StringField(default=None)
@@ -11,24 +28,6 @@ class Title(mongoengine.EmbeddedDocument):
             "jp": self.jp
         }
 
-class ExternalData(mongoengine.EmbeddedDocument):
-    updated = mongoengine.DateTimeField(default=datetime.now)
-    score = mongoengine.DecimalField(default=0)
-    code = mongoengine.IntField(required=True)
-    episodes = mongoengine.IntField(default=1)
-
-class Episode(mongoengine.EmbeddedDocument):
-    position = mongoengine.IntField(required=True)
-    name = mongoengine.StringField(default=None)
-    video = mongoengine.ReferenceField("File")
-
-    def dict(self):
-        return {
-            "video": self.video.link(),
-            "position": self.position,
-            "name": self.name
-        }
-
 class Anime(mongoengine.Document):
     title = mongoengine.EmbeddedDocumentField(Title, required=True)
     hidden = mongoengine.BooleanField(required=True, default=False)
@@ -37,18 +36,20 @@ class Anime(mongoengine.Document):
     voiceover = mongoengine.ListField(mongoengine.ReferenceField("User"))
     teams = mongoengine.ListField(mongoengine.ReferenceField("Team"))
     created = mongoengine.DateTimeField(default=datetime.now)
-    year = mongoengine.IntField(default=datetime.now().year)
     slug = mongoengine.StringField(required=True)
     poster = mongoengine.ReferenceField("File")
     banner = mongoengine.ReferenceField("File")
     views = mongoengine.IntField(default=0)
+
+    year = mongoengine.IntField(default=datetime.now().year)
+    total = mongoengine.IntField(default=None)
 
     genres = mongoengine.ListField(mongoengine.ReferenceField("Descriptor", reverse_delete_rule=4))
     franchises = mongoengine.ListField(mongoengine.ReferenceField("Descriptor", reverse_delete_rule=4))
     category = mongoengine.ReferenceField("Descriptor", reverse_delete_rule=4, required=True)
     state = mongoengine.ReferenceField("Descriptor", reverse_delete_rule=4, required=True)
 
-    external = mongoengine.EmbeddedDocumentField(ExternalData)
+    # external = mongoengine.EmbeddedDocumentField(ExternalData)
     aliases = mongoengine.ListField(mongoengine.StringField())
     rating = mongoengine.DecimalField(default=0)
     search = mongoengine.StringField()
@@ -88,7 +89,11 @@ class Anime(mongoengine.Document):
             "voiceover": [],
             "genres": [],
             "franchises": [],
-            "teams": []
+            "teams": [],
+            "episodes": {
+                "released": len(self.episodes),
+                "total": self.total
+            }
         }
 
         for account in self.subtitles:
@@ -115,9 +120,9 @@ class Anime(mongoengine.Document):
                 data["banner"] = self.banner.link()
 
         if episodes:
-            data["episode"] = []
+            data["episodes"]["list"] = []
 
             for episode in self.episodes:
-                data["episode"].append(episode.dict())
+                data["episodes"]["list"].append(episode.dict())
 
         return data
