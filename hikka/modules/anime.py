@@ -10,6 +10,7 @@ from hikka.tools import helpers
 from hikka.errors import abort
 from flask import Response
 from flask import request
+from jikanpy import Jikan
 from hikka import utils
 
 class NewAnime(Resource):
@@ -31,12 +32,17 @@ class NewAnime(Resource):
         parser.add_argument("title", type=dict, required=True)
         parser.add_argument("year", type=int, required=True)
         parser.add_argument("total", type=int, default=None)
+        parser.add_argument("external", type=dict)
         args = parser.parse_args()
 
         title_parser = RequestParser()
         title_parser.add_argument("jp", type=str, default=None, location=("title",))
         title_parser.add_argument("ua", type=str, location=("title",))
         title_args = title_parser.parse_args(req=args)
+
+        external_parser = RequestParser()
+        external_parser.add_argument("mal", type=int, default=None, location=("external"))
+        external_args = external_parser.parse_args(req=args)
 
         for alias in args["aliases"]:
             if type(alias) is not str:
@@ -72,6 +78,7 @@ class NewAnime(Resource):
 
         title = AnimeService.get_title(title_args["ua"], title_args["jp"])
         search = utils.create_search(title_args["ua"], title_args["jp"], args["aliases"])
+        external = AnimeService.get_external(external_args["mal"])
         slug = utils.create_slug(title_args["ua"])
 
         anime = AnimeService.create(
@@ -83,6 +90,7 @@ class NewAnime(Resource):
             search,
             args["category"],
             args["state"],
+            external,
             genres,
             franchises,
             [team],
@@ -90,6 +98,13 @@ class NewAnime(Resource):
             voiceover,
             args["aliases"]
         )
+
+        if anime.external["mal"] is not None:
+            jikan = Jikan()
+            data = jikan.anime(anime.external["mal"])
+            rating = data["score"]
+            anime.rating = rating
+            anime.save()
 
         result["data"] = anime.dict()
         return result

@@ -1,4 +1,4 @@
-from hikka.services.models.anime import Anime, Title, Episode
+from hikka.services.models.anime import Anime, Title, Episode, External
 from hikka.services.models.descriptor import Descriptor
 from hikka.services.models.team import Team
 from hikka.services.models.user import User
@@ -12,6 +12,11 @@ class AnimeService:
         return title
 
     @classmethod
+    def get_external(cls, mal):
+        external = External(mal=mal)
+        return external
+
+    @classmethod
     def get_episode(cls, name: str, position: int, video: File):
         episode = Episode(name=name, position=position, video=video)
         return episode
@@ -19,7 +24,7 @@ class AnimeService:
     @classmethod
     def create(cls, title: Title, slug: str, description: str,
                 year: int, total: int, search: str, category: Descriptor,
-                state: Descriptor, genres=List[Descriptor], franchises=List[Descriptor],
+                state: Descriptor, external: External, genres=List[Descriptor], franchises=List[Descriptor],
                 teams=[Team], subtitles=[User], voiceover=[User],
                 aliases=[]) -> Anime:
 
@@ -37,6 +42,7 @@ class AnimeService:
             teams=teams,
             subtitles=subtitles,
             voiceover=voiceover,
+            external=external,
             aliases=aliases
         )
 

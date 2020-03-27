@@ -1,8 +1,8 @@
 from datetime import datetime
 import mongoengine
 
-class ExternalData(mongoengine.EmbeddedDocument):
-    mal = mongoengine.IntField(default=1)
+class External(mongoengine.EmbeddedDocument):
+    mal = mongoengine.IntField(default=None)
 
 class Episode(mongoengine.EmbeddedDocument):
     description = mongoengine.StringField(default=None)
@@ -49,8 +49,8 @@ class Anime(mongoengine.Document):
     category = mongoengine.ReferenceField("Descriptor", reverse_delete_rule=4, required=True)
     state = mongoengine.ReferenceField("Descriptor", reverse_delete_rule=4, required=True)
 
-    # external = mongoengine.EmbeddedDocumentField(ExternalData)
     aliases = mongoengine.ListField(mongoengine.StringField())
+    external = mongoengine.EmbeddedDocumentField(External)
     rating = mongoengine.DecimalField(default=0)
     search = mongoengine.StringField()
 
