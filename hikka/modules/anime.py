@@ -10,7 +10,6 @@ from hikka.tools import helpers
 from hikka.errors import abort
 from flask import Response
 from flask import request
-from jikanpy import Jikan
 from hikka import utils
 
 class NewAnime(Resource):
@@ -99,11 +98,9 @@ class NewAnime(Resource):
             args["aliases"]
         )
 
-        if anime.external["mal"] is not None:
-            jikan = Jikan()
-            data = jikan.anime(anime.external["mal"])
-            rating = data["score"]
-            anime.rating = rating
+        # Get rating from MyAnimeList
+        if anime.external.mal is not None:
+            anime.rating = utils.rating(anime.external.mal)
             anime.save()
 
         result["data"] = anime.dict()

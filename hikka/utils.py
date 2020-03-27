@@ -1,3 +1,4 @@
+from jikanpy import Jikan
 import hashlib
 import secrets
 import re
@@ -91,3 +92,11 @@ def create_search(*args):
                 result.append(search_query(alias))
 
     return " ".join(result)
+
+def rating(code):
+    try:
+        jikan = Jikan()
+        data = jikan.anime(code)
+        return data["score"]
+    except Exception:
+        return 0
