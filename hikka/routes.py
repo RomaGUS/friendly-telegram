@@ -17,6 +17,7 @@ def init(api, app):
 
     # Team routes
     api.add_resource(teams.NewTeam, "/teams/new")
+    api.add_resource(teams.EditTeam, "/teams/edit")
     api.add_resource(teams.GetTeam, "/teams/get/<string:slug>")
     api.add_resource(teams.AddMember, "/teams/member/add")
     api.add_resource(teams.RemoveMember, "/teams/member/remove")
