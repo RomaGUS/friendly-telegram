@@ -98,6 +98,7 @@ class RemoveMember(Resource):
         return result
 
 class GetTeam(Resource):
+    @auth_required
     def get(self, slug):
         result = {"error": None, "data": {}}
 
@@ -107,6 +108,7 @@ class GetTeam(Resource):
         return result
 
 class ListTeams(Resource):
+    @auth_required
     def get(self):
         result = {"error": None, "data": []}
 

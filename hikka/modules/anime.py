@@ -138,6 +138,7 @@ class Upload(Resource):
         return result
 
 class GetAnime(Resource):
+    @auth_required
     def get(self, slug):
         result = {"error": None, "data": {}}
 
@@ -147,6 +148,7 @@ class GetAnime(Resource):
         return result
 
 class Search(Resource):
+    @auth_required
     def post(self):
         result = {"error": None, "data": []}
 
