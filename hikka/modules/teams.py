@@ -102,7 +102,7 @@ class GetTeam(Resource):
     def get(self, slug):
         result = {"error": None, "data": {}}
 
-        team = helpers.teams(slug)
+        team = helpers.team(slug)
         result["data"] = team.dict(True)
 
         return result
