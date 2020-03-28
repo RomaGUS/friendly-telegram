@@ -135,6 +135,40 @@
 					"response": []
 				},
 				{
+					"name": "Edit Team",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authentication",
+								"type": "text",
+								"value": "{{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"params\": {\"description\": \"Тестовий опис\"}, \"slug\": \"fanvox\"}"
+						},
+						"url": {
+							"raw": "{{url}}/teams/edit",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"teams",
+								"edit"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Add Team Member",
 					"request": {
 						"method": "POST",
@@ -391,6 +425,40 @@
 							"path": [
 								"anime",
 								"new"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Edit Anime",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authentication",
+								"type": "text",
+								"value": "{{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"slug\": \"kaguya-sama-kohannya-yak-viyna-8e206e50\", \"params\": {\"description\": \"Шіномія Каґуя та Шіроґане Міюкі — члени Учнівської ради елітної академії Шючіїн, генії з геніїв. Після часу проведеного разом часу, у них зародилися почуття один до одного. Але, на жаль, але їхня гордість не дозволить зізнатися одне одному про свої почуття. Кохання — це війна, це безжальна битва, метою якої є змусити супротивника освідчитися!\"}}"
+						},
+						"url": {
+							"raw": "{{url}}/anime/edit",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"anime",
+								"edit"
 							]
 						}
 					},
