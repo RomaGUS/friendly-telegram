@@ -180,9 +180,17 @@ class EditAnime(Resource):
             if anime.external.mal:
                 anime.rating = utils.rating(anime.external.mal)
 
-        anime.save()
-        result["data"] = anime.dict()
+        if params_args["aliases"]:
+            for alias in args["aliases"]:
+                if type(alias) is not str:
+                    return abort("general", "alias-invalid-type")
 
+            anime.aliases = args["aliases"]
+
+        anime.search = utils.create_search(anime.title.ua, anime.title.jp, anime.title.aliases)
+        anime.save()
+
+        result["data"] = anime.dict()
         return result
 
 class AnimeUpload(Resource):

@@ -81,6 +81,7 @@ class Anime(mongoengine.Document):
             "category": self.category.dict(),
             "rating": float(self.rating),
             "state": self.state.dict(),
+            "aliases": self.aliases,
             "slug": self.slug,
             "year": self.year,
             "poster": None,
