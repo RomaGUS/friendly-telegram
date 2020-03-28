@@ -21,8 +21,8 @@ def init(api, app):
     api.add_resource(teams.GetTeam, "/teams/get/<string:slug>")
     api.add_resource(teams.AddMember, "/teams/member/add")
     api.add_resource(teams.RemoveMember, "/teams/member/remove")
+    api.add_resource(teams.TeamUpload, "/teams/upload")
     api.add_resource(teams.ListTeams, "/teams/list")
-    api.add_resource(teams.Upload, "/teams/upload")
 
     # Descriptor routes
     api.add_resource(descriptors.NewDescriptor, "/descriptors/new")
@@ -32,7 +32,7 @@ def init(api, app):
     api.add_resource(anime.NewAnime, "/anime/new")
     api.add_resource(anime.EditAnime, "/anime/edit")
     api.add_resource(anime.GetAnime, "/anime/get/<string:slug>")
-    api.add_resource(anime.Upload, "/anime/upload")
+    api.add_resource(anime.AnimeUpload, "/anime/upload")
     api.add_resource(anime.Search, "/anime/list")
 
     # Episode routes

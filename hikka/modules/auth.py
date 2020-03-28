@@ -7,7 +7,6 @@ from hikka.tools import helpers
 from hikka.errors import abort
 from datetime import datetime
 from hikka.auth import Token
-from flask import Response
 import config
 
 class Join(Resource):

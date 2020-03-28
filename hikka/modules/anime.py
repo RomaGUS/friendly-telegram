@@ -26,21 +26,21 @@ class NewAnime(Resource):
         parser.add_argument("genres", type=list, default=[], location="json")
         parser.add_argument("category", type=helpers.category, required=True)
         parser.add_argument("description", type=helpers.string, required=True)
-        parser.add_argument("state", type=helpers.state, default=None)
+        parser.add_argument("state", type=helpers.state, required=True)
         parser.add_argument("team", type=helpers.team, required=True)
         parser.add_argument("title", type=dict, required=True)
         parser.add_argument("year", type=int, required=True)
-        parser.add_argument("total", type=int, default=None)
         parser.add_argument("external", type=dict)
+        parser.add_argument("total", type=int)
         args = parser.parse_args()
 
         title_parser = RequestParser()
-        title_parser.add_argument("jp", type=str, default=None, location="title")
+        title_parser.add_argument("jp", type=str, location="title")
         title_parser.add_argument("ua", type=str, location="title")
         title_args = title_parser.parse_args(req=args)
 
         external_parser = RequestParser()
-        external_parser.add_argument("mal", type=int, default=None, location="external")
+        external_parser.add_argument("mal", type=int, location="external")
         external_args = external_parser.parse_args(req=args)
 
         for alias in args["aliases"]:
@@ -118,12 +118,18 @@ class EditAnime(Resource):
         args = parser.parse_args()
 
         params_parser = RequestParser()
-        params_parser.add_argument("title", type=dict, default=None, location="params")
-        params_parser.add_argument("franchises", type=list, default=None, location="params")
-        params_parser.add_argument("subtitles", type=list, default=None, location="params")
-        params_parser.add_argument("voiceover", type=list, default=None, location="params")
-        params_parser.add_argument("aliases", type=list, default=None, location="params")
-        params_parser.add_argument("genres", type=list, default=None, location="params")
+        params_parser.add_argument("description", type=helpers.string, location="params")
+        params_parser.add_argument("category", type=helpers.category, location="params")
+        params_parser.add_argument("state", type=helpers.state, location="params")
+        params_parser.add_argument("franchises", type=list, location="params")
+        params_parser.add_argument("subtitles", type=list, location="params")
+        params_parser.add_argument("voiceover", type=list, location="params")
+        params_parser.add_argument("external", type=dict, location="params")
+        params_parser.add_argument("aliases", type=list, location="params")
+        params_parser.add_argument("genres", type=list, location="params")
+        params_parser.add_argument("title", type=dict, location="params")
+        params_parser.add_argument("total", type=int, location="params")
+        params_parser.add_argument("year", type=int, location="params")
         params_args = params_parser.parse_args(req=args)
 
         title_parser = RequestParser()
@@ -131,42 +137,55 @@ class EditAnime(Resource):
         title_parser.add_argument("ua", type=str, location="title")
         title_args = title_parser.parse_args(req=params_args)
 
+        external_parser = RequestParser()
+        external_parser.add_argument("mal", type=int, location="external")
+        external_args = external_parser.parse_args(req=args)
+
         anime = args["slug"]
 
-        if title_args["jp"]:
-            anime.title.jp = title_args["jp"]
-
-        if title_args["ua"]:
-            anime.title.ua = title_args["ua"]
-
         if params_args["genres"]:
-            genres = []
+            anime.genres = []
             for slug in params_args["genres"]:
                 genre = helpers.genre(slug)
-                genres.append(genre)
+                anime.genres.append(genre)
 
         if params_args["franchises"]:
-            franchises = []
+            anime.franchises = []
             for slug in params_args["franchises"]:
                 franchise = helpers.franchise(slug)
-                franchises.append(franchise)
+                anime.franchises.append(franchise)
 
-        if params_args["subtitles"]:
-            subtitles = []
-            for username in params_args["subtitles"]:
-                subtitles_account = helpers.account(username)
-                subtitles.append(subtitles_account)
+        fields = ["category", "category", "description", "state", "year", "total"]
+        for field in fields:
+            if params_args[field]:
+                anime[field] = params_args[field]
 
-        if params_args["voiceover"]:
-            voiceover = []
-            for username in params_args["voiceover"]:
-                voiceover_account = helpers.account(username)
-                voiceover.append(voiceover_account)
+        fields = ["subtitles", "voiceover"]
+        for field in fields:
+            if params_args[field]:
+                anime[field] = []
+                for username in params_args[field]:
+                    account = helpers.account(username)
+                    anime[field].append(account)
 
+        fields = ["jp", "ua"]
+        for field in fields:
+            if title_args[field]:
+                anime.title[field] = title_args[field]
+
+        if params_args["external"]:
+            external = AnimeService.get_external(external_args["mal"])
+            anime.external = external
+
+            if anime.external.mal:
+                anime.rating = utils.rating(anime.external.mal)
+
+        anime.save()
         result["data"] = anime.dict()
-        return params_args
 
-class Upload(Resource):
+        return result
+
+class AnimeUpload(Resource):
     @auth_required
     @permission_required("global", "publishing")
     def put(self):
@@ -224,8 +243,8 @@ class Search(Resource):
         args = parser.parse_args()
 
         year_parser = RequestParser()
-        year_parser.add_argument("min", type=int, default=None, location="year")
-        year_parser.add_argument("max", type=int, default=None, location="year")
+        year_parser.add_argument("min", type=int, location="year")
+        year_parser.add_argument("max", type=int, location="year")
         year_args = year_parser.parse_args(req=args)
 
         query = utils.search_query(args["query"])

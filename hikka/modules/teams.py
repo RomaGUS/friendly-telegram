@@ -40,7 +40,36 @@ class NewTeam(Resource):
         result["data"] = team.dict(True)
         return result
 
-class Upload(Resource):
+class EditTeam(Resource):
+    @auth_required
+    @permission_required("global", "admin")
+    def post(self):
+        result = {"error": None, "data": {}}
+
+        parser = RequestParser()
+        parser.add_argument("slug", type=helpers.team, required=True)
+        parser.add_argument("params", type=dict)
+        args = parser.parse_args()
+
+        params_parser = RequestParser()
+        params_parser.add_argument("description", type=helpers.string, location=("params"))
+        params_parser.add_argument("name", type=helpers.string, location=("params"))
+        params_args = params_parser.parse_args(req=args)
+
+        team = args["slug"]
+
+        if params_args["description"]:
+            team.description = params_args["description"]
+
+        if params_args["name"]:
+            team.name = params_args["name"]
+
+        team.save()
+        result["data"] = team.dict(True)
+
+        return result
+
+class TeamUpload(Resource):
     @auth_required
     @permission_required("global", "admin")
     def put(self):
@@ -69,35 +98,6 @@ class Upload(Resource):
             team.save()
 
         result["data"] = team.dict()
-        return result
-
-class EditTeam(Resource):
-    @auth_required
-    @permission_required("global", "admin")
-    def post(self):
-        result = {"error": None, "data": {}}
-
-        parser = RequestParser()
-        parser.add_argument("slug", type=helpers.team, required=True)
-        parser.add_argument("params", type=dict)
-        args = parser.parse_args()
-
-        params_parser = RequestParser()
-        params_parser.add_argument("description", type=helpers.string, location=("params"))
-        params_parser.add_argument("name", type=helpers.string, location=("params"))
-        params_args = params_parser.parse_args(req=args)
-
-        team = args["slug"]
-
-        if params_args["description"]:
-            team.description = params_args["description"]
-
-        if params_args["name"]:
-            team.name = params_args["name"]
-
-        team.save()
-        result["data"] = team.dict(True)
-
         return result
 
 class AddMember(Resource):

@@ -15,9 +15,9 @@ class NewDescriptor(Resource):
 
         parser = RequestParser()
         parser.add_argument("service", type=str, required=True, choices=choices)
-        parser.add_argument("description", type=str, default=None)
         parser.add_argument("name", type=str, required=True)
         parser.add_argument("slug", type=str, required=True)
+        parser.add_argument("description", type=str)
         args = parser.parse_args()
 
         check = DescriptorService.get_by_slug(args["service"], args["slug"])

@@ -20,7 +20,7 @@ class AddEpisode(Resource):
         parser.add_argument("video", type=FileStorage, location="files")
         parser.add_argument("slug", type=helpers.anime, required=True)
         parser.add_argument("position", type=int, required=True)
-        parser.add_argument("name", type=str, default=None)
+        parser.add_argument("name", type=str)
         args = parser.parse_args()
 
         if args["position"] < 0:
