@@ -33,6 +33,7 @@ class User(mongoengine.Document):
     def dict(self):
         avatar = self.avatar.link() if self.avatar else None
         return {
+            "login": int(datetime.timestamp(self.login)),
             "username": self.username,
             "avatar": avatar
         }
