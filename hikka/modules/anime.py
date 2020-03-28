@@ -58,21 +58,33 @@ class NewAnime(Resource):
         genres = []
         for slug in args["genres"]:
             genre = helpers.genre(slug)
+            if type(genre) is Response:
+                return genre
+
             genres.append(genre)
 
         franchises = []
         for slug in args["franchises"]:
             franchise = helpers.franchise(slug)
+            if type(franchise) is Response:
+                return franchise
+
             franchises.append(franchise)
 
         subtitles = []
         for username in args["subtitles"]:
             subtitles_account = helpers.account(username)
+            if type(subtitles_account) is Response:
+                return subtitles_account
+
             subtitles.append(subtitles_account)
 
         voiceover = []
         for username in args["voiceover"]:
             voiceover_account = helpers.account(username)
+            if type(voiceover_account) is Response:
+                return voiceover_account
+
             voiceover.append(voiceover_account)
 
         title = AnimeService.get_title(title_args["ua"], title_args["jp"])
@@ -143,24 +155,36 @@ class EditAnime(Resource):
             genres = []
             for slug in params_args["genres"]:
                 genre = helpers.genre(slug)
+                if type(genre) is Response:
+                    return genre
+
                 genres.append(genre)
 
         if params_args["franchises"]:
             franchises = []
             for slug in params_args["franchises"]:
                 franchise = helpers.franchise(slug)
+                if type(franchise) is Response:
+                    return franchise
+
                 franchises.append(franchise)
 
         if params_args["subtitles"]:
             subtitles = []
             for username in params_args["subtitles"]:
                 subtitles_account = helpers.account(username)
+                if type(subtitles_account) is Response:
+                    return subtitles_account
+
                 subtitles.append(subtitles_account)
 
         if params_args["voiceover"]:
             voiceover = []
             for username in params_args["voiceover"]:
                 voiceover_account = helpers.account(username)
+                if type(voiceover_account) is Response:
+                    return voiceover_account
+
                 voiceover.append(voiceover_account)
 
         result["data"] = anime.dict()
@@ -203,6 +227,9 @@ class GetAnime(Resource):
         result = {"error": None, "data": {}}
 
         anime = helpers.anime(slug)
+        if type(anime) is Response:
+            return anime
+
         result["data"] = anime.dict(True)
 
         return result
@@ -237,22 +264,37 @@ class Search(Resource):
 
         for slug in args["categories"]:
             category = helpers.category(slug)
+            if type(category) is Response:
+                return category
+
             categories.append(category)
 
         for slug in args["genres"]:
             genre = helpers.genre(slug)
+            if type(genre) is Response:
+                return genre
+
             genres.append(genre)
 
         for slug in args["franchises"]:
             franchise = helpers.franchise(slug)
+            if type(franchise) is Response:
+                return franchise
+
             franchises.append(franchise)
 
         for slug in args["states"]:
             state = helpers.state(slug)
+            if type(state) is Response:
+                return state
+
             genres.append(state)
 
         for slug in args["teams"]:
             team = helpers.team(slug)
+            if type(team) is Response:
+                return team
+
             teams.append(team)
 
         anime = AnimeService.search(
