@@ -1,6 +1,7 @@
 from hikka.decorators import auth_required, permission_required
 from hikka.services.permissions import PermissionService
 from werkzeug.datastructures import FileStorage
+from hikka.services.files import FileService
 from hikka.services.teams import TeamService
 from hikka.tools.parser import RequestParser
 from hikka.tools.upload import UploadHelper
@@ -19,7 +20,6 @@ class NewTeam(Resource):
         parser = RequestParser()
         parser.add_argument("members", type=list, default=[], location="json")
         parser.add_argument("admins", type=list, default=[], location="json")
-        parser.add_argument("avatar", type=FileStorage, location="files")
         parser.add_argument("description", type=str, required=True)
         parser.add_argument("name", type=str, required=True)
         parser.add_argument("slug", type=str, required=True)
@@ -29,20 +29,7 @@ class NewTeam(Resource):
         if team:
             return abort("team", "slug-exists")
 
-        avatar = None
-        if args["avatar"]:
-            helper = UploadHelper(request.account, args["avatar"], "avatar")
-            data = helper.upload_image()
-
-            if type(data) is Response:
-                return data
-
-            avatar = data
-
         team = TeamService.create(args["name"], args["slug"], args["description"])
-
-        if avatar:
-            TeamService.update_avatar(team, avatar)
 
         for username in args["members"]:
             account = helpers.account(username)
@@ -51,6 +38,37 @@ class NewTeam(Resource):
                 PermissionService.add(account, "global", "publishing")
 
         result["data"] = team.dict(True)
+        return result
+
+class Upload(Resource):
+    @auth_required
+    @permission_required("global", "admin")
+    def put(self):
+        result = {"error": None, "data": []}
+        choices = ("avatar")
+
+        parser = RequestParser()
+        parser.add_argument("file", type=FileStorage, location="files")
+        parser.add_argument("slug", type=helpers.team, required=True)
+        parser.add_argument("type", type=str, choices=choices)
+        args = parser.parse_args()
+
+        team = args["slug"]
+
+        if args["file"]:
+            helper = UploadHelper(request.account, args["file"], args["type"])
+            data = helper.upload_image()
+
+            if type(data) is Response:
+                return data
+
+            if team[args["type"]]:
+                FileService.destroy(team[args["type"]])
+
+            team[args["type"]] = data
+            team.save()
+
+        result["data"] = team.dict()
         return result
 
 class EditTeam(Resource):

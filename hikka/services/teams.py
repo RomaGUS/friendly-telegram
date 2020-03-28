@@ -1,8 +1,6 @@
 from hikka.services.func import update_document
-from hikka.services.files import FileService
 from hikka.services.models.user import User
 from hikka.services.models.team import Team
-from hikka.services.models.file import File
 from typing import List
 
 class TeamService:
@@ -41,16 +39,6 @@ class TeamService:
             team.members.pop(index)
 
         team.save()
-
-    @classmethod
-    def update_avatar(cls, team: Team, file: File):
-        if team.avatar:
-            FileService.destroy(team.avatar)
-
-        team.avatar = file
-        team.save()
-
-        return team
 
     @classmethod
     def list(cls) -> List[Team]:

@@ -203,7 +203,6 @@ class GetAnime(Resource):
         result = {"error": None, "data": {}}
 
         anime = helpers.anime(slug)
-
         result["data"] = anime.dict(True)
 
         return result

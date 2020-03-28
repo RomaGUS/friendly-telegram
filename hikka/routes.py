@@ -22,6 +22,7 @@ def init(api, app):
     api.add_resource(teams.AddMember, "/teams/member/add")
     api.add_resource(teams.RemoveMember, "/teams/member/remove")
     api.add_resource(teams.ListTeams, "/teams/list")
+    api.add_resource(teams.Upload, "/teams/upload")
 
     # Descriptor routes
     api.add_resource(descriptors.NewDescriptor, "/descriptors/new")
