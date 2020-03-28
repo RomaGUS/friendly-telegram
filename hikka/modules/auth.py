@@ -93,8 +93,6 @@ class Activate(Resource):
             return abort("general", "token-invalid-type")
 
         account = helpers.account(data["payload"]["meta"])
-        if type(account) is Response:
-            return account
 
         if data["payload"]["action"] != "activation":
             return abort("general", "token-invalid-type")

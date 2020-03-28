@@ -21,8 +21,6 @@ class MakeVote(Resource):
         subject = None
         if args["subject"] == "anime":
             subject = helpers.anime(args["slug"])
-            if type(subject) is Response:
-                return subject
 
         vote = VoteService.submit(subject, request.account, args["rating"])
         result["data"] = vote.dict()

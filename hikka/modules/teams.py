@@ -46,9 +46,6 @@ class NewTeam(Resource):
 
         for username in args["members"]:
             account = helpers.account(username)
-            if type(account) is Response:
-                return account
-
             TeamService.add_member(team, account)
             if account.username in args["admins"]:
                 PermissionService.add(account, "global", "publishing")
@@ -134,9 +131,6 @@ class GetTeam(Resource):
         result = {"error": None, "data": {}}
 
         team = helpers.team(slug)
-        if type(team) is Response:
-            return team
-
         result["data"] = team.dict(True)
 
         return result
