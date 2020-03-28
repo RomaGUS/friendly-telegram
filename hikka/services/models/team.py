@@ -18,7 +18,7 @@ class Team(mongoengine.Document):
     }
 
     def dict(self, members=False):
-        avatar = self.avatar.link() if self.avatar is not None else None
+        avatar = self.avatar.link() if self.avatar else None
         data = {
             "name": self.name,
             "description": self.description,

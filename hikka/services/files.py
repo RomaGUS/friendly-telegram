@@ -16,7 +16,7 @@ class FileService:
 
     @classmethod
     def destroy(cls, file: File):
-        if file.uploaded and file.path is not None:
+        if file.uploaded and file.path:
             fs = storage.init_fs()
             fs.rm(file.storage())
 

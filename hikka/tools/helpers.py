@@ -5,6 +5,8 @@ from hikka.services.users import UserService
 from hikka.errors import abort
 import re
 
+from flask_restful import abort as flask_abort
+
 def string(data):
     if not data:
         abort("general", "empty-string")
@@ -62,6 +64,7 @@ def account(username):
 def team(slug):
     team = TeamService.get_by_slug(slug)
     if team is None:
-        abort("team", "not-found")
+        # abort("team", "not-found")
+        flask_abort(422)
 
     return team

@@ -20,11 +20,11 @@ class Join(Resource):
         args = parser.parse_args()
 
         account = UserService.get_by_username(args["username"])
-        if account is not None:
+        if account:
             return abort("account", "username-exist")
 
         account_check = UserService.get_by_email(args["email"])
-        if account_check is not None:
+        if account_check:
             return abort("account", "email-exist")
 
         admin = len(UserService.list()) == 0

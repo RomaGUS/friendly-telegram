@@ -121,10 +121,10 @@ class AnimeService:
         if len(teams) > 0:
             anime = anime.filter(teams__in=teams)
 
-        if year["min"] is not None:
+        if year["min"]:
             anime = anime.filter(year__gte=year["min"])
 
-        if year["max"] is not None:
+        if year["max"]:
             anime = anime.filter(year__lte=year["max"])
 
         anime = anime.limit(limit).skip(offset)

@@ -6,7 +6,7 @@ from hikka.modules import anime
 from hikka.modules import teams
 from hikka.modules import votes
 from hikka.modules import auth
-from hikka.errors import abort
+from hikka import errors
 import flask
 
 def init(api, app):
@@ -29,6 +29,7 @@ def init(api, app):
 
     # Anime routes
     api.add_resource(anime.NewAnime, "/anime/new")
+    api.add_resource(anime.EditAnime, "/anime/edit")
     api.add_resource(anime.GetAnime, "/anime/get/<string:slug>")
     api.add_resource(anime.Upload, "/anime/upload")
     api.add_resource(anime.Search, "/anime/list")
@@ -57,16 +58,16 @@ def init(api, app):
 
     @app.errorhandler(400)
     def error400(error):
-        abort("general", "bad-request", 400)
+        return errors.abort("general", "bad-request", 400)
 
     @app.errorhandler(404)
     def error404(error):
-        abort("general", "not-found", 404)
+        return errors.abort("general", "not-found", 404)
 
     @app.errorhandler(405)
     def error405(error):
-        abort("general", "method-not-allowed", 405)
+        return errors.abort("general", "method-not-allowed", 405)
 
     @app.errorhandler(429)
     def error429(error):
-        abort("general", "too-many-requests", 429)
+        return errors.abort("general", "too-many-requests", 429)

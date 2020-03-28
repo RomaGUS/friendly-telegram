@@ -30,7 +30,7 @@ class User(mongoengine.Document):
         return result
 
     def dict(self):
-        avatar = self.avatar.link() if self.avatar is not None else None
+        avatar = self.avatar.link() if self.avatar else None
         return {
             "username": self.username,
             "avatar": avatar

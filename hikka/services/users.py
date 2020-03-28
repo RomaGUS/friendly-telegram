@@ -29,7 +29,7 @@ class UserService:
 
         if data["valid"] and data["payload"]["action"] == "login":
             user = cls.get_by_username(data["payload"]["meta"])
-            if user is not None:
+            if user:
                 if PermissionService.check(user, "global", "activated"):
                     return user
 
@@ -42,7 +42,7 @@ class UserService:
 
     @classmethod
     def update_avatar(cls, user: User, file: File):
-        if user.avatar is not None:
+        if user.avatar:
             FileService.destroy(user.avatar)
 
         user.avatar = file

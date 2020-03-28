@@ -35,12 +35,12 @@ class NewAnime(Resource):
         args = parser.parse_args()
 
         title_parser = RequestParser()
-        title_parser.add_argument("jp", type=str, default=None, location=("title",))
-        title_parser.add_argument("ua", type=str, location=("title",))
+        title_parser.add_argument("jp", type=str, default=None, location="title")
+        title_parser.add_argument("ua", type=str, location="title")
         title_args = title_parser.parse_args(req=args)
 
         external_parser = RequestParser()
-        external_parser.add_argument("mal", type=int, default=None, location=("external"))
+        external_parser.add_argument("mal", type=int, default=None, location="external")
         external_args = external_parser.parse_args(req=args)
 
         for alias in args["aliases"]:
@@ -99,12 +99,72 @@ class NewAnime(Resource):
         )
 
         # Get rating from MyAnimeList
-        if anime.external.mal is not None:
+        if anime.external.mal:
             anime.rating = utils.rating(anime.external.mal)
             anime.save()
 
         result["data"] = anime.dict()
         return result
+
+class EditAnime(Resource):
+    @auth_required
+    @permission_required("global", "publishing")
+    def post(self):
+        result = {"error": None, "data": {}}
+
+        parser = RequestParser()
+        parser.add_argument("params", type=dict, default={}, location="json")
+        parser.add_argument("slug", type=helpers.anime, required=True)
+        args = parser.parse_args()
+
+        params_parser = RequestParser()
+        params_parser.add_argument("title", type=dict, default=None, location="params")
+        params_parser.add_argument("franchises", type=list, default=None, location="params")
+        params_parser.add_argument("subtitles", type=list, default=None, location="params")
+        params_parser.add_argument("voiceover", type=list, default=None, location="params")
+        params_parser.add_argument("aliases", type=list, default=None, location="params")
+        params_parser.add_argument("genres", type=list, default=None, location="params")
+        params_args = params_parser.parse_args(req=args)
+
+        title_parser = RequestParser()
+        title_parser.add_argument("jp", type=str, location="title")
+        title_parser.add_argument("ua", type=str, location="title")
+        title_args = title_parser.parse_args(req=params_args)
+
+        anime = args["slug"]
+
+        if title_args["jp"]:
+            anime.title.jp = title_args["jp"]
+
+        if title_args["ua"]:
+            anime.title.ua = title_args["ua"]
+
+        if params_args["genres"]:
+            genres = []
+            for slug in params_args["genres"]:
+                genre = helpers.genre(slug)
+                genres.append(genre)
+
+        if params_args["franchises"]:
+            franchises = []
+            for slug in params_args["franchises"]:
+                franchise = helpers.franchise(slug)
+                franchises.append(franchise)
+
+        if params_args["subtitles"]:
+            subtitles = []
+            for username in params_args["subtitles"]:
+                subtitles_account = helpers.account(username)
+                subtitles.append(subtitles_account)
+
+        if params_args["voiceover"]:
+            voiceover = []
+            for username in params_args["voiceover"]:
+                voiceover_account = helpers.account(username)
+                voiceover.append(voiceover_account)
+
+        result["data"] = anime.dict()
+        return params_args
 
 class Upload(Resource):
     @auth_required
@@ -121,14 +181,14 @@ class Upload(Resource):
 
         anime = args["slug"]
 
-        if args["file"] is not None:
+        if args["file"]:
             helper = UploadHelper(request.account, args["file"], args["type"])
             data = helper.upload_image()
 
             if type(data) is Response:
                 return data
 
-            if anime[args["type"]] is not None:
+            if anime[args["type"]]:
                 FileService.destroy(anime[args["type"]])
 
             anime[args["type"]] = data
@@ -164,8 +224,8 @@ class Search(Resource):
         args = parser.parse_args()
 
         year_parser = RequestParser()
-        year_parser.add_argument("min", type=int, default=None, location=("year",))
-        year_parser.add_argument("max", type=int, default=None, location=("year",))
+        year_parser.add_argument("min", type=int, default=None, location="year")
+        year_parser.add_argument("max", type=int, default=None, location="year")
         year_args = year_parser.parse_args(req=args)
 
         query = utils.search_query(args["query"])

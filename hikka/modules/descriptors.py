@@ -21,7 +21,7 @@ class NewDescriptor(Resource):
         args = parser.parse_args()
 
         check = DescriptorService.get_by_slug(args["service"], args["slug"])
-        if check is not None:
+        if check:
             return abort(args["service"], "slug-exists")
 
         descriptor = DescriptorService.create(

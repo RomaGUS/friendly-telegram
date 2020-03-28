@@ -26,11 +26,11 @@ class NewTeam(Resource):
         args = parser.parse_args()
 
         team = TeamService.get_by_slug(args["slug"])
-        if team is not None:
+        if team:
             return abort("team", "slug-exists")
 
         avatar = None
-        if args["avatar"] is not None:
+        if args["avatar"]:
             helper = UploadHelper(request.account, args["avatar"], "avatar")
             data = helper.upload_image()
 
@@ -41,7 +41,7 @@ class NewTeam(Resource):
 
         team = TeamService.create(args["name"], args["slug"], args["description"])
 
-        if avatar is not None:
+        if avatar:
             TeamService.update_avatar(team, avatar)
 
         for username in args["members"]:
@@ -72,10 +72,10 @@ class EditTeam(Resource):
 
         team = args["slug"]
 
-        if params_args["description"] is not None:
+        if params_args["description"]:
             team.description = params_args["description"]
 
-        if params_args["name"] is not None:
+        if params_args["name"]:
             team.name = params_args["name"]
 
         team.save()

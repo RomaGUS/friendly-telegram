@@ -32,7 +32,7 @@ class AddEpisode(Resource):
             return abort("account", "not-team-member")
 
         episode = AnimeService.find_position(anime, args["position"])
-        if episode is not None:
+        if episode:
             return abort("episode", "position-exists")
 
         if args["video"] is None:
@@ -74,7 +74,7 @@ class UpdateEpisode(Resource):
             return abort("episode", "not-found")
 
         video = episode.video
-        if args["video"] is not None:
+        if args["video"]:
             helper = UploadHelper(request.account, args["video"], "video")
             data = helper.upload_video()
 
@@ -94,7 +94,7 @@ class UpdateEpisode(Resource):
                 return abort("general", "out-of-range")
 
             episode_check = AnimeService.find_position(anime, args["position"])
-            if episode_check is not None:
+            if episode_check:
                 return abort("episode", "position-exists")
 
             position = args["params"]["position"]

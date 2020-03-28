@@ -111,11 +111,11 @@ class Anime(mongoengine.Document):
         for team in self.teams:
             data["teams"].append(team.dict())
 
-        if self.poster is not None:
+        if self.poster:
             if self.poster.uploaded is True:
                 data["poster"] = self.poster.link()
 
-        if self.banner is not None:
+        if self.banner:
             if self.poster.uploaded is True:
                 data["banner"] = self.banner.link()
 

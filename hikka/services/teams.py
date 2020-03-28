@@ -44,7 +44,7 @@ class TeamService:
 
     @classmethod
     def update_avatar(cls, team: Team, file: File):
-        if team.avatar is not None:
+        if team.avatar:
             FileService.destroy(team.avatar)
 
         team.avatar = file
