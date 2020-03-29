@@ -25,10 +25,11 @@ class UserService:
 
     @classmethod
     def auth(cls, token: str):
-        data = Token.validate(token)
+        valid = Token.validate(token)
+        payload = Token.payload(token)
 
-        if data["valid"] and data["payload"]["action"] == "login":
-            user = cls.get_by_username(data["payload"]["meta"])
+        if valid and payload["action"] == "login":
+            user = cls.get_by_username(payload["meta"])
             if user:
                 if PermissionService.check(user, "global", "activated"):
                     return user

@@ -39,10 +39,7 @@ class JWT():
     @classmethod
     def verify_signed_token(cls, key, token):
         """
-        Decodes the payload in the token and returns a tuple
-        whose first value is a boolean indicating whether the
-        signature on this token was valid, followed by the
-        decoded payload.
+        Validate token HMAC signature.
         """
         try:
             (header, payload, sig) = token.split(".")
@@ -52,37 +49,50 @@ class JWT():
             dig = d.digest()
             denc = base58.b58encode_check(dig).decode()
 
-            verified = hmac.compare_digest(sig, denc)
-            payload_data = json.loads(base58.b58decode_check(payload).decode())
-            return {
-                "valid": verified,
-                "payload": payload_data
-            }
+            return hmac.compare_digest(sig, denc)
+
         except Exception:
-            return {
-                "valid": False,
-                "payload": {}
-            }
+            return False
+
+    @classmethod
+    def decode_payload(cls, token):
+        """
+        Decodes the payload in the token and returns a dict.
+        """
+        try:
+            (header, payload, sig) = token.split(".")
+            return json.loads(base58.b58decode_check(payload).decode())
+
+        except Exception:
+            return {}
 
 class Token():
     @classmethod
-    def create(cls, action, meta, days=3, minutes=0):
-        """Token valid for 3 days by default"""
-        delta = timedelta(days=days, minutes=minutes)
+    def create(cls, action, meta, time=None, secret=None):
+        delta = time if time else timedelta(days=3)
         expire = int(datetime.timestamp(datetime.now() + delta))
-        return JWT.create_signed_token(utils.blake2b(config.secret), {
+        key = secret if secret else config.secret
+        return JWT.create_signed_token(utils.blake2b(key), {
             "action": action,
             "expire": expire,
             "meta": meta
         })
 
     @classmethod
-    def validate(cls, token):
-        data = JWT.verify_signed_token(utils.blake2b(config.secret), token)
-        if "expire" not in data["payload"]:
-            data["valid"] = False
-        else:
-            if data["payload"]["expire"] < int(datetime.timestamp(datetime.now())):
-                data["valid"] = False
+    def validate(cls, token, secret=None):
+        key = secret if secret else config.secret
+        valid = JWT.verify_signed_token(utils.blake2b(key), token)
+        payload = JWT.decode_payload(token)
 
-        return data
+        if "expire" not in payload:
+            valid = False
+
+        else:
+            if payload["expire"] < int(datetime.timestamp(datetime.now())):
+                valid = False
+
+        return valid
+
+    @classmethod
+    def payload(cls, token):
+        return JWT.decode_payload(token)

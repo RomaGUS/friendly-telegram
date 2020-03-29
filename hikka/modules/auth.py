@@ -1,12 +1,12 @@
 from hikka.services.permissions import PermissionService
 from hikka.services.users import UserService
 from hikka.tools.parser import RequestParser
+from datetime import datetime, timedelta
+from hikka.auth import Token, hashpwd
 from hikka.tools.mail import Email
 from flask_restful import Resource
 from hikka.tools import helpers
 from hikka.errors import abort
-from datetime import datetime
-from hikka.auth import Token
 import config
 
 class Join(Resource):
@@ -30,21 +30,20 @@ class Join(Resource):
         admin = len(UserService.list()) == 0
         account = UserService.signup(args["username"], args["email"], args["password"])
 
-        # Make first registered user admin
-        if admin:
-            PermissionService.add(account, "global", "activated")
-            PermissionService.add(account, "global", "admin")
-
         mail = Email()
         activation_token = Token.create("activation", account.username)
         mail.account_confirmation(account.email, activation_token)
-
-        result["data"] = account.dict()
 
         # Display activation code only in debug mode
         if config.debug:
             result["data"]["code"] = activation_token
 
+        # Make first registered user admin
+        if admin:
+            PermissionService.add(account, "global", "activated")
+            PermissionService.add(account, "global", "admin")
+
+        result["data"] = account.dict()
         return result
 
 class Login(Resource):
@@ -65,13 +64,13 @@ class Login(Resource):
             return abort("account", "login-failed")
 
         UserService.update(account, login=datetime.now)
-        token = Token.create("login", account.username)
-        data = Token.validate(token)
+        login_token = Token.create("login", account.username)
+        data = Token.payload(login_token)
 
         result["data"] = {
-            "token": token,
-            "expire": data["payload"]["expire"],
-            "username": data["payload"]["meta"]
+            "token": login_token,
+            "expire": data["expire"],
+            "username": data["meta"]
         }
 
         return result
@@ -84,13 +83,13 @@ class Activate(Resource):
         parser.add_argument("token", type=str, required=True)
         args = parser.parse_args()
 
-        data = Token.validate(args["token"])
-        if not data["valid"]:
+        if not Token.validate(args["token"]):
             return abort("general", "token-invalid-type")
 
-        account = helpers.account(data["payload"]["meta"])
+        payload = Token.payload(args["token"])
+        account = helpers.account(payload["meta"])
 
-        if data["payload"]["action"] != "activation":
+        if payload["action"] != "activation":
             return abort("general", "token-invalid-type")
 
         activated = PermissionService.check(account, "global", "activated")
@@ -117,15 +116,50 @@ class RequestReset(Resource):
         if account is None:
             return abort("account", "not-found")
 
-        mail = Email()
-        reset_token = Token.create("reset", account.username, 0, 30)
-        mail.password_reset(account.email, reset_token)
-        
+        delta = timedelta(minutes=30)
+        if account.reset + delta > datetime.now():
+            return abort("account", "reset-cooldown")
 
-        # result["data"] = {
-        #     "token": token,
-        #     "expire": data["payload"]["expire"],
-        #     "username": data["payload"]["meta"]
-        # }
+        mail = Email()
+        reset_token = Token.create("reset", account.username, delta, account.password)
+
+        mail.password_reset(account.email, reset_token)
+        account.reset = datetime.now()
+        account.save()
+
+        result["data"] = {
+            "success": True
+        }
+
+        return result
+
+class PasswordReset(Resource):
+    def post(self):
+        result = {"error": None, "data": {}}
+
+        parser = RequestParser()
+        parser.add_argument("token", type=str, required=True)
+        parser.add_argument("password", type=str, required=True)
+        args = parser.parse_args()
+
+        payload = Token.payload(args["token"])
+        if "meta" not in payload:
+            return abort("general", "token-invalid-type")
+
+        account = helpers.account(payload["meta"])
+        if not Token.validate(args["token"], account.password):
+            return abort("general", "token-invalid-type")
+
+        if payload["action"] != "reset":
+            return abort("general", "token-invalid-type")
+
+        account.password = hashpwd(args["password"])
+        account.save()
+
+        PermissionService.add(account, "global", "activated")
+        result["data"] = {
+            "username": account.username,
+            "activated": True
+        }
 
         return result

@@ -11,7 +11,8 @@ errors = {
         "not-found": "Account not found",
         "not-admin": "Account must be admin",
         "login-failed": "Login failed",
-        "not-team-member": "Account is not team member"
+        "not-team-member": "Account is not team member",
+        "reset-cooldown": "Password reset cooldown"
     },
     "team": {
         "slug-exists": "Team with this slug already exists",
