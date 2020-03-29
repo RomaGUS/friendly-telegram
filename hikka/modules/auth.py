@@ -7,9 +7,16 @@ from hikka.tools.mail import Email
 from flask_restful import Resource
 from hikka.tools import helpers
 from hikka.errors import abort
+from hikka import limiter
 import config
 
+class Test(Resource):
+    @limiter.limit("1/day")
+    def get(self):
+        return "Test"
+
 class Join(Resource):
+    @limiter.limit("1/day")
     def post(self):
         result = {"error": None, "data": {}}
 

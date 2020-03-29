@@ -16,6 +16,7 @@ def init(api, app):
     api.add_resource(auth.Activate, "/auth/activate")
     api.add_resource(auth.RequestReset, "/auth/reset/request")
     api.add_resource(auth.PasswordReset, "/auth/reset")
+    api.add_resource(auth.Test, "/test")
 
     # Team routes
     api.add_resource(teams.NewTeam, "/teams/new")
