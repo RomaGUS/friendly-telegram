@@ -52,9 +52,6 @@ class NewAnime(Resource):
         if request.account not in team.members:
             return abort("account", "not-team-member")
 
-        if not PermissionService.check(request.account, "global", "publishing"):
-            return abort("account", "permission")
-
         genres = []
         for slug in args["genres"]:
             genre = helpers.genre(slug)
@@ -187,6 +184,10 @@ class EditAnime(Resource):
                     return abort("general", "alias-invalid-type")
 
             anime.aliases = args["aliases"]
+
+        if PermissionService.check(request.account, "global", "admin"):
+            if params_args["selected"]:
+                anime["selected"] = params_args["selected"]
 
         anime.search = utils.create_search(anime.title.ua, anime.title.jp, anime.aliases)
         anime.save()
