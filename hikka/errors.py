@@ -58,6 +58,7 @@ errors = {
         "not-editable": "Comment not editable"
     },
     "general": {
+        "token-invalid": "Invalid token",
         "token-invalid-type": "Invalid token type",
         "alias-invalid-type": "Alias must be string",
         "pagination-error": "Pagination is out of range",

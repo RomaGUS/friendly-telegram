@@ -84,7 +84,7 @@ class Activate(Resource):
         args = parser.parse_args()
 
         if not Token.validate(args["token"]):
-            return abort("general", "token-invalid-type")
+            return abort("general", "token-invalid")
 
         payload = Token.payload(args["token"])
         account = helpers.account(payload["meta"])
@@ -144,11 +144,11 @@ class PasswordReset(Resource):
 
         payload = Token.payload(args["token"])
         if "meta" not in payload:
-            return abort("general", "token-invalid-type")
+            return abort("general", "token-invalid")
 
         account = helpers.account(payload["meta"])
         if not Token.validate(args["token"], account.password):
-            return abort("general", "token-invalid-type")
+            return abort("general", "token-invalid")
 
         if payload["action"] != "reset":
             return abort("general", "token-invalid-type")
