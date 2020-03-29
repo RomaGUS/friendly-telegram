@@ -125,6 +125,7 @@ class EditAnime(Resource):
         params_parser.add_argument("subtitles", type=list, location="params")
         params_parser.add_argument("voiceover", type=list, location="params")
         params_parser.add_argument("external", type=dict, location="params")
+        params_parser.add_argument("selected", type=bool, location="params")
         params_parser.add_argument("aliases", type=list, location="params")
         params_parser.add_argument("genres", type=list, location="params")
         params_parser.add_argument("title", type=dict, location="params")
@@ -155,7 +156,7 @@ class EditAnime(Resource):
                 franchise = helpers.franchise(slug)
                 anime.franchises.append(franchise)
 
-        fields = ["category", "category", "description", "state", "year", "total"]
+        fields = ["category", "category", "description", "state", "year", "total", "selected"]
         for field in fields:
             if params_args[field]:
                 anime[field] = params_args[field]
@@ -187,7 +188,7 @@ class EditAnime(Resource):
 
             anime.aliases = args["aliases"]
 
-        anime.search = utils.create_search(anime.title.ua, anime.title.jp, anime.title.aliases)
+        anime.search = utils.create_search(anime.title.ua, anime.title.jp, anime.aliases)
         anime.save()
 
         result["data"] = anime.dict()
@@ -231,6 +232,17 @@ class GetAnime(Resource):
 
         anime = helpers.anime(slug)
         result["data"] = anime.dict(True)
+
+        return result
+
+class Selected(Resource):
+    @auth_required
+    def get(self):
+        result = {"error": None, "data": []}
+
+        anime = AnimeService.selected()
+        for item in anime:
+            result["data"].append(item.dict())
 
         return result
 
@@ -293,7 +305,7 @@ class Search(Resource):
             args["page"]
         )
 
-        for anime in anime:
-            result["data"].append(anime.dict())
+        for item in anime:
+            result["data"].append(item.dict())
 
         return result

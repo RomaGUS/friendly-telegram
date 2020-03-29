@@ -101,7 +101,7 @@ class AnimeService:
 
     @classmethod
     def search(cls, query, year: dict, categories=[], genres=[], franchises=[],
-                states=[], teams=[], page=0, limit=20) -> List[Anime]:
+                states=[], teams=[], selected=False, page=0, limit=20) -> List[Anime]:
 
         offset = page * limit
         anime = Anime.objects(search__contains=query)
@@ -128,4 +128,9 @@ class AnimeService:
             anime = anime.filter(year__lte=year["max"])
 
         anime = anime.limit(limit).skip(offset)
+        return list(anime)
+
+    @classmethod
+    def selected(cls) -> List[Anime]:
+        anime = Anime.objects(selected=True).filter()
         return list(anime)

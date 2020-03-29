@@ -26,3 +26,15 @@ class Email(object):
         msg["To"] = address
 
         self.send(msg)
+
+    def password_reset(self, address, token):
+        message = f"Ваше посилання для скидання паролю: {config.url}/reset/{token}"
+
+        msg = EmailMessage()
+        msg.set_content(message)
+
+        msg["Subject"] = "Скидання паролю"
+        msg["From"] = self.sender
+        msg["To"] = address
+
+        self.send(msg)

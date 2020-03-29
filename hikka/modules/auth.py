@@ -104,3 +104,28 @@ class Activate(Resource):
         }
 
         return result
+
+class RequestReset(Resource):
+    def post(self):
+        result = {"error": None, "data": {}}
+
+        parser = RequestParser()
+        parser.add_argument("email", type=helpers.email, required=True)
+        args = parser.parse_args()
+
+        account = UserService.get_by_email(args["email"])
+        if account is None:
+            return abort("account", "not-found")
+
+        mail = Email()
+        reset_token = Token.create("reset", account.username, 0, 30)
+        mail.password_reset(account.email, reset_token)
+        
+
+        # result["data"] = {
+        #     "token": token,
+        #     "expire": data["payload"]["expire"],
+        #     "username": data["payload"]["meta"]
+        # }
+
+        return result

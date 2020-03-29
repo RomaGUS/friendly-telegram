@@ -31,6 +31,7 @@ class Title(mongoengine.EmbeddedDocument):
 class Anime(mongoengine.Document):
     title = mongoengine.EmbeddedDocumentField(Title, required=True)
     hidden = mongoengine.BooleanField(required=True, default=False)
+    selected = mongoengine.BooleanField(required=True, default=False)
     description = mongoengine.StringField(required=True, default=None)
     subtitles = mongoengine.ListField(mongoengine.ReferenceField("User"))
     voiceover = mongoengine.ListField(mongoengine.ReferenceField("User"))
