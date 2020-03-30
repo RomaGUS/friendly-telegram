@@ -2,7 +2,22 @@ from datetime import datetime
 import mongoengine
 
 class External(mongoengine.EmbeddedDocument):
-    mal = mongoengine.IntField(default=None)
+    myanimelist = mongoengine.IntField(default=None)
+    toloka = mongoengine.IntField(default=None)
+
+    def dict(self):
+        data = {
+            "myanimelist": None,
+            "toloka": None
+        }
+
+        if self.myanimelist:
+            data["myanimelist"] = f"https://myanimelist.net/anime/{self.myanimelist}"
+
+        if self.toloka:
+            data["toloka"] = f"https://toloka.to/t{self.toloka}"
+
+        return data
 
 class Episode(mongoengine.EmbeddedDocument):
     description = mongoengine.StringField(default=None)
@@ -80,6 +95,7 @@ class Anime(mongoengine.Document):
             "description": self.description,
             "title": self.title.dict(),
             "category": self.category.dict(),
+            "external": self.external.dict(),
             "rating": float(self.rating),
             "state": self.state.dict(),
             "aliases": self.aliases,

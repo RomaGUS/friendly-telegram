@@ -40,7 +40,8 @@ class NewAnime(Resource):
         title_args = title_parser.parse_args(req=args)
 
         external_parser = RequestParser()
-        external_parser.add_argument("mal", type=int, location="external")
+        external_parser.add_argument("myanimelist", type=int, location="external")
+        external_parser.add_argument("toloka", type=int, location="external")
         external_args = external_parser.parse_args(req=args)
 
         for alias in args["aliases"]:
@@ -74,7 +75,7 @@ class NewAnime(Resource):
 
         title = AnimeService.get_title(title_args["ua"], title_args["jp"])
         search = utils.create_search(title_args["ua"], title_args["jp"], args["aliases"])
-        external = AnimeService.get_external(external_args["mal"])
+        external = AnimeService.get_external(external_args["myanimelist"], external_args["toloka"])
         slug = utils.create_slug(title_args["ua"])
 
         anime = AnimeService.create(
@@ -96,8 +97,8 @@ class NewAnime(Resource):
         )
 
         # Get rating from MyAnimeList
-        if anime.external.mal:
-            anime.rating = utils.rating(anime.external.mal)
+        if anime.external.myanimelist:
+            anime.rating = utils.rating(anime.external.myanimelist)
             anime.save()
 
         result["data"] = anime.dict()
@@ -136,8 +137,9 @@ class EditAnime(Resource):
         title_args = title_parser.parse_args(req=params_args)
 
         external_parser = RequestParser()
-        external_parser.add_argument("mal", type=int, location="external")
-        external_args = external_parser.parse_args(req=args)
+        external_parser.add_argument("myanimelist", type=int, location="external")
+        external_parser.add_argument("toloka", type=int, location="external")
+        external_args = external_parser.parse_args(req=params_args)
 
         anime = args["slug"]
 
@@ -172,11 +174,12 @@ class EditAnime(Resource):
                 anime.title[field] = title_args[field]
 
         if params_args["external"]:
-            external = AnimeService.get_external(external_args["mal"])
-            anime.external = external
+            if external_args["myanimelist"]:
+                anime.external.myanimelist = external_args["myanimelist"]
+                anime.rating = utils.rating(anime.external.myanimelist)
 
-            if anime.external.mal:
-                anime.rating = utils.rating(anime.external.mal)
+            if external_args["toloka"]:
+                anime.external.toloka = external_args["toloka"]
 
         if params_args["aliases"]:
             for alias in args["aliases"]:

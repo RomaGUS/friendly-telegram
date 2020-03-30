@@ -12,8 +12,12 @@ class AnimeService:
         return title
 
     @classmethod
-    def get_external(cls, mal):
-        external = External(mal=mal)
+    def get_external(cls, myanimelist=None, toloka=None):
+        external = External(
+            myanimelist=myanimelist,
+            toloka=toloka
+        )
+
         return external
 
     @classmethod
