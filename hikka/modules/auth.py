@@ -16,7 +16,7 @@ class Test(Resource):
         return "Test"
 
 class Join(Resource):
-    @limiter.limit("1/day")
+    @limiter.limit("1/day", override_defaults=True)
     def post(self):
         result = {"error": None, "data": {}}
 
