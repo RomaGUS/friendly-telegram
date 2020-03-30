@@ -13,6 +13,13 @@ def string(data):
 
     return data
 
+def password(data):
+    if len(data) < 8 or len(data) > 32:
+        response = abort("general", "password-length")
+        flask_abort(response)
+
+    return data
+
 def email(data):
     if not bool(re.search(r"[^@]+@[^@]+\.[^@]+", data)):
         response = abort("general", "not-found")

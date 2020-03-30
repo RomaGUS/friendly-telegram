@@ -1,6 +1,7 @@
 from hikka.modules import descriptors
 from hikka.modules import comments
 from hikka.modules import episodes
+from hikka.modules import account
 from hikka.modules import system
 from hikka.modules import anime
 from hikka.modules import teams
@@ -16,6 +17,9 @@ def init(api, app):
     api.add_resource(auth.Activate, "/auth/activate")
     api.add_resource(auth.RequestReset, "/auth/reset/request")
     api.add_resource(auth.PasswordReset, "/auth/reset")
+
+    # Account routes
+    api.add_resource(account.PasswordChange, "/account/password")
 
     # Team routes
     api.add_resource(teams.NewTeam, "/teams/new")

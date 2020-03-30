@@ -14,9 +14,9 @@ class Join(Resource):
         result = {"error": None, "data": {}}
 
         parser = RequestParser()
+        parser.add_argument("password", type=helpers.password, required=True)
         parser.add_argument("email", type=helpers.email, required=True)
         parser.add_argument("username", type=str, required=True)
-        parser.add_argument("password", type=str, required=True)
         args = parser.parse_args()
 
         account = UserService.get_by_username(args["username"])
@@ -51,8 +51,8 @@ class Login(Resource):
         result = {"error": None, "data": {}}
 
         parser = RequestParser()
+        parser.add_argument("password", type=helpers.password, required=True)
         parser.add_argument("email", type=helpers.email, required=True)
-        parser.add_argument("password", type=str, required=True)
         args = parser.parse_args()
 
         account = UserService.get_by_email(args["email"])
@@ -138,8 +138,8 @@ class PasswordReset(Resource):
         result = {"error": None, "data": {}}
 
         parser = RequestParser()
+        parser.add_argument("password", type=helpers.password, required=True)
         parser.add_argument("token", type=str, required=True)
-        parser.add_argument("password", type=str, required=True)
         args = parser.parse_args()
 
         payload = Token.payload(args["token"])
@@ -156,10 +156,9 @@ class PasswordReset(Resource):
         account.password = hashpwd(args["password"])
         account.save()
 
-        PermissionService.add(account, "global", "activated")
         result["data"] = {
             "username": account.username,
-            "activated": True
+            "success": True
         }
 
         return result

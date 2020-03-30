@@ -65,13 +65,14 @@ errors = {
         "service-not-found": "Descriptor service not found",
         "missing-field": "Required field is missing",
         "empty-required": "Required field can't be empty",
+        "password-length": "Bad password length",
         "out-of-range": "Number is out of range",
         "method-not-allowed": "Method not allowed",
         "too-many-requests": "Too many requests",
         "invalid-email": "Invalid email",
         "empty-string": "Empty string",
-        "bad-request": "Bad Request",
-        "not-found": "Not Found"
+        "bad-request": "Bad request",
+        "not-found": "Not found"
     }
 }
 
