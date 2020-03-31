@@ -1,7 +1,5 @@
 from hikka.services.models.anime import Anime, Title, Episode, External
 from hikka.services.models.descriptor import Descriptor
-from hikka.services.models.team import Team
-from hikka.services.models.user import User
 from hikka.services.models.file import File
 from typing import List
 
@@ -26,31 +24,18 @@ class AnimeService:
         return episode
 
     @classmethod
-    def create(cls, title: Title, slug: str, description: str,
-                year: int, total: int, search: str, category: Descriptor,
-                state: Descriptor, external: External, genres=List[Descriptor], franchises=List[Descriptor],
-                teams=[Team], subtitles=[User], voiceover=[User],
-                aliases=[]) -> Anime:
+    def create(cls, title: Title, description: str,
+                category: Descriptor, state: Descriptor,
+                slug: str) -> Anime:
 
         anime = Anime(
             title=title,
-            slug=slug,
             description=description,
-            year=year,
-            total=total,
-            search=search,
             category=category,
             state=state,
-            genres=genres,
-            franchises=franchises,
-            teams=teams,
-            subtitles=subtitles,
-            voiceover=voiceover,
-            external=external,
-            aliases=aliases
+            slug=slug
         )
 
-        anime.save()
         return anime
 
     @classmethod
@@ -76,14 +61,14 @@ class AnimeService:
         return episode
 
     @classmethod
-    def get_by_slug(cls, slug: str):
-        anime = Anime.objects().filter(slug=slug).first()
+    def get_by_slug(cls, slug: str, hidden=False):
+        anime = Anime.objects().filter(slug=slug, hidden=hidden).first()
         return anime
 
     @classmethod
-    def list(cls, page=0, limit=20) -> List[Anime]:
+    def list(cls, page=0, limit=20, hidden=False) -> List[Anime]:
         offset = page * limit
-        anime = Anime.objects().filter().limit(limit).skip(offset)
+        anime = Anime.objects().filter(hidden=hidden).limit(limit).skip(offset)
         return list(anime)
 
     @classmethod
@@ -104,8 +89,9 @@ class AnimeService:
         }
 
     @classmethod
-    def search(cls, query, year: dict, categories=[], genres=[], franchises=[],
-                states=[], teams=[], selected=False, page=0, limit=20) -> List[Anime]:
+    def search(cls, query, year: dict, categories=[], genres=[],
+                franchises=[], states=[], teams=[], selected=False,
+                page=0, limit=20, hidden=False) -> List[Anime]:
 
         offset = page * limit
         anime = Anime.objects(search__contains=query)
@@ -131,7 +117,7 @@ class AnimeService:
         if year["max"]:
             anime = anime.filter(year__lte=year["max"])
 
-        anime = anime.limit(limit).skip(offset)
+        anime = anime.filter(hidden=hidden).limit(limit).skip(offset)
         return list(anime)
 
     @classmethod

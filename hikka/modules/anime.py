@@ -44,64 +44,58 @@ class NewAnime(Resource):
         external_parser.add_argument("toloka", type=int, location="external")
         external_args = external_parser.parse_args(req=args)
 
+        title = AnimeService.get_title(title_args["ua"], title_args["jp"])
+        slug = utils.create_slug(title_args["ua"])
+        team = args["team"]
+
+        anime = AnimeService.create(
+            title, args["description"],
+            args["category"], args["state"],
+            slug
+        )
+
         for alias in args["aliases"]:
             if type(alias) is not str:
                 return abort("general", "alias-invalid-type")
 
-        team = args["team"]
-
         if request.account not in team.members:
             return abort("account", "not-team-member")
 
-        genres = []
+        anime.genres = []
         for slug in args["genres"]:
             genre = helpers.genre(slug)
-            genres.append(genre)
+            anime.genres.append(genre)
 
-        franchises = []
+        anime.franchises = []
         for slug in args["franchises"]:
             franchise = helpers.franchise(slug)
-            franchises.append(franchise)
+            anime.franchises.append(franchise)
 
-        subtitles = []
-        for username in args["subtitles"]:
-            subtitles_account = helpers.account(username)
-            subtitles.append(subtitles_account)
+        fields = ["aliases", "year", "total"]
+        for field in fields:
+            anime[field] = args[field]
 
-        voiceover = []
-        for username in args["voiceover"]:
-            voiceover_account = helpers.account(username)
-            voiceover.append(voiceover_account)
+        fields = ["subtitles", "voiceover"]
+        for field in fields:
+            anime[field] = []
+            for username in args[field]:
+                account = helpers.account(username)
+                anime[field].append(account)
 
-        title = AnimeService.get_title(title_args["ua"], title_args["jp"])
-        search = utils.create_search(title_args["ua"], title_args["jp"], args["aliases"])
+        search = utils.create_search(anime.title.ua, anime.title.jp, anime.aliases)
         external = AnimeService.get_external(external_args["myanimelist"], external_args["toloka"])
-        slug = utils.create_slug(title_args["ua"])
 
-        anime = AnimeService.create(
-            title,
-            slug,
-            args["description"],
-            args["year"],
-            args["total"],
-            search,
-            args["category"],
-            args["state"],
-            external,
-            genres,
-            franchises,
-            [team],
-            subtitles,
-            voiceover,
-            args["aliases"]
-        )
+        anime.external = external
+        anime.search = search
+        anime.teams = [team]
 
-        # Get rating from MyAnimeList
         if anime.external.myanimelist:
             anime.rating = utils.rating(anime.external.myanimelist)
             anime.save()
 
         result["data"] = anime.dict()
+        anime.save()
+
         return result
 
 class EditAnime(Resource):
@@ -143,6 +137,11 @@ class EditAnime(Resource):
 
         anime = args["slug"]
 
+        if params_args["aliases"]:
+            for alias in args["aliases"]:
+                if type(alias) is not str:
+                    return abort("general", "alias-invalid-type")
+
         if params_args["genres"]:
             anime.genres = []
             for slug in params_args["genres"]:
@@ -155,7 +154,7 @@ class EditAnime(Resource):
                 franchise = helpers.franchise(slug)
                 anime.franchises.append(franchise)
 
-        fields = ["category", "category", "description", "state", "year", "total", "selected"]
+        fields = ["category", "description", "state", "year", "total", "selected", "aliases"]
         for field in fields:
             if params_args[field]:
                 anime[field] = params_args[field]
@@ -180,13 +179,6 @@ class EditAnime(Resource):
 
             if external_args["toloka"]:
                 anime.external.toloka = external_args["toloka"]
-
-        if params_args["aliases"]:
-            for alias in args["aliases"]:
-                if type(alias) is not str:
-                    return abort("general", "alias-invalid-type")
-
-            anime.aliases = args["aliases"]
 
         if PermissionService.check(request.account, "global", "admin"):
             if params_args["selected"]:
@@ -227,27 +219,6 @@ class AnimeUpload(Resource):
             anime.save()
 
         result["data"] = anime.dict()
-        return result
-
-class GetAnime(Resource):
-    @auth_required
-    def get(self, slug):
-        result = {"error": None, "data": {}}
-
-        anime = helpers.anime(slug)
-        result["data"] = anime.dict(True)
-
-        return result
-
-class Selected(Resource):
-    @auth_required
-    def get(self):
-        result = {"error": None, "data": []}
-
-        anime = AnimeService.selected()
-        for item in anime:
-            result["data"].append(item.dict())
-
         return result
 
 class Search(Resource):
@@ -299,16 +270,32 @@ class Search(Resource):
             teams.append(team)
 
         anime = AnimeService.search(
-            query,
-            year_args,
-            categories,
-            genres,
-            franchises,
-            states,
-            teams,
-            args["page"]
+            query, year_args, categories,
+            genres, franchises, states,
+            teams, args["page"]
         )
 
+        for item in anime:
+            result["data"].append(item.dict())
+
+        return result
+
+class GetAnime(Resource):
+    @auth_required
+    def get(self, slug):
+        result = {"error": None, "data": {}}
+
+        anime = helpers.anime(slug)
+        result["data"] = anime.dict(True)
+
+        return result
+
+class Selected(Resource):
+    @auth_required
+    def get(self):
+        result = {"error": None, "data": []}
+
+        anime = AnimeService.selected()
         for item in anime:
             result["data"].append(item.dict())
 
