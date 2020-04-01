@@ -64,6 +64,10 @@ class Login(Resource):
         if not login:
             return abort("account", "login-failed")
 
+        activated = PermissionService.check(account, "global", "activated")
+        if not activated:
+            return abort("account", "not-activated")
+
         UserService.update(account, login=datetime.now)
         login_token = Token.create("login", account.username)
         data = Token.payload(login_token)

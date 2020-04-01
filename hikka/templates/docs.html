@@ -1573,6 +1573,11 @@ var n=this.pipeline.run(e.tokenizer(t)),r=new e.Vector,i=[],o=this._fields.reduc
                     
                   </li>
                 
+                  <li>
+                    <a href="#login" class="toc-h2 toc-link" data-title="">Login</a>
+                    
+                  </li>
+                
               </ul>
             
           </li>
@@ -1768,8 +1773,194 @@ $.ajax({
 <td>none</td>
 </tr>
 <tr>
-<td>»» avarat</td>
+<td>»» avatar</td>
 <td>string,null</td>
+<td>false</td>
+<td>none</td>
+<td>none</td>
+</tr>
+</tbody>
+</table>
+<h3 id="response-headers">Response Headers</h3>
+<table>
+<thead>
+<tr>
+<th>Status</th>
+<th>Header</th>
+<th>Type</th>
+<th>Format</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>200</td>
+<td>application/json</td>
+<td>string</td>
+<td></td>
+<td>none</td>
+</tr>
+</tbody>
+</table>
+<aside class="success">
+This operation does not require authentication
+</aside>
+<h2 id="login">Login</h2>
+<p><a id="opIdLogin"></a></p>
+<blockquote>
+<p>Code samples</p>
+</blockquote>
+<pre class="highlight tab tab-python"><code><span class="hljs-keyword">import</span> requests
+headers = {
+  <span class="hljs-string">'Content-Type'</span>: <span class="hljs-string">'application/json'</span>,
+  <span class="hljs-string">'Accept'</span>: <span class="hljs-string">'application/json'</span>
+}
+
+r = requests.post(<span class="hljs-string">'https://api.hikka.io/auth/login'</span>, params={
+
+}, headers = headers)
+
+<span class="hljs-keyword">print</span> r.json()
+
+</code></pre>
+<pre class="highlight tab tab-javascript"><code><span class="hljs-keyword">var</span> headers = {
+  <span class="hljs-string">'Content-Type'</span>:<span class="hljs-string">'application/json'</span>,
+  <span class="hljs-string">'Accept'</span>:<span class="hljs-string">'application/json'</span>
+
+};
+
+$.ajax({
+  <span class="hljs-attr">url</span>: <span class="hljs-string">'https://api.hikka.io/auth/login'</span>,
+  <span class="hljs-attr">method</span>: <span class="hljs-string">'post'</span>,
+
+  <span class="hljs-attr">headers</span>: headers,
+  <span class="hljs-attr">success</span>: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">data</span>) </span>{
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-built_in">JSON</span>.stringify(data));
+  }
+})
+
+</code></pre>
+<p><code>POST /auth/login</code></p>
+<p><em>Create new user</em></p>
+<p>This method is used for obtaining API token.</p>
+<blockquote>
+<p>Body parameter</p>
+</blockquote>
+<pre class="highlight tab tab-json"><code>{
+  <span class="hljs-attr">"email"</span>: <span class="hljs-string">"example@hikka.io"</span>,
+  <span class="hljs-attr">"password"</span>: <span class="hljs-string">"password"</span>
+}
+</code></pre>
+<h3 id="login-parameters">Parameters</h3>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>In</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>body</td>
+<td>body</td>
+<td>object</td>
+<td>false</td>
+<td>none</td>
+</tr>
+<tr>
+<td>» email</td>
+<td>body</td>
+<td>string</td>
+<td>true</td>
+<td>none</td>
+</tr>
+<tr>
+<td>» password</td>
+<td>body</td>
+<td>string</td>
+<td>true</td>
+<td>none</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Example responses</p>
+</blockquote>
+<pre class="highlight tab tab-json"><code>{
+  <span class="hljs-attr">"error"</span>: <span class="hljs-literal">null</span>,
+  <span class="hljs-attr">"data"</span>: {
+    <span class="hljs-attr">"token"</span>: <span class="hljs-string">"3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuYpbsSVbHxJnUepd.8L6w9mVQkeJqtP35fjryHXsWp2jzC2M5RRxqrQ2VoDycEat9VHAwaqpbdn4G53Juad275TKYkr6tEbjePvQHt.MSzTK1y118jM7qN6JVWigKoGDutNYCDkuF1uXA6J4MQtT2GJXucMnMnt9wz2LJgykRQcAFrLFH97orwDnoNfVc1SRBSex"</span>,
+    <span class="hljs-attr">"expire"</span>: <span class="hljs-number">1585989400</span>,
+    <span class="hljs-attr">"username"</span>: <span class="hljs-string">"hikka"</span>
+  }
+}
+</code></pre>
+<h3 id="login-responses">Responses</h3>
+<table>
+<thead>
+<tr>
+<th>Status</th>
+<th>Meaning</th>
+<th>Description</th>
+<th>Schema</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>200</td>
+<td><a href="https://tools.ietf.org/html/rfc7231#section-6.3.1">OK</a></td>
+<td>none</td>
+<td>Inline</td>
+</tr>
+</tbody>
+</table>
+<h3 id="login-responseschema">Response Schema</h3>
+<p>Status Code <strong>200</strong></p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Required</th>
+<th>Restrictions</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>» error</td>
+<td>null</td>
+<td>false</td>
+<td>none</td>
+<td>none</td>
+</tr>
+<tr>
+<td>» data</td>
+<td>object</td>
+<td>false</td>
+<td>none</td>
+<td>none</td>
+</tr>
+<tr>
+<td>»» expire</td>
+<td>integer</td>
+<td>false</td>
+<td>none</td>
+<td>none</td>
+</tr>
+<tr>
+<td>»» username</td>
+<td>string</td>
+<td>false</td>
+<td>none</td>
+<td>none</td>
+</tr>
+<tr>
+<td>»» token</td>
+<td>string</td>
 <td>false</td>
 <td>none</td>
 <td>none</td>

@@ -7,6 +7,7 @@ errors = {
         "email-exist": "Account with this email already exists",
         "username-exist": "Account with this username already exists",
         "activated": "Account already activated",
+        "not-activated": "Account not activated yet",
         "permission": "Account don't have corresponding permission",
         "not-found": "Account not found",
         "not-admin": "Account must be admin",
