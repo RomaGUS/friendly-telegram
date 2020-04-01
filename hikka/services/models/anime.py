@@ -90,7 +90,18 @@ class Anime(mongoengine.Document):
         ]
     }
 
+    def missing(self):
+        missing = False
+        if self.external is None:
+            self.external = External()
+            missing = True
+
+        if missing:
+            self.save()
+
     def dict(self, episodes=False):
+        self.missing()
+
         data = {
             "description": self.description,
             "title": self.title.dict(),
