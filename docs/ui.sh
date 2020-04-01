@@ -1,0 +1,1 @@
+api2html -o ../hikka/templates/docs.html -l python,javascript -c ui/logo.png -P ui/style.css --raw ui/api.json

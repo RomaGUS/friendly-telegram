@@ -34,6 +34,8 @@ class Join(Resource):
         activation_token = Token.create("activation", account.username)
         mail.account_confirmation(account.email, activation_token)
 
+        result["data"] = account.dict()
+
         # Display activation code only in debug mode
         if config.debug:
             result["data"]["code"] = activation_token
@@ -43,7 +45,6 @@ class Join(Resource):
             PermissionService.add(account, "global", "activated")
             PermissionService.add(account, "global", "admin")
 
-        result["data"] = account.dict()
         return result
 
 class Login(Resource):

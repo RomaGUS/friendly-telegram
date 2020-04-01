@@ -21,7 +21,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"username\": \"volbil\", \"password\": \"thisispassword\", \"email\": \"volbilnexus@gmail.com\"}"
+							"raw": "{\"username\": \"hikka\", \"password\": \"thisispassword\", \"email\": \"example@hikka.io\"}"
 						},
 						"url": {
 							"raw": "{{url}}/auth/join",
@@ -79,7 +79,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"token\": \"3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuaKHVFGSweqHCNPp.H7MGKU95BMZZ2tUjHy5JkLevZFKZGYfUu6gzsQLe4825QPQiUBHBaRY4dGNnK3pSyMroKvXdCpSaUUvSY9t3LGdwW6nWT.GYfvzpc9ovBDiyBsTbd5Wpz4xXYaM5Y876Dg2sfuXVSHeFz62\"}"
+							"raw": "{\"token\": \"3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuYpbsSVbHxJnUepd.2E72ScWndShkgPLDPftW1LHkPPLCuRckr8x7YRU1gYmykSDug2xNRkwaQKdNM1LheWUm99YQnN44L4skzoUZnHrt1eVtbo8.Fve66pawu7fK4k8fUYZUJs6umMFuynfCX9FDH9hZb9YvZxsX87rzoqs1n5p7GqDGKzPN5ADRcKxynXDFpBrQc9rBHDwsW\"}"
 						},
 						"url": {
 							"raw": "{{url}}/auth/activate",
@@ -89,6 +89,105 @@
 							"path": [
 								"auth",
 								"activate"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Request Reset",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"email\": \"volbilnexus@gmail.com\"}"
+						},
+						"url": {
+							"raw": "{{url}}/auth/reset/request",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"reset",
+								"request"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Password Reset",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"token\": \"3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuYpbsSVbHxJnUepd.ZMKC1hNPqdfkmnGBcJz84TZxVL83qS7RFtiTfjccrHTkhcXrVPmrdBoWJr17yQKhVvLKu9KASgN7Gy264bNvKn.DufWeiFaFKzyigT5Gxbzagcmy8f4YyanToyx31eSgZnY1SpMfbnK9h6Fp7MMfPCg7jmu3zJ1DBikoZriciAVaBmqRaU73\", \"password\": \"thisispassword\"}"
+						},
+						"url": {
+							"raw": "{{url}}/auth/reset",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"auth",
+								"reset"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Account",
+			"item": [
+				{
+					"name": "Password Change",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authentication",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"password\": \"thisispassword\"}"
+						},
+						"url": {
+							"raw": "{{url}}/account/password",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"account",
+								"password"
 							]
 						}
 					},
@@ -341,7 +440,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"name\": \"Хорор\", \"slug\": \"horror\", \"service\": \"genre\"}"
+							"raw": "{\"name\": \"Коносуба\", \"slug\": \"konosuba\", \"service\": \"franchise\"}"
 						},
 						"url": {
 							"raw": "{{url}}/descriptors/new",
@@ -415,7 +514,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"description\": \"Шіномія Каґуя та Шіроґане Міюкі — члени Учнівської ради елітної академії Шючіїн, генії з геніїв. Після часу проведеного разом часу, у них зародилися почуття один до одного. Але, на жаль, але їхня гордість не дозволить зізнатися одне одному про свої почуття. Кохання — це війна, це безжальна битва, метою якої є змусити супротивника освідчитися!\", \"title\": {\"ua\": \"Каґуя-сама, Кохання як війна\", \"jp\": \"TEST\"}, \"state\": \"ongoing\", \"genres\": [\"romance\", \"horror\"], \"franchises\": [\"boku_no_piko\"], \"voiceover\": [\"volbil\"], \"category\": \"tv\", \"team\": \"fanvox\", \"aliases\": [\"кагуя\"], \"year\": 2019, \"total\": 20, \"external\": {\"mal\": 38883}}"
+							"raw": "{\"description\": \"Не зважаючи на назву, цей фільм — легенда про силу чоловічої харизми! Отримавши від Юнюн тривожну звістку з батьківщини Меґумін, наші друзі вирушають на порятунок села багряних демонів. Загроза постає у подобі армії короля демонів на чолі з генералом Сільвією, мета якої - знайти легендарну зброю - Убивцю Магів. Село опиняється на межі смерті від сили, яку самі ж охороняли століттями.\", \"title\": {\"ua\": \"Цей прекрасний світ, благословенний Богом! Багряна легенда\"}, \"state\": \"ongoing\", \"genres\": [\"romance\"], \"franchises\": [\"konosuba\"], \"category\": \"tv\", \"team\": \"fanvox\", \"aliases\": [\"коносуба\"], \"year\": 2019, \"total\": 20, \"external\": {\"myanimelist\": 38040, \"toloka\": 109206}}"
 						},
 						"url": {
 							"raw": "{{url}}/anime/new",
@@ -449,7 +548,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"slug\": \"kaguya-sama-kohannya-yak-viyna-8e206e50\", \"params\": {\"description\": \"Шіномія Каґуя та Шіроґане Міюкі — члени Учнівської ради елітної академії Шючіїн, генії з геніїв. Після часу проведеного разом часу, у них зародилися почуття один до одного. Але, на жаль, але їхня гордість не дозволить зізнатися одне одному про свої почуття. Кохання — це війна, це безжальна битва, метою якої є змусити супротивника освідчитися!\"}}"
+							"raw": "{\"slug\": \"kaguya-sama-kohannya-yak-viyna-58613f9e\", \"params\": {\"selected\": true, \"external\": {\"toloka\": \"109206\"}}}"
 						},
 						"url": {
 							"raw": "{{url}}/anime/edit",

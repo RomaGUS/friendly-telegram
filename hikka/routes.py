@@ -62,7 +62,7 @@ def init(api, app):
 
     @app.route("/")
     def root():
-        return flask.render_template("index.html")
+        return flask.render_template("docs.html")
 
     @app.errorhandler(400)
     def error400(error):

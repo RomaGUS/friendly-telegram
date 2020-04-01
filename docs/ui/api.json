@@ -1,0 +1,128 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Hikka API",
+    "version": "1.0",
+    "description": "",
+    "license": {
+      "url": "https://github.com/hkkio/hikka/blob/master/LICENSE.md",
+      "name": "BSD 3-Clause License"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://api.hikka.io"
+    }
+  ],
+  "paths": {
+    "/auth/join": {
+      "post": {
+        "summary": "Create new user",
+        "tags": [
+          "Auth"
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "null"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "login": {
+                          "type": "integer"
+                        },
+                        "username": {
+                          "type": "string"
+                        },
+                        "avarat": {
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        }
+                      }
+                    }
+                  }
+                },
+                "examples": {
+                  "new-user-responce": {
+                    "value": {
+                      "error": null,
+                      "data": {
+                        "login": 1585727565,
+                        "username": "hikka",
+                        "avatar": null
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "operationId": "Join",
+        "parameters": [],
+        "description": "This method is used for creating new user.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "username": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "username",
+                  "email",
+                  "password"
+                ]
+              },
+              "examples": {
+                "new-user": {
+                  "value": {
+                    "username": "hikka",
+                    "password": "password",
+                    "email": "example@hikka.io"
+                  }
+                }
+              }
+            }
+          },
+          "description": ""
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "API Token": {
+        "name": "Authentication",
+        "type": "apiKey",
+        "in": "header",
+        "description": "JWT Token which issued after login process"
+      }
+    }
+  }
+}
