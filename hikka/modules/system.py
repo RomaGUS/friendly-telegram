@@ -1,13 +1,10 @@
 from hikka.decorators import auth_required, permission_required
 from hikka.services.permissions import PermissionService
-from hikka.services.descriptors import DescriptorService
-from hikka.services.models.descriptor import choices
 from hikka.services.anime import AnimeService
 from hikka.tools.parser import RequestParser
 from flask_restful import Resource
+from hikka.services import static
 from hikka.tools import helpers
-from hikka.errors import abort
-from hikka import static
 
 class ManagePermissions(Resource):
     @auth_required

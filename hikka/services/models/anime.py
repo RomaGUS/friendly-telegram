@@ -1,5 +1,5 @@
+from hikka.services import static
 from datetime import datetime
-from hikka import static
 import mongoengine
 
 class External(mongoengine.EmbeddedDocument):

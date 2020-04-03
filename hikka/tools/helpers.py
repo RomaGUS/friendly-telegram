@@ -3,8 +3,8 @@ from hikka.services.anime import AnimeService
 from hikka.services.teams import TeamService
 from hikka.services.users import UserService
 from flask import abort as flask_abort
+from hikka.services import static
 from hikka.errors import abort
-from hikka import static
 import re
 
 def string(data):
