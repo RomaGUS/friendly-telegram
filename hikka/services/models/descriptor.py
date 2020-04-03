@@ -1,6 +1,7 @@
 import mongoengine
 
-choices = ("genre", "category", "state", "franchise")
+# "genre", "category", "state"
+choices = ("franchise")
 
 class Descriptor(mongoengine.Document):
     category = mongoengine.StringField(required=True, choices=choices)

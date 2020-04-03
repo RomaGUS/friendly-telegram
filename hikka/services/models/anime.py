@@ -1,4 +1,5 @@
 from datetime import datetime
+from hikka import static
 import mongoengine
 
 class External(mongoengine.EmbeddedDocument):
@@ -61,7 +62,7 @@ class Anime(mongoengine.Document):
     year = mongoengine.IntField(default=datetime.now().year)
     total = mongoengine.IntField(default=None)
 
-    genres = mongoengine.ListField(mongoengine.ReferenceField("Descriptor", reverse_delete_rule=4))
+    genres = mongoengine.ListField(mongoengine.IntField(required=True))
     franchises = mongoengine.ListField(mongoengine.ReferenceField("Descriptor", reverse_delete_rule=4))
     category = mongoengine.ReferenceField("Descriptor", reverse_delete_rule=4, required=True)
     state = mongoengine.ReferenceField("Descriptor", reverse_delete_rule=4, required=True)
@@ -93,6 +94,7 @@ class Anime(mongoengine.Document):
 
     def missing(self):
         missing = False
+
         if self.external is None:
             self.external = External()
             missing = True
@@ -133,14 +135,16 @@ class Anime(mongoengine.Document):
         for account in self.voiceover:
             data["voiceover"].append(account.dict())
 
-        for genre in self.genres:
-            data["genres"].append(genre.dict())
-
         for franchise in self.franchises:
             data["franchises"].append(franchise.dict())
 
         for team in self.teams:
             data["teams"].append(team.dict())
+
+        for genre in self.genres:
+            data["genres"].append(
+                static.dict(static.genres, genre)
+            )
 
         if self.poster:
             if self.poster.uploaded is True:

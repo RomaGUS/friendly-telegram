@@ -4,6 +4,7 @@ from hikka.services.teams import TeamService
 from hikka.services.users import UserService
 from flask import abort as flask_abort
 from hikka.errors import abort
+from hikka import static
 import re
 
 def string(data):
@@ -60,7 +61,7 @@ def state(slug):
     return state
 
 def genre(slug):
-    genre = DescriptorService.get_by_slug("genre", slug)
+    genre = static.get_key(static.genres, slug)
     if genre is None:
         response = abort("genre", "not-found")
         flask_abort(response)
