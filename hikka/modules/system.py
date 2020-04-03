@@ -53,14 +53,15 @@ class StaticData(Resource):
     def get(self):
         result = {"error": None, "data": {}}
 
-        result["data"]["static"] = {}
+        data = {}
         for service in ["genres", "categories", "states"]:
-            result["data"]["static"][service] = []
+            data[service] = []
             descriptors = static.static[service]
 
             for descriptor in descriptors:
-                result["data"]["static"][service].append(static.dict(service, descriptor))
+                data[service].append(static.dict(service, descriptor))
 
         result["data"]["years"] = AnimeService.years()
+        result["data"]["static"] = data
 
         return result

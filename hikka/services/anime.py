@@ -84,8 +84,8 @@ class AnimeService:
         )
 
         return {
-            "min": data[0]["min"],
-            "max": data[0]["max"]
+            "min": data[0]["min"] if len(data) > 0 else None,
+            "max": data[0]["max"] if len(data) > 0 else None
         }
 
     @classmethod
