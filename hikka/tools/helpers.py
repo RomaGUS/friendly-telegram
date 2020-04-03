@@ -45,7 +45,7 @@ def franchise(slug):
     return franchise
 
 def category(slug):
-    category = static.get_key(static.categories, slug)
+    category = static.get_key("categories", slug)
     if not category:
         response = abort("category", "not-found")
         flask_abort(response)
@@ -53,7 +53,7 @@ def category(slug):
     return category
 
 def state(slug):
-    state = static.get_key(static.states, slug)
+    state = static.get_key("states", slug)
     if not state:
         response = abort("state", "not-found")
         flask_abort(response)
@@ -61,7 +61,7 @@ def state(slug):
     return state
 
 def genre(slug):
-    genre = static.get_key(static.genres, slug)
+    genre = static.get_key("genres", slug)
     if not genre:
         response = abort("genre", "not-found")
         flask_abort(response)

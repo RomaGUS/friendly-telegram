@@ -105,8 +105,8 @@ class Anime(mongoengine.Document):
     def dict(self, episodes=False):
         self.missing()
 
-        category = static.dict(static.categories, self.category)
-        state = static.dict(static.states, self.state)
+        category = static.dict("categories", self.category)
+        state = static.dict("states", self.state)
 
         data = {
             "description": self.description,
@@ -145,7 +145,7 @@ class Anime(mongoengine.Document):
             data["teams"].append(team.dict())
 
         for genre in self.genres:
-            item = static.dict(static.genres, genre)
+            item = static.dict("genres", genre)
             data["genres"].append(item)
 
         if self.poster:

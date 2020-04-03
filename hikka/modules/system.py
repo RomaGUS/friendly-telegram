@@ -7,6 +7,7 @@ from hikka.tools.parser import RequestParser
 from flask_restful import Resource
 from hikka.tools import helpers
 from hikka.errors import abort
+from hikka import static
 
 class ManagePermissions(Resource):
     @auth_required
@@ -54,6 +55,7 @@ class App(Resource):
 
         parser = RequestParser()
         parser.add_argument("descriptors", type=list, default=[], location="json")
+        parser.add_argument("static", type=list, default=[], location="json")
         args = parser.parse_args()
 
         result["data"]["search"] = {}
@@ -69,6 +71,19 @@ class App(Resource):
                 data[service].append(descriptor.dict())
 
         result["data"]["search"]["descriptors"] = data
+
+        data = {}
+        for service in args["static"]:
+            if service not in ["genres", "categories", "states"]:
+                return abort("general", "service-not-found")
+
+            data[service] = []
+            descriptors = static.static[service]
+
+            for descriptor in descriptors:
+                data[service].append(static.dict(service, descriptor))
+
         result["data"]["search"]["years"] = AnimeService.years()
+        result["data"]["search"]["static"] = data
 
         return result
