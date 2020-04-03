@@ -50,7 +50,7 @@ def init(api, app):
     # System routes
     api.add_resource(system.ManagePermissions, "/system/permissions/manage")
     api.add_resource(system.UserPermissions, "/system/permissions/user")
-    api.add_resource(system.App, "/system/app")
+    api.add_resource(system.StaticData, "/system/static")
 
     # Comment routes
     api.add_resource(comments.NewComment, "/comments/new")

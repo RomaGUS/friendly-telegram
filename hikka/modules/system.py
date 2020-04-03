@@ -49,41 +49,18 @@ class UserPermissions(Resource):
 
         return result
 
-class App(Resource):
-    def post(self):
+class StaticData(Resource):
+    def get(self):
         result = {"error": None, "data": {}}
 
-        parser = RequestParser()
-        parser.add_argument("descriptors", type=list, default=[], location="json")
-        parser.add_argument("static", type=list, default=[], location="json")
-        args = parser.parse_args()
-
-        result["data"]["search"] = {}
-        data = {}
-
-        for service in args["descriptors"]:
-            if service not in choices:
-                return abort("general", "service-not-found")
-
-            data[service] = []
-            descriptors = DescriptorService.list(service)
-            for descriptor in descriptors:
-                data[service].append(descriptor.dict())
-
-        result["data"]["search"]["descriptors"] = data
-
-        data = {}
-        for service in args["static"]:
-            if service not in ["genres", "categories", "states"]:
-                return abort("general", "service-not-found")
-
-            data[service] = []
+        result["data"]["static"] = {}
+        for service in ["genres", "categories", "states"]:
+            result["data"]["static"][service] = []
             descriptors = static.static[service]
 
             for descriptor in descriptors:
-                data[service].append(static.dict(service, descriptor))
+                result["data"]["static"][service].append(static.dict(service, descriptor))
 
-        result["data"]["search"]["years"] = AnimeService.years()
-        result["data"]["search"]["static"] = data
+        result["data"]["years"] = AnimeService.years()
 
         return result
