@@ -28,6 +28,7 @@ class NewAnime(Resource):
         parser.add_argument("description", type=helpers.string, required=True)
         parser.add_argument("state", type=helpers.state, required=True)
         parser.add_argument("team", type=helpers.team, required=True)
+        parser.add_argument("season", type=int, choices=range(1, 5))
         parser.add_argument("title", type=dict, required=True)
         parser.add_argument("year", type=int, required=True)
         parser.add_argument("external", type=dict)
@@ -110,6 +111,7 @@ class EditAnime(Resource):
         args = parser.parse_args()
 
         params_parser = RequestParser()
+        params_parser.add_argument("season", type=int, choices=range(1, 5), location="params")
         params_parser.add_argument("description", type=helpers.string, location="params")
         params_parser.add_argument("category", type=helpers.category, location="params")
         params_parser.add_argument("state", type=helpers.state, location="params")
@@ -154,7 +156,7 @@ class EditAnime(Resource):
                 franchise = helpers.franchise(slug)
                 anime.franchises.append(franchise)
 
-        fields = ["category", "description", "state", "year", "total", "selected", "aliases"]
+        fields = ["category", "description", "state", "year", "total", "selected", "aliases", "season"]
         for field in fields:
             if params_args[field]:
                 anime[field] = params_args[field]

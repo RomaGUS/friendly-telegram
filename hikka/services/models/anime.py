@@ -57,6 +57,7 @@ class Anime(mongoengine.Document):
     banner = mongoengine.ReferenceField("File")
     views = mongoengine.IntField(default=0)
 
+    season = mongoengine.IntField(default=None, min_value=1, max_value=4)
     year = mongoengine.IntField(default=datetime.now().year)
     total = mongoengine.IntField(default=None)
 
@@ -110,6 +111,7 @@ class Anime(mongoengine.Document):
             "rating": float(self.rating),
             "state": self.state.dict(),
             "aliases": self.aliases,
+            "season": self.season,
             "slug": self.slug,
             "year": self.year,
             "poster": None,
