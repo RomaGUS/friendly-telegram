@@ -30,7 +30,7 @@ def email(data):
 
 def anime(slug):
     anime = AnimeService.get_by_slug(slug)
-    if anime is None:
+    if not anime:
         response = abort("anime", "not-found")
         flask_abort(response)
 
@@ -38,23 +38,23 @@ def anime(slug):
 
 def franchise(slug):
     franchise = DescriptorService.get_by_slug("franchise", slug)
-    if franchise is None:
+    if not franchise:
         response = abort("franchise", "not-found")
         flask_abort(response)
 
     return franchise
 
 def category(slug):
-    category = DescriptorService.get_by_slug("category", slug)
-    if category is None:
+    category = static.get_key(static.categories, slug)
+    if not category:
         response = abort("category", "not-found")
         flask_abort(response)
 
     return category
 
 def state(slug):
-    state = DescriptorService.get_by_slug("state", slug)
-    if state is None:
+    state = static.get_key(static.states, slug)
+    if not state:
         response = abort("state", "not-found")
         flask_abort(response)
 
@@ -62,7 +62,7 @@ def state(slug):
 
 def genre(slug):
     genre = static.get_key(static.genres, slug)
-    if genre is None:
+    if not genre:
         response = abort("genre", "not-found")
         flask_abort(response)
 
@@ -70,7 +70,7 @@ def genre(slug):
 
 def account(username):
     account = UserService.get_by_username(username)
-    if account is None:
+    if not account:
         response = abort("account", "not-found")
         flask_abort(response)
 
@@ -78,7 +78,7 @@ def account(username):
 
 def team(slug):
     team = TeamService.get_by_slug(slug)
-    if team is None:
+    if not team:
         response = abort("team", "not-found")
         flask_abort(response)
 

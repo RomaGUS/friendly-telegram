@@ -1,6 +1,5 @@
 import mongoengine
 
-# "genre", "category", "state"
 choices = ("franchise")
 
 class Descriptor(mongoengine.Document):

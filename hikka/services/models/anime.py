@@ -62,10 +62,10 @@ class Anime(mongoengine.Document):
     year = mongoengine.IntField(default=datetime.now().year)
     total = mongoengine.IntField(default=None)
 
-    genres = mongoengine.ListField(mongoengine.IntField(required=True))
     franchises = mongoengine.ListField(mongoengine.ReferenceField("Descriptor", reverse_delete_rule=4))
-    category = mongoengine.ReferenceField("Descriptor", reverse_delete_rule=4, required=True)
-    state = mongoengine.ReferenceField("Descriptor", reverse_delete_rule=4, required=True)
+    genres = mongoengine.ListField(mongoengine.IntField(required=True))
+    category = mongoengine.IntField(required=True)
+    state = mongoengine.IntField(required=True)
 
     aliases = mongoengine.ListField(mongoengine.StringField())
     external = mongoengine.EmbeddedDocumentField(External)
@@ -105,28 +105,31 @@ class Anime(mongoengine.Document):
     def dict(self, episodes=False):
         self.missing()
 
+        category = static.dict(static.categories, self.category)
+        state = static.dict(static.states, self.state)
+
         data = {
             "description": self.description,
             "title": self.title.dict(),
-            "category": self.category.dict(),
             "external": self.external.dict(),
             "rating": float(self.rating),
-            "state": self.state.dict(),
             "aliases": self.aliases,
             "season": self.season,
             "slug": self.slug,
             "year": self.year,
             "poster": None,
             "banner": None,
+            "franchises": [],
             "subtitles": [],
             "voiceover": [],
             "genres": [],
-            "franchises": [],
             "teams": [],
             "episodes": {
                 "released": len(self.episodes),
                 "total": self.total
-            }
+            },
+            "category": category,
+            "state": state
         }
 
         for account in self.subtitles:
@@ -142,9 +145,8 @@ class Anime(mongoengine.Document):
             data["teams"].append(team.dict())
 
         for genre in self.genres:
-            data["genres"].append(
-                static.dict(static.genres, genre)
-            )
+            item = static.dict(static.genres, genre)
+            data["genres"].append(item)
 
         if self.poster:
             if self.poster.uploaded is True:
