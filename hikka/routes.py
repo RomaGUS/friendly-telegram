@@ -59,6 +59,7 @@ def init(api, app):
 
     # Voting routes
     api.add_resource(statuses.Update, "/status")
+    api.add_resource(statuses.Check, "/status/check")
 
     @app.route("/")
     def root():

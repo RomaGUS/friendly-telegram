@@ -25,10 +25,9 @@ class Status(mongoengine.Document):
     }
 
     def dict(self):
-        content = static.slug("content", self.content)
         return {
-            "content": content["slug"],
             "created": int(datetime.timestamp(self.created)),
+            "content": static.slug("content", self.content),
             "position": self.position,
             "rating": self.rating,
             "times": self.times

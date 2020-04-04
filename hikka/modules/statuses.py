@@ -34,3 +34,23 @@ class Update(Resource):
         result["data"] = status.dict()
 
         return result
+
+class Check(Resource):
+    @auth_required
+    def post(self):
+        result = {"error": None, "data": {}}
+
+        parser = RequestParser()
+        parser.add_argument("subject", type=helpers.content, required=True)
+        parser.add_argument("slug", type=str, default=None)
+        args = parser.parse_args()
+
+        subject = None
+        content = static.slug("content", args["subject"])
+        if content == "anime":
+            subject = helpers.anime(args["slug"])
+
+        status = StatusService.get(subject, request.account, args["subject"])
+        result["data"] = status.dict()
+
+        return result
