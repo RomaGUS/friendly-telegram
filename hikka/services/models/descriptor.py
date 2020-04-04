@@ -1,10 +1,8 @@
 import mongoengine
 
-choices = ("franchise")
-
 class Descriptor(mongoengine.Document):
-    category = mongoengine.StringField(required=True, choices=choices)
     description = mongoengine.StringField(default=None)
+    category = mongoengine.IntField(required=True)
     name = mongoengine.StringField(required=True)
     slug = mongoengine.StringField(required=True)
 

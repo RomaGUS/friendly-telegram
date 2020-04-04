@@ -19,7 +19,7 @@ class Update(Resource):
         args = parser.parse_args()
 
         subject = None
-        content = static.dict("content", args["subject"])["slug"]
+        content = static.slug("content", args["subject"])
         if content == "anime":
             subject = helpers.anime(args["slug"])
 

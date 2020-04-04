@@ -99,3 +99,11 @@ def team(slug):
         flask_abort(response)
 
     return team
+
+def descriptor_service(slug):
+    descriptor = static.key("descriptors", slug)
+    if not descriptor:
+        response = abort("descriptors", "not-found")
+        flask_abort(response)
+
+    return descriptor

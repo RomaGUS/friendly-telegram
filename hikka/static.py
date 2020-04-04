@@ -1,84 +1,28 @@
 static = {
+    "statuses": {1: "active", 2: "finished", 3: "hold", 4: "dropped", 5: "planned"},
+    "categories": {1: "tv", 2: "movie", 3: "special", 4: "ova", 5: "ona"},
+    "states": {1: "ongoing", 2: "released", 3: "announced"},
+    "descriptors": {1: "franchise"},
+    "content": {1: "anime"},
     "genres": {
-        1: ["action", "Екшн"],
-        2: ["adventure", "Пригоди"],
-        3: ["cars", "Автівки"],
-        4: ["comedy", "Комедія"],
-        5: ["dementia", "Деменція"],
-        6: ["demons", "Демони"],
-        7: ["drama", "Драма"],
-        8: ["ecchi", "Еччі"],
-        9: ["fantasy", "Фентезі"],
-        10: ["game", "Ігри"],
-        11: ["harem", "Гарем"],
-        12: ["hentai", "Хентий"],
-        13: ["historical", "Історичне"],
-        14: ["horror", "Хоррор"],
-        15: ["josei", "Дзьосей"],
-        16: ["kids", "Діти"],
-        17: ["magic", "Магія"],
-        18: ["martial_arts", "Бойові мистецтва"],
-        19: ["mecha", "Мехи"],
-        20: ["military", "Військове"],
-        21: ["music", "Музика"],
-        22: ["mystery", "Таємниця"],
-        23: ["parody", "Пародія"],
-        24: ["police", "Поліцій"],
-        25: ["psychological", "Психологічне"],
-        26: ["romance", "Романтика"],
-        27: ["samurai", "Самураї"],
-        28: ["school", "Школа"],
-        29: ["sci_fi", "Наукова фантастика"],
-        30: ["seinen", "Сейнен"],
-        31: ["shoujo", "Сьодзьо"],
-        32: ["shoujo_ai", "Сьодзьо-ай"],
-        33: ["shounen", "Сьонен"],
-        34: ["shounen_ai", "Сьонен-ай"],
-        35: ["slice_of_life", "Буденність"],
-        36: ["space", "Космос"],
-        37: ["sports", "Спорт"],
-        38: ["superpower", "Суперсила"],
-        39: ["supernatural", "Надприроднє"],
-        40: ["thriller", "Триллер"],
-        41: ["vampire", "Вампіри"],
-        42: ["yaoi", "Яой"],
-        43: ["yuri", "Юрі"]
-    },
-    "categories": {
-        1: ["tv", "TV Серіал"],
-        2: ["movie", "Фільм"],
-        3: ["special", "Спешл"],
-        4: ["ova", "OVA"],
-        5: ["ona", "ONA"]
-    },
-    "statuses": {
-        1: ["active", "Дивлюсь"],
-        2: ["finished", "Закінчено"],
-        3: ["hold", "Відкладено"],
-        4: ["dropped", "Кинуто"],
-        5: ["planned", "Заплановано"]
-    },
-    "states": {
-        1: ["ongoing", "Онгоїнг"],
-        2: ["released", "Завершений"],
-        3: ["аnnounced", "Анонс"]
-    },
-    "content": {
-        1: ["anime", "Аніме"]
+        1: "action", 2: "adventure", 3: "cars", 4: "comedy", 5: "dementia", 6: "demons",
+        7: "drama", 8: "ecchi", 9: "fantasy", 10: "game", 11: "harem", 12: "hentai",
+        13: "historical", 14: "horror", 15: "josei", 16: "kids", 17: "magic", 18: "martial_arts",
+        19: "mecha", 20: "military", 21: "music", 22: "mystery", 23: "parody", 24: "police",
+        25: "psychological", 26: "romance", 27: "samurai", 28: "school", 29: "sci_fi",
+        30: "seinen", 31: "shoujo", 32: "shoujo_ai", 33: "shounen", 34: "shounen_ai",
+        35: "slice_of_life", 36: "space", 37: "sports", 38: "superpower", 39: "supernatural",
+        40: "thriller", 41: "vampire", 42: "yaoi", 43: "yuri"
     }
 }
 
-
-def key(service, value):
+def key(service, slug):
     if service in static:
         for key in static[service]:
-            if (static[service][key][0] == value):
+            if (static[service][key] == slug):
                 return key
 
     return None
 
-def dict(service, key):
-    return {
-        "slug": static[service][key][0],
-        "name": static[service][key][1]
-    }
+def slug(service, key):
+    return static[service][key]

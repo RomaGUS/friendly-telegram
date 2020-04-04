@@ -49,16 +49,5 @@ class UserPermissions(Resource):
 class StaticData(Resource):
     def get(self):
         result = {"error": None, "data": {}}
-
-        data = {}
-        for service in ["genres", "categories", "states"]:
-            data[service] = []
-            descriptors = static.static[service]
-
-            for descriptor in descriptors:
-                data[service].append(static.dict(service, descriptor))
-
         result["data"]["years"] = AnimeService.years()
-        result["data"]["static"] = data
-
-        return result
+        return result["data"]["static"]

@@ -25,6 +25,9 @@ errors = {
     "status": {
         "not-found": "Status not found"
     },
+    "descriptors": {
+        "not-found": "Descriptor service not found"
+    },
     "genre": {
         "slug-exists": "Genre with this slug already exists",
         "not-found": "Genre not found"
