@@ -75,6 +75,7 @@ errors = {
         "service-not-found": "Descriptor service not found",
         "missing-field": "Required field is missing",
         "empty-required": "Required field can't be empty",
+        "something-bad": "Something very bad happened",
         "password-length": "Bad password length",
         "out-of-range": "Number is out of range",
         "method-not-allowed": "Method not allowed",

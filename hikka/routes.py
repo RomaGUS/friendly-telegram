@@ -80,3 +80,7 @@ def init(api, app):
     @app.errorhandler(429)
     def error429(error):
         return errors.abort("general", "too-many-requests", 429)
+
+    @app.errorhandler(500)
+    def error500(error):
+        return errors.abort("general", "something-bad", 500)
