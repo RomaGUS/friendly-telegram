@@ -514,7 +514,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"description\": \"Не зважаючи на назву, цей фільм — легенда про силу чоловічої харизми! Отримавши від Юнюн тривожну звістку з батьківщини Меґумін, наші друзі вирушають на порятунок села багряних демонів. Загроза постає у подобі армії короля демонів на чолі з генералом Сільвією, мета якої - знайти легендарну зброю - Убивцю Магів. Село опиняється на межі смерті від сили, яку самі ж охороняли століттями.\", \"title\": {\"ua\": \"Цей прекрасний світ, благословенний Богом! Багряна легенда\"}, \"state\": \"ongoing\", \"genres\": [\"romance\"], \"franchises\": [\"konosuba\"], \"category\": \"tv\", \"team\": \"fanvox\", \"aliases\": [\"коносуба\"], \"year\": 2019, \"total\": 20, \"external\": {\"myanimelist\": 38040, \"toloka\": 109206}}"
+							"raw": "{\"description\": \"Не зважаючи на назву, цей фільм — легенда про силу чоловічої харизми! Отримавши від Юнюн тривожну звістку з батьківщини Меґумін, наші друзі вирушають на порятунок села багряних демонів. Загроза постає у подобі армії короля демонів на чолі з генералом Сільвією, мета якої - знайти легендарну зброю - Убивцю Магів. Село опиняється на межі смерті від сили, яку самі ж охороняли століттями.\", \"title\": {\"ua\": \"Цей прекрасний світ, благословенний Богом! Багряна легенда\"}, \"state\": \"ongoing\", \"genres\": [\"romance\"], \"category\": \"tv\", \"team\": \"fanvox\", \"aliases\": [\"коносуба\"], \"year\": 2019, \"total\": 20, \"external\": {\"myanimelist\": 38040, \"toloka\": 109206}}"
 						},
 						"url": {
 							"raw": "{{url}}/anime/new",
@@ -548,7 +548,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"slug\": \"kaguya-sama-kohannya-yak-viyna-58613f9e\", \"params\": {\"selected\": true, \"external\": {\"toloka\": \"109206\"}}}"
+							"raw": "{\"slug\": \"cey-prekrasniy-svit-blagoslovenniy-bogom-bagryana-legenda-617f4768\", \"params\": {\"season\": 4}}"
 						},
 						"url": {
 							"raw": "{{url}}/anime/edit",
@@ -582,7 +582,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"query\": \"кохання як війна\", \"genres\": [\"romance\", \"horror\"], \"teams\": [\"fanvox\"], \"categories\": [\"tv\", \"ova\"], \"year\": {\"min\": 2015}}"
+							"raw": "{\"query\": \"цей прекрасний\", \"genres\": [\"romance\"], \"teams\": [\"fanvox\"], \"year\": {\"min\": 2015}}"
 						},
 						"url": {
 							"raw": "{{url}}/anime/list",
@@ -946,7 +946,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"descriptors\": [\"genre\", \"category\"]}"
+							"raw": "{\"static\": [\"genres\", \"categories\"]}"
 						},
 						"url": {
 							"raw": "{{url}}/system/app",
@@ -965,10 +965,10 @@
 			"protocolProfileBehavior": {}
 		},
 		{
-			"name": "Vote",
+			"name": "Status",
 			"item": [
 				{
-					"name": "Make Vote",
+					"name": "Submit Status",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -986,15 +986,49 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"rating\": 9, \"subject\": \"anime\", \"slug\": \"kaguya-sama-kohannya-yak-viyna-c6422ca3\"}"
+							"raw": "{\"rating\": 9, \"subject\": \"anime\", \"slug\": \"cey-prekrasniy-svit-blagoslovenniy-bogom-bagryana-legenda-b87359ad\"}"
 						},
 						"url": {
-							"raw": "{{url}}/vote",
+							"raw": "{{url}}/status",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
-								"vote"
+								"status"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Check Status",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authentication",
+								"type": "text",
+								"value": "{{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"subject\": \"anime\", \"slug\": \"cey-prekrasniy-svit-blagoslovenniy-bogom-bagryana-legenda-b87359ad\"}"
+						},
+						"url": {
+							"raw": "{{url}}/status/check",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"status",
+								"check"
 							]
 						}
 					},
