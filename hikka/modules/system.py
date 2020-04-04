@@ -3,7 +3,7 @@ from hikka.services.permissions import PermissionService
 from hikka.services.anime import AnimeService
 from hikka.tools.parser import RequestParser
 from flask_restful import Resource
-from hikka.services import static
+from hikka import static
 from hikka.tools import helpers
 
 class ManagePermissions(Resource):

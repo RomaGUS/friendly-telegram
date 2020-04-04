@@ -1,4 +1,4 @@
-from hikka.services import static
+from hikka import static
 from datetime import datetime
 import mongoengine
 
