@@ -19,6 +19,12 @@ errors = {
         "slug-exists": "Team with this slug already exists",
         "not-found": "Team not found"
     },
+    "content": {
+        "not-found": "Content type not found"
+    },
+    "status": {
+        "not-found": "Status not found"
+    },
     "genre": {
         "slug-exists": "Genre with this slug already exists",
         "not-found": "Genre not found"

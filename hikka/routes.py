@@ -1,11 +1,11 @@
 from hikka.modules import descriptors
 from hikka.modules import comments
+from hikka.modules import statuses
 from hikka.modules import episodes
 from hikka.modules import account
 from hikka.modules import system
 from hikka.modules import anime
 from hikka.modules import teams
-from hikka.modules import votes
 from hikka.modules import auth
 from hikka import errors
 import flask
@@ -58,7 +58,7 @@ def init(api, app):
     api.add_resource(comments.ListComments, "/comments/list")
 
     # Voting routes
-    api.add_resource(votes.MakeVote, "/vote")
+    api.add_resource(statuses.Update, "/status")
 
     @app.route("/")
     def root():

@@ -51,15 +51,25 @@ static = {
         4: ["ova", "OVA"],
         5: ["ona", "ONA"]
     },
+    "statuses": {
+        1: ["active", "Дивлюсь"],
+        2: ["finished", "Закінчено"],
+        3: ["hold", "Відкладено"],
+        4: ["dropped", "Кинуто"],
+        5: ["planned", "Заплановано"]
+    },
     "states": {
         1: ["ongoing", "Онгоїнг"],
         2: ["released", "Завершений"],
         3: ["аnnounced", "Анонс"]
+    },
+    "content": {
+        1: ["anime", "Аніме"]
     }
 }
 
 
-def get_key(service, value):
+def key(service, value):
     if service in static:
         for key in static[service]:
             if (static[service][key][0] == value):
