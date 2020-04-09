@@ -156,11 +156,11 @@ class Anime(mongoengine.Document):
             data["genres"].append(item)
 
         if self.poster:
-            if self.poster.uploaded is True:
+            if self.poster.uploaded is True or self.poster.is_link():
                 data["poster"] = self.poster.link()
 
         if self.banner:
-            if self.poster.uploaded is True:
+            if self.poster.uploaded is True or self.banner.is_link():
                 data["banner"] = self.banner.link()
 
         if episodes:
