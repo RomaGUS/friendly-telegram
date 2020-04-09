@@ -3,7 +3,7 @@ from hikka.services.files import FileService
 from hikka.tools import helpers
 from jikanpy import Jikan
 from hikka import utils
-import requests
+import time
 
 jikan = Jikan()
 top = jikan.top(type="anime")
@@ -46,5 +46,6 @@ for index, item in enumerate(top["top"]):
     anime["poster"] = file
     anime.save()
 
+    time.sleep(1)
     if index > 40:
         break
