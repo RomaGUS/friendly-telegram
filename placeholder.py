@@ -12,6 +12,9 @@ for index, item in enumerate(top["top"]):
     data = jikan.anime(item["mal_id"])
     myanimelist = data["mal_id"]
 
+    if data["synopsis"] is None:
+        data["synopsis"] = "Lorem ipsum dolor sit amet."
+
     title = AnimeService.get_title(data["title"])
     anime = AnimeService.create(
         title, data["synopsis"],
@@ -28,10 +31,12 @@ for index, item in enumerate(top["top"]):
     anime.total = data["episodes"]
     anime.rating = data["score"]
 
-    anime.genres = [
-        helpers.genre(genre["name"].lower().replace("-", "_").replace(" ", "_"))
-        for genre in data["genres"]
-    ]
+    for genre_data in data["genres"]:
+        genre_slug = genre_data["name"].lower().replace("-", "_").replace(" ", "_")
+        try:
+            anime.genres.append(helpers.genre(genre_slug))
+        except Exception:
+            pass
 
     file = FileService.create(None, helpers.account("volbil"))
     file.path = data["image_url"]
