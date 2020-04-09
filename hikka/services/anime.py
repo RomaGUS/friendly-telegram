@@ -1,6 +1,5 @@
 from hikka.services.models.anime import Anime, Title, Episode, External
 from hikka.services.models.descriptor import Descriptor
-from hikka.services.models.file import File
 from typing import List
 
 class AnimeService:
@@ -19,8 +18,8 @@ class AnimeService:
         return external
 
     @classmethod
-    def get_episode(cls, name: str, position: int, video: File):
-        episode = Episode(name=name, position=position, video=video)
+    def get_episode(cls, name: str, position: int):
+        episode = Episode(name=name, position=position)
         return episode
 
     @classmethod

@@ -106,6 +106,7 @@ class UploadHelper(object):
         shutil.rmtree(self.tmp_dir)
 
     def is_image(self):
+        print(self.upload.mimetype)
         return self.upload.mimetype in supported_images
 
     def is_video(self):

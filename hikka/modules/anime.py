@@ -6,10 +6,10 @@ from hikka.services.files import FileService
 from hikka.tools.parser import RequestParser
 from hikka.tools.upload import UploadHelper
 from flask_restful import Resource
+from flask import request, session
 from hikka.tools import helpers
 from hikka.errors import abort
 from flask import Response
-from flask import request
 from hikka import utils
 
 class NewAnime(Resource):
@@ -289,6 +289,11 @@ class GetAnime(Resource):
 
         anime = helpers.anime(slug)
         result["data"] = anime.dict(True)
+
+        if str(anime.id) not in session:
+            session[str(anime.id)] = []
+            anime.views += 1
+            anime.save()
 
         return result
 

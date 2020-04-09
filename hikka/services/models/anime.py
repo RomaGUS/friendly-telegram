@@ -25,14 +25,20 @@ class Episode(mongoengine.EmbeddedDocument):
     position = mongoengine.IntField(required=True)
     name = mongoengine.StringField(default=None)
     video = mongoengine.ReferenceField("File")
+    views = mongoengine.IntField(default=0)
 
     def dict(self):
-        return {
+        data = {
             "description": self.description,
-            "video": self.video.link(),
+            "video": None,
             "position": self.position,
             "name": self.name
         }
+
+        if self.video:
+            data["video"] = self.video.link()
+
+        return data
 
 class Title(mongoengine.EmbeddedDocument):
     ua = mongoengine.StringField(required=True)
@@ -115,6 +121,7 @@ class Anime(mongoengine.Document):
             "rating": float(self.rating),
             "aliases": self.aliases,
             "season": self.season,
+            "views": self.views,
             "slug": self.slug,
             "year": self.year,
             "poster": None,

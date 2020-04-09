@@ -17,7 +17,6 @@ class AddEpisode(Resource):
         result = {"error": None, "data": {}}
 
         parser = RequestParser()
-        parser.add_argument("video", type=FileStorage, location="files")
         parser.add_argument("slug", type=helpers.anime, required=True)
         parser.add_argument("position", type=int, required=True)
         parser.add_argument("name", type=str)
@@ -28,27 +27,26 @@ class AddEpisode(Resource):
 
         anime = args["slug"]
 
-        if request.account not in anime.team.members:
+        if request.account not in anime.teams[0].members:
             return abort("account", "not-team-member")
 
         episode = AnimeService.find_position(anime, args["position"])
         if episode:
             return abort("episode", "position-exists")
 
-        if args["video"] is None:
-            return abort("file", "not-found")
+        # if args["video"] is None:
+        #     return abort("file", "not-found")
 
-        helper = UploadHelper(request.account, args["video"], "video")
-        data = helper.upload_video()
+        # helper = UploadHelper(request.account, args["video"], "video")
+        # data = helper.upload_video()
 
-        if type(data) is Response:
-            return data
+        # if type(data) is Response:
+            # return data
 
-        video = data
-        episode = AnimeService.get_episode(args["name"], args["position"], video)
+        episode = AnimeService.get_episode(args["name"], args["position"])
         AnimeService.add_episode(anime, episode)
-
         result["data"] = anime.dict(True)
+
         return result
 
 class UpdateEpisode(Resource):
@@ -58,7 +56,7 @@ class UpdateEpisode(Resource):
         result = {"error": None, "data": {}}
 
         parser = RequestParser()
-        parser.add_argument("video", type=FileStorage, location="files")
+        # parser.add_argument("video", type=FileStorage, location="files")
         parser.add_argument("slug", type=helpers.anime, required=True)
         parser.add_argument("position", type=int, required=True)
         parser.add_argument("params", type=dict, default={})
@@ -66,23 +64,23 @@ class UpdateEpisode(Resource):
 
         anime = args["slug"]
 
-        if request.account not in anime.team.members:
+        if request.account not in anime.teams[0].members:
             return abort("account", "not-team-member")
 
         episode = AnimeService.find_position(anime, args["position"])
         if episode is None:
             return abort("episode", "not-found")
 
-        video = episode.video
-        if args["video"]:
-            helper = UploadHelper(request.account, args["video"], "video")
-            data = helper.upload_video()
+        # video = episode.video
+        # if args["video"]:
+        #     helper = UploadHelper(request.account, args["video"], "video")
+        #     data = helper.upload_video()
 
-            if type(data) is Response:
-                return data
+        #     if type(data) is Response:
+        #         return data
 
-            FileService.destroy(episode.video)
-            video = data
+        #     FileService.destroy(episode.video)
+        #     video = data
 
         name = episode.name
         if "name" in args["params"]:
@@ -100,7 +98,7 @@ class UpdateEpisode(Resource):
             position = args["params"]["position"]
 
         AnimeService.remove_episode(anime, episode)
-        episode = AnimeService.get_episode(name, position, video)
+        episode = AnimeService.get_episode(name, position)
         AnimeService.add_episode(anime, episode)
 
         result["data"] = anime.dict(True)
@@ -119,7 +117,7 @@ class DeleteEpisode(Resource):
 
         anime = args["slug"]
 
-        if request.account not in anime.team.members:
+        if request.account not in anime.teams[0].members:
             return abort("account", "not-team-member")
 
         episode = AnimeService.find_position(anime, args["position"])

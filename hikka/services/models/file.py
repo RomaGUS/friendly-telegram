@@ -18,10 +18,16 @@ class File(mongoengine.Document):
         "ordering": ["-created"]
     }
 
+    def is_link(self):
+        return self.path[:4] == "http"
+
     def link(self):
         """Return CDN link"""
         if self.path is None:
             return None
+
+        if self.is_link():
+            return self.path
 
         return config.cdn + self.path
 
