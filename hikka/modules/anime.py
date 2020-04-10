@@ -265,7 +265,7 @@ class Search(Resource):
 
         for slug in args["states"]:
             state = helpers.state(slug)
-            genres.append(state)
+            states.append(state)
 
         for slug in args["teams"]:
             team = helpers.team(slug)
