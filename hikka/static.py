@@ -11,7 +11,7 @@ static = {
         19: "mecha", 20: "military", 21: "music", 22: "mystery", 23: "parody", 24: "police",
         25: "psychological", 26: "romance", 27: "samurai", 28: "school", 29: "sci_fi",
         30: "seinen", 31: "shoujo", 32: "shoujo_ai", 33: "shounen", 34: "shounen_ai",
-        35: "slice_of_life", 36: "space", 37: "sports", 38: "superpower", 39: "supernatural",
+        35: "slice_of_life", 36: "space", 37: "sports", 38: "super_power", 39: "supernatural",
         40: "thriller", 41: "vampire", 42: "yaoi", 43: "yuri"
     }
 }
