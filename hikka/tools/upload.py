@@ -16,7 +16,7 @@ image_max_size = 10 * 1024 * 1024
 class UploadHelper(object):
     def __init__(self, account, upload, upload_type):
         self.name = secrets.token_hex(16)
-        self.file_type = upload.filename.rsplit('.', 1)[1]
+        self.file_type = upload.filename.rsplit(".", 1)[1]
         self.storage_name = config.storage["name"]
         self.branch = config.storage["branch"]
         self.upload_type = upload_type
@@ -69,7 +69,7 @@ class UploadHelper(object):
 
         storage_path = self.storage_dir + storage_file_name
         self.fs.put(tmp_path, storage_path)
-        self.fs.chmod(storage_path, 'public-read')
+        self.fs.chmod(storage_path, "public-read")
 
         self.clean()
 

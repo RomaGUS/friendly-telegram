@@ -66,7 +66,7 @@ class Argument(reqparse.Argument):
                 friendly_locations = [reqparse._friendly_location.get(loc, loc)
                                       for loc in self.location]
                 error_msg = u"Missing required parameter in {0}".format(
-                    ' or '.join(friendly_locations)
+                    " or ".join(friendly_locations)
                 )
             if current_app.config.get("BUNDLE_ERRORS", False) or bundle_errors:
                 return self.handle_validation_error(ValueError(error_msg), bundle_errors)
@@ -78,10 +78,10 @@ class Argument(reqparse.Argument):
             else:
                 return self.default, _not_found
 
-        if self.action == 'append':
+        if self.action == "append":
             return results, _found
 
-        if self.action == 'store' or len(results) == 1:
+        if self.action == "store" or len(results) == 1:
             return results[0], _found
 
         return results, _found
@@ -101,7 +101,7 @@ class RequestParser(reqparse.RequestParser):
 
         namespace = self.namespace_class()
 
-        req.unparsed_arguments = dict(self.argument_class('').source(req)) if strict else {}
+        req.unparsed_arguments = dict(self.argument_class("").source(req)) if strict else {}
         errors = {}
         for arg in self.args:
             value, found = arg.parse(req, self.bundle_errors)
