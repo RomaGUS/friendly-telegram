@@ -1,3 +1,4 @@
+from hikka.services.teams import TeamService
 from hikka.tools.parser import RequestParser
 from hikka.decorators import auth_required
 from flask_restful import Resource
@@ -18,4 +19,15 @@ class PasswordChange(Resource):
         request.account.save()
 
         result["data"] = request.account.dict()
+        return result
+
+class AccountTeams(Resource):
+    @auth_required
+    def get(self):
+        result = {"error": None, "data": []}
+
+        teams = TeamService.member_teams(request.account)
+        for team in teams:
+            result["data"].append(team.dict())
+
         return result

@@ -41,6 +41,11 @@ class TeamService:
         team.save()
 
     @classmethod
+    def member_teams(cls, user: User):
+        teams = Team.objects().filter(members__in=[user])
+        return list(teams)
+
+    @classmethod
     def list(cls) -> List[Team]:
         teams = Team.objects().filter()
         return list(teams)

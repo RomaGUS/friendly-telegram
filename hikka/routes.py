@@ -20,6 +20,7 @@ def init(api, app):
 
     # Account routes
     api.add_resource(account.PasswordChange, "/account/password")
+    api.add_resource(account.AccountTeams, "/account/teams")
 
     # Team routes
     api.add_resource(teams.NewTeam, "/teams/new")
