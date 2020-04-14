@@ -28,6 +28,6 @@ class AccountTeams(Resource):
 
         teams = TeamService.member_teams(request.account)
         for team in teams:
-            result["data"].append(team.dict())
+            result["data"].append(team.dict(True))
 
         return result
