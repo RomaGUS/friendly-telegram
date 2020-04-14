@@ -36,8 +36,8 @@ class NewAnime(Resource):
         args = parser.parse_args()
 
         title_parser = RequestParser()
-        title_parser.add_argument("jp", type=str, location="title")
-        title_parser.add_argument("ua", type=str, location="title")
+        title_parser.add_argument("ua", type=helpers.string, location="title", required=True)
+        title_parser.add_argument("jp", type=helpers.string, location="title")
         title_args = title_parser.parse_args(req=args)
 
         external_parser = RequestParser()
