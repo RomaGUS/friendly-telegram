@@ -9,7 +9,6 @@ from flask_restful import Resource
 from flask import request, session
 from hikka.tools import helpers
 from hikka.errors import abort
-from flask import Response
 from hikka import utils
 
 class NewAnime(Resource):
@@ -211,9 +210,6 @@ class AnimeUpload(Resource):
         if args["file"]:
             helper = UploadHelper(request.account, args["file"], args["type"])
             data = helper.upload_image()
-
-            if type(data) is Response:
-                return data
 
             if anime[args["type"]]:
                 FileService.destroy(anime[args["type"]])

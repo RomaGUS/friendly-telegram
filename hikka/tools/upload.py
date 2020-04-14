@@ -1,4 +1,5 @@
 from hikka.services.files import FileService
+from flask import abort as flask_abort
 from hikka.tools import storage
 from hikka.errors import abort
 from hikka import utils
@@ -32,10 +33,12 @@ class UploadHelper(object):
 
     def upload_image(self):
         if not self.is_image():
-            return abort("file", "bad-mime-type")
+            response = abort("file", "bad-mime-type")
+            flask_abort(response)
 
         if self.size() > image_max_size:
-            return abort("file", "too-big")
+            response = abort("file", "too-big")
+            flask_abort(response)
 
         storage_file_name = self.file.name + "." + "jpg"
         os.makedirs(self.tmp_dir)
@@ -49,11 +52,13 @@ class UploadHelper(object):
 
             if width != height:
                 self.clean()
-                return abort("image", "not-square")
+                response = abort("image", "not-square")
+                flask_abort(response)
 
             if width < avatar_size:
                 self.clean()
-                return abort("image", "small-image")
+                response = abort("image", "small-image")
+                flask_abort(response)
 
             pil = pil.resize((avatar_size, avatar_size), Image.LANCZOS)
 
@@ -81,7 +86,8 @@ class UploadHelper(object):
 
     def upload_video(self):
         if not self.is_video():
-            return abort("file", "bad-mime-type")
+            response = abort("file", "bad-mime-type")
+            flask_abort(response)
 
         storage_file_name = self.file.name + "." + "mp4"
 

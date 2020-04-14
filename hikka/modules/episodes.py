@@ -7,7 +7,6 @@ from hikka.tools.upload import UploadHelper
 from flask_restful import Resource
 from hikka.tools import helpers
 from hikka.errors import abort
-from flask import Response
 from flask import request
 
 class AddEpisode(Resource):
@@ -119,9 +118,6 @@ class EpisodeUpload(Resource):
                 data = helper.upload_image()
             else:
                 data = helper.upload_video()
-
-            if type(data) is Response:
-                return data
 
             if episode[args["type"]]:
                 FileService.destroy(episode[args["type"]])
