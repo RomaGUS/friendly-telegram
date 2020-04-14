@@ -107,3 +107,21 @@ def descriptor_service(slug):
         flask_abort(response)
 
     return descriptor
+
+def position(data):
+    if data < 1:
+        response = abort("general", "position-range")
+        flask_abort(response)
+
+    return data
+
+def is_member(account, teams):
+    member = False
+
+    for team in teams:
+        if account in team.members:
+            member = True
+
+    if not member:
+        response = abort("account", "not-team-member")
+        flask_abort(response)

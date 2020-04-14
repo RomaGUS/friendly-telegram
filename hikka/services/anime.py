@@ -51,13 +51,12 @@ class AnimeService:
         anime.save()
 
     @classmethod
-    def find_position(cls, anime: Anime, position: int):
-        episode = None
-        for anime_episode in anime.episodes:
-            if anime_episode.position == position:
-                episode = anime_episode
+    def position(cls, anime: Anime, position: int):
+        for index, episode in enumerate(anime.episodes):
+            if episode.position == position:
+                return index
 
-        return episode
+        return None
 
     @classmethod
     def get_by_slug(cls, slug: str, hidden=False):

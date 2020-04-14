@@ -21,22 +21,24 @@ class External(mongoengine.EmbeddedDocument):
         return data
 
 class Episode(mongoengine.EmbeddedDocument):
-    description = mongoengine.StringField(default=None)
+    thumbnail = mongoengine.ReferenceField("File")
     position = mongoengine.IntField(required=True)
     name = mongoengine.StringField(default=None)
     video = mongoengine.ReferenceField("File")
     views = mongoengine.IntField(default=0)
 
-    def dict(self):
+    def dict(self, link=False):
         data = {
-            "description": self.description,
-            "video": None,
             "position": self.position,
+            "views": self.views,
             "name": self.name
         }
 
-        if self.video:
-            data["video"] = self.video.link()
+        if link:
+            data["video"] = None
+
+            if self.video:
+                data["video"] = self.video.link()
 
         return data
 

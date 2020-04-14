@@ -17,31 +17,17 @@ class AddEpisode(Resource):
         result = {"error": None, "data": {}}
 
         parser = RequestParser()
+        parser.add_argument("position", type=helpers.position, required=True)
         parser.add_argument("slug", type=helpers.anime, required=True)
-        parser.add_argument("position", type=int, required=True)
         parser.add_argument("name", type=str)
         args = parser.parse_args()
 
-        if args["position"] < 0:
-            return abort("general", "out-of-range")
-
         anime = args["slug"]
+        helpers.is_member(request.account, anime.teams)
 
-        if request.account not in anime.teams[0].members:
-            return abort("account", "not-team-member")
-
-        episode = AnimeService.find_position(anime, args["position"])
-        if episode:
+        position = AnimeService.position(anime, args["position"])
+        if position is not None:
             return abort("episode", "position-exists")
-
-        # if args["video"] is None:
-        #     return abort("file", "not-found")
-
-        # helper = UploadHelper(request.account, args["video"], "video")
-        # data = helper.upload_video()
-
-        # if type(data) is Response:
-            # return data
 
         episode = AnimeService.get_episode(args["name"], args["position"])
         AnimeService.add_episode(anime, episode)
@@ -56,50 +42,26 @@ class UpdateEpisode(Resource):
         result = {"error": None, "data": {}}
 
         parser = RequestParser()
-        # parser.add_argument("video", type=FileStorage, location="files")
+        parser.add_argument("position", type=helpers.position, required=True)
         parser.add_argument("slug", type=helpers.anime, required=True)
-        parser.add_argument("position", type=int, required=True)
         parser.add_argument("params", type=dict, default={})
         args = parser.parse_args()
 
+        params_parser = RequestParser()
+        params_parser.add_argument("name", type=helpers.string, location="params")
+        params_args = params_parser.parse_args(req=args)
+
         anime = args["slug"]
+        helpers.is_member(request.account, anime.teams)
 
-        if request.account not in anime.teams[0].members:
-            return abort("account", "not-team-member")
-
-        episode = AnimeService.find_position(anime, args["position"])
-        if episode is None:
+        position = AnimeService.position(anime, args["position"])
+        if position is None:
             return abort("episode", "not-found")
 
-        # video = episode.video
-        # if args["video"]:
-        #     helper = UploadHelper(request.account, args["video"], "video")
-        #     data = helper.upload_video()
-
-        #     if type(data) is Response:
-        #         return data
-
-        #     FileService.destroy(episode.video)
-        #     video = data
-
-        name = episode.name
-        if "name" in args["params"]:
-            name = args["params"]["name"]
-
-        position = episode.position
-        if "position" in args["params"]:
-            if args["position"] < 0:
-                return abort("general", "out-of-range")
-
-            episode_check = AnimeService.find_position(anime, args["position"])
-            if episode_check:
-                return abort("episode", "position-exists")
-
-            position = args["params"]["position"]
-
-        AnimeService.remove_episode(anime, episode)
-        episode = AnimeService.get_episode(name, position)
-        AnimeService.add_episode(anime, episode)
+        fields = ["name"]
+        for field in fields:
+            if params_args[field]:
+                anime.episodes[position][field] = params_args[field]
 
         result["data"] = anime.dict(True)
         return result
@@ -111,21 +73,61 @@ class DeleteEpisode(Resource):
         result = {"error": None, "data": {}}
 
         parser = RequestParser()
+        parser.add_argument("position", type=helpers.position, required=True)
         parser.add_argument("slug", type=helpers.anime, required=True)
-        parser.add_argument("position", type=int, required=True)
         args = parser.parse_args()
 
         anime = args["slug"]
+        helpers.is_member(request.account, anime.teams)
 
-        if request.account not in anime.teams[0].members:
-            return abort("account", "not-team-member")
+        position = AnimeService.position(anime, args["position"])
+        if position is None:
+            return abort("episode", "not-found")
 
-        episode = AnimeService.find_position(anime, args["position"])
+        FileService.destroy(anime.episodes[position].video)
+        FileService.destroy(anime.episodes[position].thumbnail)
+        AnimeService.remove_episode(anime, anime.episodes[position])
+
+        result["data"] = anime.dict(True)
+        return result
+
+class EpisodeUpload(Resource):
+    @auth_required
+    @permission_required("global", "publishing")
+    def put(self):
+        result = {"error": None, "data": []}
+        choices = ("thumbnail", "video")
+
+        parser = RequestParser()
+        parser.add_argument("position", type=helpers.position, required=True)
+        parser.add_argument("file", type=FileStorage, location="files")
+        parser.add_argument("slug", type=helpers.anime, required=True)
+        parser.add_argument("type", type=str, choices=choices)
+        args = parser.parse_args()
+
+        anime = args["slug"]
+        helpers.is_member(request.account, anime.teams)
+
+        episode = AnimeService.position(anime, args["position"])
         if episode is None:
             return abort("episode", "not-found")
 
-        FileService.destroy(episode.video)
-        AnimeService.remove_episode(anime, episode)
+        if args["file"]:
+            helper = UploadHelper(request.account, args["file"], args["type"])
 
-        result["data"] = anime.dict(True)
+            if args["type"] == "thumbnail":
+                data = helper.upload_image()
+            else:
+                data = helper.upload_video()
+
+            if type(data) is Response:
+                return data
+
+            if episode[args["type"]]:
+                FileService.destroy(episode[args["type"]])
+
+            episode[args["type"]] = data
+            anime.save()
+
+        result["data"] = anime.dict()
         return result

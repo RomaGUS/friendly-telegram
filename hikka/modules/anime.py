@@ -49,6 +49,8 @@ class NewAnime(Resource):
         slug = utils.create_slug(title_args["ua"])
         team = args["team"]
 
+        helpers.is_member(request.account, [team])
+
         anime = AnimeService.create(
             title, args["description"],
             args["category"], args["state"],
@@ -58,9 +60,6 @@ class NewAnime(Resource):
         for alias in args["aliases"]:
             if type(alias) is not str:
                 return abort("general", "alias-invalid-type")
-
-        if request.account not in team.members:
-            return abort("account", "not-team-member")
 
         anime.genres = []
         for slug in args["genres"]:
@@ -138,6 +137,7 @@ class EditAnime(Resource):
         external_args = external_parser.parse_args(req=params_args)
 
         anime = args["slug"]
+        helpers.is_member(request.account, anime.teams)
 
         if params_args["aliases"]:
             for alias in args["aliases"]:
@@ -206,6 +206,7 @@ class AnimeUpload(Resource):
         args = parser.parse_args()
 
         anime = args["slug"]
+        helpers.is_member(request.account, anime.teams)
 
         if args["file"]:
             helper = UploadHelper(request.account, args["file"], args["type"])
