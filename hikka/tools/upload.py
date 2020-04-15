@@ -104,6 +104,13 @@ class UploadHelper(object):
                 new_height = int(new_width * height / width)
                 pil = pil.resize((new_width, new_height), Image.LANCZOS)
 
+        if self.file_type == "thumbnail":
+            max_width = 250
+            if width > max_width:
+                new_width = max_width
+                new_height = int(new_width * height / width)
+                pil = pil.resize((new_width, new_height), Image.LANCZOS)
+
         storage_path = self.storage_dir + storage_file_name
         tmp_path = self.tmp_dir + storage_file_name
         pil.save(tmp_path, optimize=True, quality=95)
