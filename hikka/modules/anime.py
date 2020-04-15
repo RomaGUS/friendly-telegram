@@ -281,7 +281,8 @@ class Search(Resource):
         anime = AnimeService.search(
             query, year_args, categories,
             genres, franchises, states,
-            teams, False, args["page"]
+            teams, False, args["page"],
+            account=request.account
         )
 
         for item in anime:

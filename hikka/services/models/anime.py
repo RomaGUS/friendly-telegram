@@ -92,6 +92,8 @@ class Anime(mongoengine.Document):
             "slug",
             "genres",
             "category",
+            "franchises",
+            "teams",
             "state",
             "title.jp",
             "title.ua",

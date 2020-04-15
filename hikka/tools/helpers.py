@@ -5,6 +5,7 @@ from hikka.services.users import UserService
 from flask import abort as flask_abort
 from hikka.errors import abort
 from hikka.tools import check
+from flask import request
 from hikka import static
 import re
 
@@ -40,17 +41,18 @@ def image_link(data):
 
     return data
 
-def anime(slug, account=None):
+def anime(slug):
     anime = AnimeService.get_by_slug(slug)
     valid = False
 
     if anime:
         if anime.hidden is True:
-            valid = check.member(account, anime.teams)
-        else:
-            valid = True
+            if hasattr(request, "account"):
+                valid = check.member(request.account, anime.teams)
+                if check.permission(request.account, "global", "admin"):
+                    valid = True
 
-        if check.permission(account, "global", "admin"):
+        else:
             valid = True
 
     if not valid:

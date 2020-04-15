@@ -1,5 +1,7 @@
 from hikka.services.models.anime import Anime, Title, Episode, External
 from hikka.services.models.descriptor import Descriptor
+from hikka.services.teams import TeamService
+from mongoengine.queryset.visitor import Q
 from typing import List
 
 class AnimeService:
@@ -64,12 +66,6 @@ class AnimeService:
         return anime
 
     @classmethod
-    def list(cls, page=0, limit=20, hidden=False) -> List[Anime]:
-        offset = page * limit
-        anime = Anime.objects().filter(hidden=hidden).limit(limit).skip(offset)
-        return list(anime)
-
-    @classmethod
     def years(cls) -> dict:
         data = list(
             Anime.objects().aggregate({
@@ -89,7 +85,7 @@ class AnimeService:
     @classmethod
     def search(cls, query, year: dict, categories=[], genres=[],
                 franchises=[], states=[], teams=[], selected=False,
-                page=0, limit=20, hidden=False) -> List[Anime]:
+                page=0, limit=20, account=None) -> List[Anime]:
 
         offset = page * limit
         anime = Anime.objects(search__contains=query)
@@ -115,7 +111,10 @@ class AnimeService:
         if year["max"]:
             anime = anime.filter(year__lte=year["max"])
 
-        anime = anime.filter(hidden=hidden).limit(limit).skip(offset)
+        teams = TeamService.member_teams(account)
+        anime = anime.filter(Q(hidden=False) | Q(teams__in=teams))
+        anime = anime.limit(limit).skip(offset)
+
         return list(anime)
 
     @classmethod

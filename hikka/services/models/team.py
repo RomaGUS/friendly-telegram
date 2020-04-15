@@ -12,6 +12,7 @@ class Team(mongoengine.Document):
         "alias": "default",
         "collection": "teams",
         "indexes": [
+            "members",
             "name",
             "slug",
         ]
