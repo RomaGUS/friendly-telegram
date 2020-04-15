@@ -4,6 +4,7 @@ from hikka.services.teams import TeamService
 from hikka.services.users import UserService
 from flask import abort as flask_abort
 from hikka.errors import abort
+from hikka.tools import check
 from hikka import static
 import re
 
@@ -39,9 +40,20 @@ def image_link(data):
 
     return data
 
-def anime(slug):
+def anime(slug, account=None):
     anime = AnimeService.get_by_slug(slug)
-    if not anime:
+    valid = False
+
+    if anime:
+        if anime.hidden is True:
+            valid = check.member(account, anime.teams)
+        else:
+            valid = True
+
+        if check.permission(account, "global", "admin"):
+            valid = True
+
+    if not valid:
         response = abort("anime", "not-found")
         flask_abort(response)
 
@@ -127,12 +139,6 @@ def position(data):
     return data
 
 def is_member(account, teams):
-    member = False
-
-    for team in teams:
-        if account in team.members:
-            member = True
-
-    if not member:
+    if not check.member(account, teams):
         response = abort("account", "not-team-member")
         flask_abort(response)

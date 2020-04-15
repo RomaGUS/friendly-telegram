@@ -59,8 +59,8 @@ class AnimeService:
         return None
 
     @classmethod
-    def get_by_slug(cls, slug: str, hidden=False):
-        anime = Anime.objects().filter(slug=slug, hidden=hidden).first()
+    def get_by_slug(cls, slug: str):
+        anime = Anime.objects().filter(slug=slug).first()
         return anime
 
     @classmethod

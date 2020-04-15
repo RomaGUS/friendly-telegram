@@ -30,12 +30,13 @@ class PermissionService:
 
     @classmethod
     def check(cls, user: User, scope: str, name: str) -> bool:
-        permission = cls.get(scope=scope, name=name)
-        if permission in user.permissions:
-            return True
+        if user:
+            permission = cls.get(scope=scope, name=name)
+            if permission in user.permissions:
+                return True
 
-        admin = cls.get("global", "admin")
-        if admin in user.permissions:
-            return True
+            admin = cls.get("global", "admin")
+            if admin in user.permissions:
+                return True
 
         return False
