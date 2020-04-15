@@ -194,7 +194,7 @@ class EditAnime(Resource):
 class AnimeUpload(Resource):
     @auth_required
     @permission_required("global", "publishing")
-    def put(self):
+    def post(self):
         result = {"error": None, "data": []}
         choices = ("poster", "banner")
 
