@@ -88,9 +88,6 @@ class TeamUpload(Resource):
             helper = UploadHelper(request.account, args["file"], args["type"])
             data = helper.upload_image()
 
-            if type(data) is Response:
-                return data
-
             if team[args["type"]]:
                 FileService.destroy(team[args["type"]])
 

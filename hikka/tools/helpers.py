@@ -22,8 +22,19 @@ def password(data):
     return data
 
 def email(data):
-    if not bool(re.search(r"[^@]+@[^@]+\.[^@]+", data)):
+    expression = r"[^@]+@[^@]+\.[^@]+"
+    if not bool(re.search(expression, data)):
         response = abort("general", "not-found")
+        flask_abort(response)
+
+    return data
+
+def image_link(data):
+    # Based on
+    # https://stackoverflow.com/a/51493215/9217774
+    expression = r"^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+(?:png|jpg|jpeg)+$"
+    if not bool(re.search(expression, data)):
+        response = abort("general", "not-file-link")
         flask_abort(response)
 
     return data

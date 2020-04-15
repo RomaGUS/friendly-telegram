@@ -199,16 +199,26 @@ class AnimeUpload(Resource):
         choices = ("poster", "banner")
 
         parser = RequestParser()
+        parser.add_argument("type", type=str, choices=choices, required=True)
         parser.add_argument("file", type=FileStorage, location="files")
         parser.add_argument("slug", type=helpers.anime, required=True)
-        parser.add_argument("type", type=str, choices=choices)
+        parser.add_argument("link", type=helpers.image_link)
         args = parser.parse_args()
 
         anime = args["slug"]
         helpers.is_member(request.account, anime.teams)
 
-        if args["file"]:
-            helper = UploadHelper(request.account, args["file"], args["type"])
+        upload_type = None
+        upload = None
+
+        fields = ["file", "link"]
+        for field in fields:
+            if field:
+                upload_type = field
+                upload = args[field]
+
+        if upload_type:
+            helper = UploadHelper(request.account, upload, upload_type, args["type"])
             data = helper.upload_image()
 
             if anime[args["type"]]:
