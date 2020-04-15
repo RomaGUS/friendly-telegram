@@ -11,6 +11,8 @@ from hikka.errors import abort
 from flask import request
 from hikka import utils
 
+from flask_cors import cross_origin
+
 class NewAnime(Resource):
     @auth_required
     @permission_required("global", "publishing")
@@ -194,6 +196,7 @@ class EditAnime(Resource):
 class AnimeUpload(Resource):
     @auth_required
     @permission_required("global", "publishing")
+    @cross_origin
     def put(self):
         result = {"error": None, "data": []}
         choices = ("poster", "banner")
