@@ -47,6 +47,7 @@ def init(api, app):
     api.add_resource(episodes.AddEpisode, "/episodes/add")
     api.add_resource(episodes.UpdateEpisode, "/episodes/update")
     api.add_resource(episodes.DeleteEpisode, "/episodes/delete")
+    api.add_resource(episodes.EpisodeUpload, "/episodes/upload")
 
     # System routes
     api.add_resource(system.ManagePermissions, "/system/permissions/manage")
