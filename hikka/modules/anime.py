@@ -295,7 +295,7 @@ class GetAnime(Resource):
     def get(self, slug):
         result = {"error": None, "data": {}}
 
-        anime = helpers.anime(slug, request.account)
+        anime = helpers.anime(slug)
         result["data"] = anime.dict(True)
 
         # if str(anime.id) not in session:
