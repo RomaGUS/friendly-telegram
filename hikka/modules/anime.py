@@ -213,7 +213,7 @@ class AnimeUpload(Resource):
 
         fields = ["file", "link"]
         for field in fields:
-            if field:
+            if args[field]:
                 upload_type = field
                 upload = args[field]
 
