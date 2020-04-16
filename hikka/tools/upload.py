@@ -15,7 +15,7 @@ import os
 supported_videos = ["video/mp4"]
 supported_images = ["image/jpeg", "image/png"]
 supported_video_types = ["anime"]
-image_max_size = 1 * 1024 * 1024
+image_max_size = 10 * 1024 * 1024
 
 # Lasciate ogni speranza, voi ch'entrate
 
