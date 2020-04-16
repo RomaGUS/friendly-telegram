@@ -5,7 +5,7 @@ from hikka.services.anime import AnimeService
 from hikka.services.files import FileService
 from hikka.tools.parser import RequestParser
 from hikka.tools.upload import UploadHelper
-from flask_restful import Resource
+from flask.views import MethodView
 from hikka.tools import helpers
 from hikka.errors import abort
 from flask import request
@@ -13,7 +13,7 @@ from hikka import utils
 
 from flask_cors import cross_origin
 
-class NewAnime(Resource):
+class NewAnime(MethodView):
     @auth_required
     @permission_required("global", "publishing")
     def post(self):
@@ -99,7 +99,7 @@ class NewAnime(Resource):
 
         return result
 
-class EditAnime(Resource):
+class EditAnime(MethodView):
     @auth_required
     @permission_required("global", "publishing")
     def post(self):
@@ -193,7 +193,7 @@ class EditAnime(Resource):
         result["data"] = anime.dict()
         return result
 
-class AnimeUpload(Resource):
+class AnimeUpload(MethodView):
     @auth_required
     @permission_required("global", "publishing")
     @cross_origin
@@ -233,7 +233,7 @@ class AnimeUpload(Resource):
         result["data"] = anime.dict()
         return result
 
-class Search(Resource):
+class Search(MethodView):
     @auth_required
     def post(self):
         result = {"error": None, "data": []}
@@ -293,7 +293,7 @@ class Search(Resource):
 
         return result
 
-class GetAnime(Resource):
+class GetAnime(MethodView):
     @auth_required
     def get(self, slug):
         result = {"error": None, "data": {}}
@@ -308,7 +308,7 @@ class GetAnime(Resource):
 
         return result
 
-class Selected(Resource):
+class Selected(MethodView):
     @auth_required
     def get(self):
         result = {"error": None, "data": []}
