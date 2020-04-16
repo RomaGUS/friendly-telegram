@@ -4,12 +4,12 @@ from hikka.services.anime import AnimeService
 from hikka.tools.parser import RequestParser
 from hikka.services.files import FileService
 from hikka.tools.upload import UploadHelper
-from flask_restful import Resource
+from flask.views import MethodView
 from hikka.tools import helpers
 from hikka.errors import abort
 from flask import request
 
-class AddEpisode(Resource):
+class AddEpisode(MethodView):
     @auth_required
     @permission_required("global", "publishing")
     def post(self):
@@ -34,7 +34,7 @@ class AddEpisode(Resource):
 
         return result
 
-class UpdateEpisode(Resource):
+class UpdateEpisode(MethodView):
     @auth_required
     @permission_required("global", "publishing")
     def post(self):
@@ -65,7 +65,7 @@ class UpdateEpisode(Resource):
         result["data"] = anime.dict(True)
         return result
 
-class DeleteEpisode(Resource):
+class DeleteEpisode(MethodView):
     @auth_required
     @permission_required("global", "publishing")
     def post(self):
@@ -90,7 +90,7 @@ class DeleteEpisode(Resource):
         result["data"] = anime.dict(True)
         return result
 
-class EpisodeUpload(Resource):
+class EpisodeUpload(MethodView):
     @auth_required
     @permission_required("global", "publishing")
     def put(self):

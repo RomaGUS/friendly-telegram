@@ -2,12 +2,12 @@ from hikka.decorators import auth_required, permission_required
 from hikka.services.descriptors import DescriptorService
 from hikka.services.func import update_document
 from hikka.tools.parser import RequestParser
-from flask_restful import Resource
+from flask.views import MethodView
 from hikka.tools import helpers
 from hikka.errors import abort
 from hikka import utils
 
-class NewDescriptor(Resource):
+class NewDescriptor(MethodView):
     @auth_required
     @permission_required("global", "admin")
     def post(self):
@@ -33,7 +33,7 @@ class NewDescriptor(Resource):
         result["data"] = descriptor.dict()
         return result
 
-class UpdateDescriptor(Resource):
+class UpdateDescriptor(MethodView):
     @auth_required
     @permission_required("global", "admin")
     def post(self):

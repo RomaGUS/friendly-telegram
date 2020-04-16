@@ -2,10 +2,10 @@ from hikka.decorators import auth_required, permission_required
 from hikka.services.permissions import PermissionService
 from hikka.services.anime import AnimeService
 from hikka.tools.parser import RequestParser
-from flask_restful import Resource
+from flask.views import MethodView
 from hikka.tools import helpers
 
-class ManagePermissions(Resource):
+class ManagePermissions(MethodView):
     @auth_required
     @permission_required("global", "admin")
     def post(self):
@@ -30,7 +30,7 @@ class ManagePermissions(Resource):
 
         return result
 
-class UserPermissions(Resource):
+class UserPermissions(MethodView):
     @auth_required
     @permission_required("global", "admin")
     def post(self):
@@ -45,7 +45,7 @@ class UserPermissions(Resource):
 
         return result
 
-class StaticData(Resource):
+class StaticData(MethodView):
     def get(self):
         result = {"error": None, "data": {}}
         result["data"]["years"] = AnimeService.years()

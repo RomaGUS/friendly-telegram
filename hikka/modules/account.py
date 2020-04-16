@@ -1,12 +1,12 @@
 from hikka.services.teams import TeamService
 from hikka.tools.parser import RequestParser
 from hikka.decorators import auth_required
-from flask_restful import Resource
+from flask.views import MethodView
 from hikka.tools import helpers
 from hikka.auth import hashpwd
 from flask import request
 
-class PasswordChange(Resource):
+class PasswordChange(MethodView):
     @auth_required
     def post(self):
         result = {"error": None, "data": {}}
@@ -21,7 +21,7 @@ class PasswordChange(Resource):
         result["data"] = request.account.dict()
         return result
 
-class AccountTeams(Resource):
+class AccountTeams(MethodView):
     @auth_required
     def get(self):
         result = {"error": None, "data": []}

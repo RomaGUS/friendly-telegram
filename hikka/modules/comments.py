@@ -3,7 +3,7 @@ from hikka.services.anime import AnimeService
 from hikka.tools.parser import RequestParser
 from hikka.decorators import auth_required
 from datetime import datetime, timedelta
-from flask_restful import Resource
+from flask.views import MethodView
 from hikka.tools import helpers
 from hikka.errors import abort
 from flask import request
@@ -14,7 +14,7 @@ def get_service(service):
     if service == "anime":
         return AnimeService
 
-class NewComment(Resource):
+class NewComment(MethodView):
     @auth_required
     def post(self):
         result = {"error": None, "data": {}}
@@ -33,7 +33,7 @@ class NewComment(Resource):
 
         return result
 
-class UpdateComment(Resource):
+class UpdateComment(MethodView):
     @auth_required
     def post(self):
         result = {"error": None, "data": {}}
@@ -61,7 +61,7 @@ class UpdateComment(Resource):
         result["data"] = comment.dict()
         return result
 
-class ListComments(Resource):
+class ListComments(MethodView):
     @auth_required
     def post(self):
         result = {"error": None, "data": []}

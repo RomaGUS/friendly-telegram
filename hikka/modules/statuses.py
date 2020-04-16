@@ -1,12 +1,12 @@
 from hikka.services.statuses import StatusService
 from hikka.tools.parser import RequestParser
 from hikka.decorators import auth_required
-from flask_restful import Resource
+from flask.views import MethodView
 from hikka.tools import helpers
 from flask import request
 from hikka import static
 
-class Update(Resource):
+class Update(MethodView):
     @auth_required
     def post(self):
         result = {"error": None, "data": {}}
@@ -35,7 +35,7 @@ class Update(Resource):
 
         return result
 
-class Check(Resource):
+class Check(MethodView):
     @auth_required
     def post(self):
         result = {"error": None, "data": {}}

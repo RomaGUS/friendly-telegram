@@ -3,13 +3,13 @@ from hikka.services.users import UserService
 from hikka.tools.parser import RequestParser
 from datetime import datetime, timedelta
 from hikka.auth import Token, hashpwd
-from hikka.tools.mail import Email
-from flask_restful import Resource
+from flask.views import MethodView
 from hikka.tools import helpers
 from hikka.errors import abort
+from hikka.tools import mail
 import config
 
-class Join(Resource):
+class Join(MethodView):
     def post(self):
         result = {"error": None, "data": {}}
 
@@ -30,9 +30,9 @@ class Join(Resource):
         admin = len(UserService.list()) == 0
         account = UserService.signup(args["username"], args["email"], args["password"])
 
-        mail = Email()
+        email = mail.Email()
         activation_token = Token.create("activation", account.username)
-        mail.account_confirmation(account.email, activation_token)
+        email.account_confirmation(account.email, activation_token)
 
         result["data"] = account.dict()
 
@@ -47,7 +47,7 @@ class Join(Resource):
 
         return result
 
-class Login(Resource):
+class Login(MethodView):
     def post(self):
         result = {"error": None, "data": {}}
 
@@ -80,7 +80,7 @@ class Login(Resource):
 
         return result
 
-class Activate(Resource):
+class Activate(MethodView):
     def post(self):
         result = {"error": None, "data": {}}
 
@@ -109,7 +109,7 @@ class Activate(Resource):
 
         return result
 
-class RequestReset(Resource):
+class RequestReset(MethodView):
     def post(self):
         result = {"error": None, "data": {}}
 
@@ -121,14 +121,18 @@ class RequestReset(Resource):
         if account is None:
             return abort("account", "not-found")
 
+        activated = PermissionService.check(account, "global", "activated")
+        if not activated:
+            return abort("account", "not-activated")
+
         delta = timedelta(minutes=30)
         if account.reset + delta > datetime.now():
             return abort("account", "reset-cooldown")
 
-        mail = Email()
+        email = mail.Email()
         reset_token = Token.create("reset", account.username, delta, account.password)
 
-        mail.password_reset(account.email, reset_token)
+        email.password_reset(account.email, reset_token)
         account.reset = datetime.now()
         account.save()
 
@@ -138,7 +142,7 @@ class RequestReset(Resource):
 
         return result
 
-class PasswordReset(Resource):
+class PasswordReset(MethodView):
     def post(self):
         result = {"error": None, "data": {}}
 

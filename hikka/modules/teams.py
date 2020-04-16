@@ -5,13 +5,12 @@ from hikka.services.files import FileService
 from hikka.services.teams import TeamService
 from hikka.tools.parser import RequestParser
 from hikka.tools.upload import UploadHelper
-from flask_restful import Resource
+from flask.views import MethodView
 from hikka.tools import helpers
 from hikka.errors import abort
-from flask import Response
 from flask import request
 
-class NewTeam(Resource):
+class NewTeam(MethodView):
     @auth_required
     @permission_required("global", "admin")
     def post(self):
@@ -40,7 +39,7 @@ class NewTeam(Resource):
         result["data"] = team.dict(True)
         return result
 
-class EditTeam(Resource):
+class EditTeam(MethodView):
     @auth_required
     @permission_required("global", "admin")
     def post(self):
@@ -69,7 +68,7 @@ class EditTeam(Resource):
 
         return result
 
-class TeamUpload(Resource):
+class TeamUpload(MethodView):
     @auth_required
     @permission_required("global", "admin")
     def put(self):
@@ -97,7 +96,7 @@ class TeamUpload(Resource):
         result["data"] = team.dict()
         return result
 
-class AddMember(Resource):
+class AddMember(MethodView):
     @auth_required
     @permission_required("global", "admin")
     def post(self):
@@ -119,7 +118,7 @@ class AddMember(Resource):
         result["data"] = team.dict(True)
         return result
 
-class RemoveMember(Resource):
+class RemoveMember(MethodView):
     @auth_required
     @permission_required("global", "admin")
     def post(self):
@@ -140,7 +139,7 @@ class RemoveMember(Resource):
         result["data"] = team.dict(True)
         return result
 
-class GetTeam(Resource):
+class GetTeam(MethodView):
     @auth_required
     def get(self, slug):
         result = {"error": None, "data": {}}
@@ -150,7 +149,7 @@ class GetTeam(Resource):
 
         return result
 
-class ListTeams(Resource):
+class ListTeams(MethodView):
     @auth_required
     def get(self):
         result = {"error": None, "data": []}
