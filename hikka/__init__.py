@@ -8,6 +8,7 @@ import config
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = config.secret
+app.config["JSON_SORT_KEYS"] = False
 CORS(app)
 
 limiter = Limiter(
