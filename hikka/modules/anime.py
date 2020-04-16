@@ -11,8 +11,6 @@ from hikka.errors import abort
 from flask import request
 from hikka import utils
 
-from flask_cors import cross_origin
-
 class NewAnime(MethodView):
     @auth_required
     @permission_required("global", "publishing")
@@ -196,7 +194,6 @@ class EditAnime(MethodView):
 class AnimeUpload(MethodView):
     @auth_required
     @permission_required("global", "publishing")
-    @cross_origin
     def put(self):
         result = {"error": None, "data": []}
         choices = ("poster", "banner")
@@ -300,11 +297,6 @@ class GetAnime(MethodView):
 
         anime = helpers.anime(slug)
         result["data"] = anime.dict(True)
-
-        # if str(anime.id) not in session:
-        #     session[str(anime.id)] = []
-        #     anime.views += 1
-        #     anime.save()
 
         return result
 

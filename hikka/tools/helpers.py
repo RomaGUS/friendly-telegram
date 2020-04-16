@@ -17,6 +17,10 @@ def string(data):
     return data
 
 def password(data):
+    if type(data) is not str:
+        response = abort("general", "not-found")
+        flask_abort(response)
+
     if len(data) < 8 or len(data) > 32:
         response = abort("general", "password-length")
         flask_abort(response)

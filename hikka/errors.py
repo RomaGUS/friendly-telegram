@@ -1,6 +1,5 @@
 from flask import abort as flask_abort
 from flask import jsonify
-import flask_restful
 
 errors = {
     "account": {
@@ -88,10 +87,6 @@ errors = {
         "not-found": "Not found"
     }
 }
-
-class Api(flask_restful.Api):
-    def error_router(self, original_handler, e):
-        return original_handler(e)
 
 def get(scope, message):
     error_code = scope.title()

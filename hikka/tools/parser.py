@@ -1,14 +1,108 @@
+from werkzeug.datastructures import MultiDict, FileStorage
 from collections import MutableSequence
+from flask import current_app, request
 from flask import abort as flask_abort
-from flask_restful import reqparse
 from werkzeug import exceptions
-from flask import current_app
+from hikka.errors import abort
 from flask import Response
-from flask import request
-import flask_restful
+from copy import deepcopy
+import decimal
 import six
 
-class Argument(reqparse.Argument):
+available_location = {
+    u"json": u"the JSON body",
+    u"form": u"the post body",
+    u"args": u"the query string",
+    u"values": u"the post body or the query string",
+    u"headers": u"the HTTP headers",
+    u"cookies": u"the request's cookies",
+    u"files": u"an uploaded file",
+}
+
+class Namespace(dict):
+    def __getattr__(self, name):
+        try:
+            return self[name]
+        except KeyError:
+            raise AttributeError(name)
+
+    def __setattr__(self, name, value):
+        self[name] = value
+
+class Argument(object):
+    def __init__(self, name, default=None, dest=None, required=False,
+                 ignore=False, type=lambda x: six.text_type(x), location=("json", "values"),
+                 choices=(), action="store", help=None, operators=("="),
+                 case_sensitive=True, store_missing=True, trim=False,
+                 nullable=True):
+
+        self.name = name
+        self.default = default
+        self.dest = dest
+        self.required = required
+        self.ignore = ignore
+        self.location = location
+        self.type = type
+        self.choices = choices
+        self.action = action
+        self.help = help
+        self.case_sensitive = case_sensitive
+        self.operators = operators
+        self.store_missing = store_missing
+        self.trim = trim
+        self.nullable = nullable
+
+    def source(self, request):
+        if isinstance(self.location, six.string_types):
+            value = getattr(request, self.location, MultiDict())
+            if callable(value):
+                value = value()
+            if value is not None:
+                return value
+        else:
+            values = MultiDict()
+            for l in self.location:
+                value = getattr(request, l, None)
+                if callable(value):
+                    value = value()
+                if value is not None:
+                    values.update(value)
+            return values
+
+        return MultiDict()
+
+    def convert(self, value, op):
+        if value is None:
+            if self.nullable:
+                return None
+            else:
+                raise ValueError("Must not be null!")
+
+        elif isinstance(value, FileStorage) and self.type == FileStorage:
+            return value
+
+        try:
+            return self.type(value, self.name, op)
+        except TypeError:
+            try:
+                if self.type is decimal.Decimal:
+                    return self.type(str(value))
+                else:
+                    return self.type(value, self.name)
+            except TypeError:
+                return self.type(value)
+
+    def handle_validation_error(self, error, bundle_errors):
+        error_str = six.text_type(error)
+        error_msg = self.help.format(error_msg=error_str) if self.help else error_str
+        msg = {self.name: error_msg}
+
+        if current_app.config.get("BUNDLE_ERRORS", False) or bundle_errors:
+            return error, msg
+
+        response = abort("general", "missing-field")
+        flask_abort(response)
+
     def parse(self, request, bundle_errors=False):
         source = self.source(request)
 
@@ -59,15 +153,14 @@ class Argument(reqparse.Argument):
 
         if not results and self.required:
             if isinstance(self.location, six.string_types):
-                error_msg = u"Missing required parameter in {0}".format(
-                    reqparse._friendly_location.get(self.location, self.location)
-                )
+                error = available_location.get(self.location, self.location)
+                error_msg = f"Missing required parameter in {error}"
             else:
-                friendly_locations = [reqparse._friendly_location.get(loc, loc)
+                friendly_locations = [available_location.get(loc, loc)
                                       for loc in self.location]
-                error_msg = u"Missing required parameter in {0}".format(
-                    " or ".join(friendly_locations)
-                )
+                error = " or ".join(friendly_locations)
+                error_msg = f"Missing required parameter in {error}"
+
             if current_app.config.get("BUNDLE_ERRORS", False) or bundle_errors:
                 return self.handle_validation_error(ValueError(error_msg), bundle_errors)
             self.handle_validation_error(ValueError(error_msg), bundle_errors)
@@ -86,14 +179,26 @@ class Argument(reqparse.Argument):
 
         return results, _found
 
-class RequestParser(reqparse.RequestParser):
-    def __init__(self, argument_class=Argument, namespace_class=reqparse.Namespace,
+
+class RequestParser(object):
+    def __init__(self, argument_class=Argument, namespace_class=Namespace,
                  trim=False, bundle_errors=False):
         self.args = []
         self.argument_class = argument_class
         self.namespace_class = namespace_class
         self.trim = trim
         self.bundle_errors = bundle_errors
+
+    def add_argument(self, *args, **kwargs):
+        if len(args) == 1 and isinstance(args[0], self.argument_class):
+            self.args.append(args[0])
+        else:
+            self.args.append(self.argument_class(*args, **kwargs))
+
+        if self.trim and self.argument_class is Argument:
+            self.args[-1].trim = kwargs.get("trim", self.trim)
+
+        return self
 
     def parse_args(self, req=None, strict=False, http_error_code=400):
         if req is None:
@@ -115,10 +220,34 @@ class RequestParser(reqparse.RequestParser):
                 flask_abort(value)
 
         if errors:
-            flask_restful.abort(http_error_code, message=errors)
+            response = abort("general", "missing-field")
+            flask_abort(response)
 
         if strict and req.unparsed_arguments:
             raise exceptions.BadRequest("Unknown arguments: %s"
                                         % ", ".join(req.unparsed_arguments.keys()))
 
         return namespace
+
+    def copy(self):
+        parser_copy = self.__class__(self.argument_class, self.namespace_class)
+        parser_copy.args = deepcopy(self.args)
+        parser_copy.trim = self.trim
+        parser_copy.bundle_errors = self.bundle_errors
+        return parser_copy
+
+    def replace_argument(self, name, *args, **kwargs):
+        new_arg = self.argument_class(name, *args, **kwargs)
+        for index, arg in enumerate(self.args[:]):
+            if new_arg.name == arg.name:
+                del self.args[index]
+                self.args.append(new_arg)
+                break
+        return self
+
+    def remove_argument(self, name):
+        for index, arg in enumerate(self.args[:]):
+            if name == arg.name:
+                del self.args[index]
+                break
+        return self

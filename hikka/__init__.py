@@ -1,19 +1,15 @@
 from flask_limiter.util import get_remote_address
 from flask_limiter import Limiter
 from flask_cors import CORS
-from hikka import errors
 from hikka import routes
 from flask import Flask
-import flask_restful
 import mongoengine
 import config
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = config.secret
-api = errors.Api(app)
 CORS(app)
 
-flask_restful.abort = errors.reqparse_abort
 limiter = Limiter(
     app=app,
     key_func=get_remote_address,
@@ -32,4 +28,4 @@ mongoengine.register_connection(
     **db_settings
 )
 
-routes.init(api, app)
+routes.init(app)
