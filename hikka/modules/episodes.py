@@ -16,10 +16,10 @@ class AddEpisode(MethodView):
         result = {"error": None, "data": {}}
 
         parser = RequestParser()
-        parser.add_argument("position", type=helpers.position, required=True)
-        parser.add_argument("slug", type=helpers.anime, required=True)
-        parser.add_argument("name", type=str)
-        args = parser.parse_args()
+        parser.argument("position", type=helpers.position, required=True)
+        parser.argument("slug", type=helpers.anime, required=True)
+        parser.argument("name", type=str)
+        args = parser.parse()
 
         anime = args["slug"]
         helpers.is_member(request.account, anime.teams)
@@ -41,14 +41,14 @@ class UpdateEpisode(MethodView):
         result = {"error": None, "data": {}}
 
         parser = RequestParser()
-        parser.add_argument("position", type=helpers.position, required=True)
-        parser.add_argument("slug", type=helpers.anime, required=True)
-        parser.add_argument("params", type=dict, default={})
-        args = parser.parse_args()
+        parser.argument("position", type=helpers.position, required=True)
+        parser.argument("slug", type=helpers.anime, required=True)
+        parser.argument("params", type=dict, default={})
+        args = parser.parse()
 
         params_parser = RequestParser()
-        params_parser.add_argument("name", type=helpers.string, location="params")
-        params_args = params_parser.parse_args(req=args)
+        params_parser.argument("name", type=helpers.string, location="params")
+        params_args = params_parser.parse(req=args)
 
         anime = args["slug"]
         helpers.is_member(request.account, anime.teams)
@@ -72,9 +72,9 @@ class DeleteEpisode(MethodView):
         result = {"error": None, "data": {}}
 
         parser = RequestParser()
-        parser.add_argument("position", type=helpers.position, required=True)
-        parser.add_argument("slug", type=helpers.anime, required=True)
-        args = parser.parse_args()
+        parser.argument("position", type=helpers.position, required=True)
+        parser.argument("slug", type=helpers.anime, required=True)
+        args = parser.parse()
 
         anime = args["slug"]
         helpers.is_member(request.account, anime.teams)
@@ -98,11 +98,11 @@ class EpisodeUpload(MethodView):
         choices = ("thumbnail", "video")
 
         parser = RequestParser()
-        parser.add_argument("position", type=helpers.position, required=True)
-        parser.add_argument("file", type=FileStorage, location="files")
-        parser.add_argument("slug", type=helpers.anime, required=True)
-        parser.add_argument("type", type=str, choices=choices)
-        args = parser.parse_args()
+        parser.argument("position", type=helpers.position, required=True)
+        parser.argument("file", type=FileStorage, location="files")
+        parser.argument("slug", type=helpers.anime, required=True)
+        parser.argument("type", type=str, choices=choices)
+        args = parser.parse()
 
         anime = args["slug"]
         helpers.is_member(request.account, anime.teams)

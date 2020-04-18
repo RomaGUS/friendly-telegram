@@ -17,12 +17,12 @@ class NewTeam(MethodView):
         result = {"error": None, "data": {}}
 
         parser = RequestParser()
-        parser.add_argument("members", type=list, default=[], location="json")
-        parser.add_argument("admins", type=list, default=[], location="json")
-        parser.add_argument("description", type=str, required=True)
-        parser.add_argument("name", type=str, required=True)
-        parser.add_argument("slug", type=str, required=True)
-        args = parser.parse_args()
+        parser.argument("members", type=list, default=[], location="json")
+        parser.argument("admins", type=list, default=[], location="json")
+        parser.argument("description", type=str, required=True)
+        parser.argument("name", type=str, required=True)
+        parser.argument("slug", type=str, required=True)
+        args = parser.parse()
 
         team = TeamService.get_by_slug(args["slug"])
         if team:
@@ -46,14 +46,14 @@ class EditTeam(MethodView):
         result = {"error": None, "data": {}}
 
         parser = RequestParser()
-        parser.add_argument("slug", type=helpers.team, required=True)
-        parser.add_argument("params", type=dict)
-        args = parser.parse_args()
+        parser.argument("slug", type=helpers.team, required=True)
+        parser.argument("params", type=dict)
+        args = parser.parse()
 
         params_parser = RequestParser()
-        params_parser.add_argument("description", type=helpers.string, location=("params"))
-        params_parser.add_argument("name", type=helpers.string, location=("params"))
-        params_args = params_parser.parse_args(req=args)
+        params_parser.argument("description", type=helpers.string, location=("params"))
+        params_parser.argument("name", type=helpers.string, location=("params"))
+        params_args = params_parser.parse(req=args)
 
         team = args["slug"]
 
@@ -76,10 +76,10 @@ class TeamUpload(MethodView):
         choices = ("avatar")
 
         parser = RequestParser()
-        parser.add_argument("file", type=FileStorage, location="files")
-        parser.add_argument("slug", type=helpers.team, required=True)
-        parser.add_argument("type", type=str, choices=choices)
-        args = parser.parse_args()
+        parser.argument("file", type=FileStorage, location="files")
+        parser.argument("slug", type=helpers.team, required=True)
+        parser.argument("type", type=str, choices=choices)
+        args = parser.parse()
 
         team = args["slug"]
 
@@ -103,10 +103,10 @@ class AddMember(MethodView):
         result = {"error": None, "data": {}}
 
         parser = RequestParser()
-        parser.add_argument("account", type=helpers.account, required=True)
-        parser.add_argument("slug", type=helpers.team, required=True)
-        parser.add_argument("admin", type=bool, default=False)
-        args = parser.parse_args()
+        parser.argument("account", type=helpers.account, required=True)
+        parser.argument("slug", type=helpers.team, required=True)
+        parser.argument("admin", type=bool, default=False)
+        args = parser.parse()
 
         account = args["account"]
         team = args["slug"]
@@ -125,10 +125,10 @@ class RemoveMember(MethodView):
         result = {"error": None, "data": {}}
 
         parser = RequestParser()
-        parser.add_argument("account", type=helpers.account, required=True)
-        parser.add_argument("slug", type=helpers.team, required=True)
-        parser.add_argument("admin", type=bool, default=False)
-        args = parser.parse_args()
+        parser.argument("account", type=helpers.account, required=True)
+        parser.argument("slug", type=helpers.team, required=True)
+        parser.argument("admin", type=bool, default=False)
+        args = parser.parse()
 
         account = args["account"]
         team = args["slug"]

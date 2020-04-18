@@ -20,10 +20,10 @@ class NewComment(MethodView):
         result = {"error": None, "data": {}}
 
         parser = RequestParser()
-        parser.add_argument("subject", type=str, required=True, choices=choices)
-        parser.add_argument("text", type=helpers.string, required=True)
-        parser.add_argument("slug", type=str, required=True)
-        args = parser.parse_args()
+        parser.argument("subject", type=str, required=True, choices=choices)
+        parser.argument("text", type=helpers.string, required=True)
+        parser.argument("slug", type=str, required=True)
+        args = parser.parse()
 
         service = get_service(args["subject"])
         subject = service.get_by_slug(args["slug"])
@@ -39,13 +39,13 @@ class UpdateComment(MethodView):
         result = {"error": None, "data": {}}
 
         parser = RequestParser()
-        parser.add_argument("counter", type=int, required=True)
-        parser.add_argument("params", type=dict, default={})
-        args = parser.parse_args()
+        parser.argument("counter", type=int, required=True)
+        parser.argument("params", type=dict, default={})
+        args = parser.parse()
 
         params_parser = RequestParser()
-        params_parser.add_argument("text", type=helpers.string, required=True, location=("params"))
-        params_args = params_parser.parse_args(req=args)
+        params_parser.argument("text", type=helpers.string, required=True, location=("params"))
+        params_args = params_parser.parse(req=args)
 
         comment = CommentService.get_by_counter(args["counter"], request.account)
         if comment is None:
@@ -67,10 +67,10 @@ class ListComments(MethodView):
         result = {"error": None, "data": []}
 
         parser = RequestParser()
-        parser.add_argument("subject", type=str, required=True, choices=choices)
-        parser.add_argument("slug", type=str, required=True)
-        parser.add_argument("page", type=int, default=0)
-        args = parser.parse_args()
+        parser.argument("subject", type=str, required=True, choices=choices)
+        parser.argument("slug", type=str, required=True)
+        parser.argument("page", type=int, default=0)
+        args = parser.parse()
 
         service = get_service(args["subject"])
         subject = service.get_by_slug(args["slug"])

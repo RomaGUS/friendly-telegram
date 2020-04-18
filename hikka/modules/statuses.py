@@ -12,11 +12,11 @@ class Update(MethodView):
         result = {"error": None, "data": {}}
 
         parser = RequestParser()
-        parser.add_argument("rating", type=int, default=None, choices=range(1, 11))
-        parser.add_argument("subject", type=helpers.content, required=True)
-        parser.add_argument("status", type=int, default=None)
-        parser.add_argument("slug", type=str, default=None)
-        args = parser.parse_args()
+        parser.argument("rating", type=int, default=None, choices=range(1, 11))
+        parser.argument("subject", type=helpers.content, required=True)
+        parser.argument("status", type=int, default=None)
+        parser.argument("slug", type=str, default=None)
+        args = parser.parse()
 
         subject = None
         content = static.slug("content", args["subject"])
@@ -41,9 +41,9 @@ class Check(MethodView):
         result = {"error": None, "data": {}}
 
         parser = RequestParser()
-        parser.add_argument("subject", type=helpers.content, required=True)
-        parser.add_argument("slug", type=str, default=None)
-        args = parser.parse_args()
+        parser.argument("subject", type=helpers.content, required=True)
+        parser.argument("slug", type=str, default=None)
+        args = parser.parse()
 
         subject = None
         content = static.slug("content", args["subject"])

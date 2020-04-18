@@ -12,8 +12,8 @@ class PasswordChange(MethodView):
         result = {"error": None, "data": {}}
 
         parser = RequestParser()
-        parser.add_argument("password", type=helpers.password, required=True)
-        args = parser.parse_args()
+        parser.argument("password", type=helpers.password, required=True)
+        args = parser.parse()
 
         request.account.password = hashpwd(args["password"])
         request.account.save()

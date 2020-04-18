@@ -14,10 +14,10 @@ class Join(MethodView):
         result = {"error": None, "data": {}}
 
         parser = RequestParser()
-        parser.add_argument("password", type=helpers.password, required=True)
-        parser.add_argument("email", type=helpers.email, required=True)
-        parser.add_argument("username", type=str, required=True)
-        args = parser.parse_args()
+        parser.argument("password", type=helpers.password, required=True)
+        parser.argument("email", type=helpers.email, required=True)
+        parser.argument("username", type=str, required=True)
+        args = parser.parse()
 
         account = UserService.get_by_username(args["username"])
         if account:
@@ -52,9 +52,9 @@ class Login(MethodView):
         result = {"error": None, "data": {}}
 
         parser = RequestParser()
-        parser.add_argument("password", type=helpers.password, required=True)
-        parser.add_argument("email", type=helpers.email, required=True)
-        args = parser.parse_args()
+        parser.argument("password", type=helpers.password, required=True)
+        parser.argument("email", type=helpers.email, required=True)
+        args = parser.parse()
 
         account = UserService.get_by_email(args["email"])
         if account is None:
@@ -85,8 +85,8 @@ class Activate(MethodView):
         result = {"error": None, "data": {}}
 
         parser = RequestParser()
-        parser.add_argument("token", type=str, required=True)
-        args = parser.parse_args()
+        parser.argument("token", type=str, required=True)
+        args = parser.parse()
 
         if not Token.validate(args["token"]):
             return abort("general", "token-invalid")
@@ -114,8 +114,8 @@ class RequestReset(MethodView):
         result = {"error": None, "data": {}}
 
         parser = RequestParser()
-        parser.add_argument("email", type=helpers.email, required=True)
-        args = parser.parse_args()
+        parser.argument("email", type=helpers.email, required=True)
+        args = parser.parse()
 
         account = UserService.get_by_email(args["email"])
         if account is None:
@@ -147,9 +147,9 @@ class PasswordReset(MethodView):
         result = {"error": None, "data": {}}
 
         parser = RequestParser()
-        parser.add_argument("password", type=helpers.password, required=True)
-        parser.add_argument("token", type=str, required=True)
-        args = parser.parse_args()
+        parser.argument("password", type=helpers.password, required=True)
+        parser.argument("token", type=str, required=True)
+        args = parser.parse()
 
         payload = Token.payload(args["token"])
         if "meta" not in payload:

@@ -189,7 +189,7 @@ class RequestParser(object):
         self.trim = trim
         self.bundle_errors = bundle_errors
 
-    def add_argument(self, *args, **kwargs):
+    def argument(self, *args, **kwargs):
         if len(args) == 1 and isinstance(args[0], self.argument_class):
             self.args.append(args[0])
         else:
@@ -200,7 +200,7 @@ class RequestParser(object):
 
         return self
 
-    def parse_args(self, req=None, strict=False, http_error_code=400):
+    def parse(self, req=None, strict=False, http_error_code=400):
         if req is None:
             req = request
 

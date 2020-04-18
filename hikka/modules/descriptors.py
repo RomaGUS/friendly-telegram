@@ -14,11 +14,11 @@ class NewDescriptor(MethodView):
         result = {"error": None, "data": {}}
 
         parser = RequestParser()
-        parser.add_argument("service", type=helpers.descriptor_service, required=True)
-        parser.add_argument("name", type=str, required=True)
-        parser.add_argument("slug", type=str, required=True)
-        parser.add_argument("description", type=str)
-        args = parser.parse_args()
+        parser.argument("service", type=helpers.descriptor_service, required=True)
+        parser.argument("name", type=str, required=True)
+        parser.argument("slug", type=str, required=True)
+        parser.argument("description", type=str)
+        args = parser.parse()
 
         check = DescriptorService.get_by_slug(args["service"], args["slug"])
         if check:
@@ -40,10 +40,10 @@ class UpdateDescriptor(MethodView):
         result = {"error": None, "data": {}}
 
         parser = RequestParser()
-        parser.add_argument("service", type=helpers.descriptor_service, required=True)
-        parser.add_argument("slug", type=str, required=True)
-        parser.add_argument("params", type=dict, default={})
-        args = parser.parse_args()
+        parser.argument("service", type=helpers.descriptor_service, required=True)
+        parser.argument("slug", type=str, required=True)
+        parser.argument("params", type=dict, default={})
+        args = parser.parse()
 
         descriptor = DescriptorService.get_by_slug(args["service"], args["slug"])
         if descriptor is None:
