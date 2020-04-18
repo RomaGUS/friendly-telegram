@@ -19,6 +19,11 @@ image_max_size = 10 * 1024 * 1024
 
 # Lasciate ogni speranza, voi ch'entrate
 
+class ChunkHelper(object):
+    def __init__(self, account, uuid, upload_type):
+        self.tmp_dir = f"/tmp/hikka/{account.username}/{upload_type}/"
+
+
 class UploadHelper(object):
     def __init__(self, account, upload, upload_type, file_type):
         self.type = upload_type

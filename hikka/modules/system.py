@@ -8,6 +8,8 @@ from hikka.tools.upload import UploadHelper
 from flask.views import MethodView
 from hikka.tools import helpers
 from flask import request
+import shutil
+import os
 
 class ManagePermissions(MethodView):
     @auth_required
@@ -57,39 +59,60 @@ class StaticData(MethodView):
 
 class SystemUpload(MethodView):
     @auth_required
-    @permission_required("global", "publishing")
     def put(self):
-        result = {"error": None, "data": []}
+        result = {"error": None, "data": {}}
         choices = ("poster", "banner")
 
         parser = RequestParser()
         parser.argument("type", type=str, choices=choices, required=True)
         parser.argument("file", type=FileStorage, location="files")
-        parser.argument("slug", type=helpers.anime, required=True)
-        parser.argument("link", type=helpers.image_link)
+        # parser.argument("slug", type=helpers.anime, required=True)
+        parser.argument("uuid", type=helpers.uuid, required=True)
+        # parser.argument("link", type=helpers.image_link)
         args = parser.parse()
 
-        anime = args["slug"]
-        helpers.is_member(request.account, anime.teams)
+        folder = request.account.username
+        upload_type = args["type"]
+        uuid = args["uuid"]
 
-        upload_type = None
-        upload = None
+        tmp_dir = f"/tmp/hikka/{folder}/{upload_type}/"
+        uuid_dir = os.path.join(tmp_dir, uuid)
 
-        fields = ["file", "link"]
-        for field in fields:
-            if args[field]:
-                upload_type = field
-                upload = args[field]
+        if not os.path.isdir(tmp_dir):
+            os.makedirs(tmp_dir)
 
-        if upload_type:
-            helper = UploadHelper(request.account, upload, upload_type, args["type"])
-            data = helper.upload_image()
+        tmp_ls = os.listdir(tmp_dir)
 
-            if anime[args["type"]]:
-                FileService.destroy(anime[args["type"]])
+        if uuid not in tmp_ls:
+            shutil.rmtree(tmp_dir)
+            os.makedirs(tmp_dir)
+            os.mkdir(uuid_dir)
 
-            anime[args["type"]] = data
-            anime.save()
+        result["data"]["ls"] = os.listdir(tmp_dir)
 
-        result["data"] = anime.dict()
         return result
+
+        # anime = args["slug"]
+        # helpers.is_member(request.account, anime.teams)
+
+        # upload_type = None
+        # upload = None
+
+        # fields = ["file", "link"]
+        # for field in fields:
+        #     if args[field]:
+        #         upload_type = field
+        #         upload = args[field]
+
+        # if upload_type:
+        #     helper = UploadHelper(request.account, upload, upload_type, args["type"])
+        #     data = helper.upload_image()
+
+        #     if anime[args["type"]]:
+        #         FileService.destroy(anime[args["type"]])
+
+        #     anime[args["type"]] = data
+        #     anime.save()
+
+        # result["data"] = anime.dict()
+        # return result

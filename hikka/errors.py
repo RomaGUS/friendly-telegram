@@ -76,6 +76,7 @@ errors = {
         "missing-field": "Required field is missing",
         "empty-required": "Required field can't be empty",
         "something-bad": "Something very bad happened",
+        "bad-regex": "Parameter don't match regex",
         "password-length": "Bad password length",
         "position-range": "Position is out of range",
         "method-not-allowed": "Method not allowed",

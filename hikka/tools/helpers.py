@@ -30,7 +30,15 @@ def password(data):
 def email(data):
     expression = r"[^@]+@[^@]+\.[^@]+"
     if not bool(re.search(expression, data)):
-        response = abort("general", "not-found")
+        response = abort("general", "bad-regex")
+        flask_abort(response)
+
+    return data
+
+def uuid(data):
+    expression = r"[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"
+    if not bool(re.search(expression, data)):
+        response = abort("general", "bad-regex")
         flask_abort(response)
 
     return data

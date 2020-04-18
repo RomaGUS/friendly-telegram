@@ -55,6 +55,7 @@ def init(app):
     # System routes
     add_resource(app, system.ManagePermissions, "/system/permissions/manage")
     add_resource(app, system.UserPermissions, "/system/permissions/user")
+    add_resource(app, system.SystemUpload, "/system/upload")
     add_resource(app, system.StaticData, "/system/static")
 
     # Comment routes
