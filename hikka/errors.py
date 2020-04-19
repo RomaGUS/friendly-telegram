@@ -51,7 +51,8 @@ errors = {
         "bad-mime": "Unsupported file type",
         "bad-upload-type": "Unsupported upload type",
         "bad-mime-type": "Unsupported mime type",
-        "too-big": "File is larger than allowed"
+        "too-big": "File is larger than allowed",
+        "invalid-size": "Provided file size is invalid"
     },
     "image": {
         "not-square": "Image is not square",

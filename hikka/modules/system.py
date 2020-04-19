@@ -2,14 +2,17 @@ from hikka.decorators import auth_required, permission_required
 from hikka.services.permissions import PermissionService
 from werkzeug.datastructures import FileStorage
 from hikka.services.anime import AnimeService
-from hikka.services.files import FileService
+# from hikka.services.files import FileService
 from hikka.tools.parser import RequestParser
-from hikka.tools.upload import UploadHelper
+# from hikka.tools.upload import UploadHelper
 from flask.views import MethodView
 from hikka.tools import helpers
 from flask import request
 import shutil
+# import magic
 import os
+
+from hikka.errors import abort
 
 class ManagePermissions(MethodView):
     @auth_required
@@ -57,6 +60,14 @@ class StaticData(MethodView):
         result["data"]["years"] = AnimeService.years()
         return result["data"]["static"]
 
+def get_size(file):
+    file_size = 0
+    file.seek(0, os.SEEK_END)
+    file_size = file.tell()
+    file.seek(0, 0)
+
+    return file_size
+
 class SystemUpload(MethodView):
     @auth_required
     def put(self):
@@ -68,12 +79,24 @@ class SystemUpload(MethodView):
         parser.argument("file", type=FileStorage, location="files")
         # parser.argument("slug", type=helpers.anime, required=True)
         parser.argument("uuid", type=helpers.uuid, required=True)
+        parser.argument("offset", type=int, required=True)
+        parser.argument("index", type=int, required=True)
+        parser.argument("total", type=int, required=True)
+        parser.argument("size", type=int, required=True)
         # parser.argument("link", type=helpers.image_link)
         args = parser.parse()
 
+        print("Loading chunk #" + str(args["index"]))
+
+        file = args["file"]
+        offset = args["offset"]
         folder = request.account.username
         upload_type = args["type"]
+        size = get_size(file)
         uuid = args["uuid"]
+
+        if args["size"] != size:
+            return abort("file", "invalid-size")
 
         tmp_dir = f"/tmp/hikka/{folder}/{upload_type}/"
         uuid_dir = os.path.join(tmp_dir, uuid)
@@ -88,7 +111,14 @@ class SystemUpload(MethodView):
             os.makedirs(tmp_dir)
             os.mkdir(uuid_dir)
 
+        blob_file = os.path.join(uuid_dir, "blob")
+
+        with open(blob_file, "ab") as blob:
+            blob.seek(offset)
+            blob.write(file.stream.read())
+
         result["data"]["ls"] = os.listdir(tmp_dir)
+        # magic.from_file("/tmp/hikka/volbil/poster/500jpg.jpg", mime=True)
 
         return result
 
