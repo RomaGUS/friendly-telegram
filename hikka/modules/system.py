@@ -86,8 +86,6 @@ class SystemUpload(MethodView):
         # parser.argument("link", type=helpers.image_link)
         args = parser.parse()
 
-        print("Loading chunk #" + str(args["index"]))
-
         file = args["file"]
         offset = args["offset"]
         folder = request.account.username
