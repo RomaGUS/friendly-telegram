@@ -1,11 +1,8 @@
 from hikka.decorators import auth_required, permission_required
-from werkzeug.datastructures import FileStorage
 from hikka.services.anime import AnimeService
 from hikka.tools.parser import RequestParser
 from hikka.services.files import FileService
-from hikka.tools.upload import UploadHelper
 from flask import request, Blueprint
-from flask.views import MethodView
 from hikka.tools import helpers
 from hikka.errors import abort
 
