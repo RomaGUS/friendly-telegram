@@ -1,4 +1,3 @@
-from flask import abort as flask_abort
 from flask import jsonify
 
 errors = {
@@ -73,14 +72,14 @@ errors = {
         "pagination-error": "Pagination is out of range",
         "service-not-found": "Descriptor service not found",
         "not-file-link": "Link doesn't seems to be a file",
-        "missing-field": "Required field is missing",
         "empty-required": "Required field can't be empty",
         "something-bad": "Something very bad happened",
-        "bad-regex": "Parameter don't match regex",
-        "password-length": "Bad password length",
         "position-range": "Position is out of range",
+        "missing-field": "Required field is missing",
+        "bad-regex": "Parameter don't match regex",
         "method-not-allowed": "Method not allowed",
         "too-many-requests": "Too many requests",
+        "password-length": "Bad password length",
         "file-link-down": "File link is down",
         "invalid-email": "Invalid email",
         "empty-string": "Empty string",
