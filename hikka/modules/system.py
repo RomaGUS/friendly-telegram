@@ -2,7 +2,6 @@ from hikka.decorators import auth_required, permission_required
 from hikka.services.permissions import PermissionService
 from hikka.services.anime import AnimeService
 from hikka.tools.parser import RequestParser
-from flask.views import MethodView
 from hikka.tools import helpers
 from flask import Blueprint
 

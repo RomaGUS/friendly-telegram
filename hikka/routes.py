@@ -11,9 +11,6 @@ from hikka.modules import auth
 from hikka import errors
 import flask
 
-def add_resource(app, view, endpoint):
-    app.add_url_rule(endpoint, view_func=view.as_view(endpoint))
-
 def init(app, limiter):
     # App blueprints
     app.register_blueprint(descriptors.blueprint)

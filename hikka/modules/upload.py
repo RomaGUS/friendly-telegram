@@ -1,12 +1,10 @@
 from werkzeug.datastructures import FileStorage
 from hikka.tools.parser import RequestParser
 from hikka.decorators import auth_required
-from hikka.tools.upload import get_size
 from flask import Blueprint, request
 from hikka.tools import helpers
+from hikka.tools import upload
 from hikka.errors import abort
-import shutil
-import os
 
 blueprint = Blueprint("upload", __name__)
 
@@ -14,47 +12,56 @@ blueprint = Blueprint("upload", __name__)
 @auth_required
 def file_upload():
     result = {"error": None, "data": {}}
-    choices = ("poster", "banner")
+    choices = ("account", "anime")
 
     parser = RequestParser()
-    parser.argument("type", type=str, choices=choices, required=True)
+    parser.argument("subject", type=str, choices=choices, required=True)
+    parser.argument("type", type=helpers.string, required=True)
     parser.argument("file", type=FileStorage, location="files")
     parser.argument("uuid", type=helpers.uuid, required=True)
     parser.argument("offset", type=int, required=True)
     parser.argument("index", type=int, required=True)
     parser.argument("total", type=int, required=True)
     parser.argument("size", type=int, required=True)
+    parser.argument("slug", type=helpers.string)
     args = parser.parse()
 
-    file = args["file"]
-    offset = args["offset"]
-    folder = request.account.username
     upload_type = args["type"]
-    size = get_size(file)
     uuid = args["uuid"]
 
-    if args["size"] != size:
-        return abort("file", "invalid-size")
+    if args["subject"] == "account":
+        if upload_type not in ("avatar"):
+            return abort("file", "bad-upload-type")
 
-    tmp_dir = f"/tmp/hikka/{folder}/{upload_type}/"
-    uuid_dir = os.path.join(tmp_dir, uuid)
+        subject = request.account
+        folder = subject.username
 
-    if not os.path.isdir(tmp_dir):
-        os.makedirs(tmp_dir)
+    if args["subject"] == "anime":
+        if upload_type not in ("poster", "banner"):
+            return abort("file", "bad-upload-type")
 
-    tmp_ls = os.listdir(tmp_dir)
+        subject = helpers.anime(args["slug"])
+        folder = subject.slug
 
-    if uuid not in tmp_ls:
-        shutil.rmtree(tmp_dir)
-        os.makedirs(tmp_dir)
-        os.mkdir(uuid_dir)
+    chunks = upload.ChunkHelper(request.account, folder, args["file"], upload_type, uuid)
+    chunks.load(args["size"], args["index"], args["total"], args["offset"])
 
-    blob_file = os.path.join(uuid_dir, "blob")
+    if args["index"] + 1 == args["total"]:
+        helper = upload.UploadHelper(request.account, chunks.blob_file, upload_type)
 
-    with open(blob_file, "ab") as blob:
-        blob.seek(offset)
-        blob.write(file.stream.read())
+        if args["subject"] == "account":
+            file = helper.upload_image()
 
-    result["data"]["ls"] = os.listdir(tmp_dir)
+        if args["subject"] == "anime":
+            file = helper.upload_image()
+
+        subject[upload_type] = file
+        subject.save()
+
+        result["data"] = subject.dict()
+        chunks.clean()
+
+    else:
+        result["data"]["chunk"] = True
 
     return result

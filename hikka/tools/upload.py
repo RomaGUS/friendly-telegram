@@ -1,70 +1,77 @@
-from werkzeug.datastructures import FileStorage
+from hikka.services.permissions import PermissionService
 from hikka.services.files import FileService
 from flask import abort as flask_abort
 from hikka.tools import storage
 from hikka.errors import abort
 from hikka import utils
-from io import BytesIO
 from PIL import Image
-import requests
 import secrets
 import config
 import shutil
+import magic
 import os
 
 supported_videos = ["video/mp4"]
 supported_images = ["image/jpeg", "image/png"]
 supported_video_types = ["anime"]
-image_max_size = 10 * 1024 * 1024
-
-# Lasciate ogni speranza, voi ch'entrate
-
-def get_size(file):
-    file_size = 0
-    file.seek(0, os.SEEK_END)
-    file_size = file.tell()
-    file.seek(0, 0)
-
-    return file_size
+max_size = 10 * 1024 * 1024
 
 class ChunkHelper(object):
-    def __init__(self, account, uuid, upload_type):
-        self.tmp_dir = f"/tmp/hikka/{account.username}/{upload_type}/"
+    def __init__(self, account, folder, file, upload_type, uuid):
+        self.chunk_size = self.get_size(file)
+        self.account = account
+        self.file = file
+        self.uuid = uuid
 
+        self.tmp_dir = f"/tmp/hikka/{folder}/{upload_type}/"
+        self.uuid_dir = os.path.join(self.tmp_dir, uuid)
+        self.blob_file = os.path.join(self.uuid_dir, "blob")
+
+    def load(self, size, index, total, offset):
+        if size != self.chunk_size:
+            self.clean()
+            return abort("file", "invalid-size")
+
+        if index >= total or index < 0:
+            self.clean()
+            return abort("file", "invalid-index")
+
+        if not PermissionService.check(self.account, "global", "publishing"):
+            if self.chunk_size > max_size:
+                return abort("file", "too-big")
+
+            if os.path.isfile(self.blob_file):
+                if os.path.getsize(self.blob_file) > max_size:
+                    return abort("file", "too-big")
+
+        if not os.path.isdir(self.tmp_dir):
+            os.makedirs(self.tmp_dir)
+
+        tmp_ls = os.listdir(self.tmp_dir)
+
+        if self.uuid not in tmp_ls:
+            self.clean()
+            os.makedirs(self.tmp_dir)
+            os.mkdir(self.uuid_dir)
+
+        with open(self.blob_file, "ab") as blob:
+            blob.seek(offset)
+            blob.write(self.file.stream.read())
+
+    def clean(self):
+        shutil.rmtree(self.tmp_dir)
+
+    def get_size(self, file):
+        file_size = 0
+        file.seek(0, os.SEEK_END)
+        file_size = file.tell()
+        file.seek(0, 0)
+
+        return file_size
 
 class UploadHelper(object):
-    def __init__(self, account, upload, upload_type, file_type):
-        self.type = upload_type
-
-        if self.type == "file":
-            self.file_type = upload.filename.split(".")[-1]
-            self.upload = upload
-
-        if self.type == "link":
-            self.file_type = upload.split(".")[-1]
-
-            try:
-                response = requests.get(upload, stream=True)
-                response.raise_for_status()
-                content = bytes()
-
-            except Exception:
-                response = abort("general", "file-link-down")
-                flask_abort(response)
-
-            mimetype = response.headers["Content-Type"]
-            size = 0
-
-            for block in response.iter_content(1024):
-                content += block
-                size += 1024
-
-                if size > image_max_size:
-                    response = abort("file", "too-big")
-                    flask_abort(response)
-
-            file = BytesIO(content)
-            self.upload = FileStorage(file, content_type=mimetype)
+    def __init__(self, account, path, file_type):
+        self.path = path
 
         self.storage_name = config.storage["name"]
         self.branch = config.storage["branch"]
@@ -77,22 +84,16 @@ class UploadHelper(object):
         self.fs = storage.init_fs()
 
         self.storage_dir = f"{self.storage_name}/{self.branch}/{self.file_type}/{self.folder}/"
-        self.tmp_dir = f"/tmp/{self.storage_name}/{self.file.name}/"
+        self.mimetype = magic.from_file(path, mime=True)
 
     def upload_image(self):
         if not self.is_image():
             response = abort("file", "bad-mime-type")
             flask_abort(response)
 
-        if self.size() > image_max_size:
-            response = abort("file", "too-big")
-            flask_abort(response)
+        storage_file_name = self.file.name + ".jpg"
 
-        storage_file_name = self.file.name + "." + "jpg"
-        os.makedirs(self.tmp_dir)
-
-        self.upload.save(self.tmp_dir + self.file.name + "." + self.file_type)
-        pil = Image.open(self.tmp_dir + self.file.name + "." + self.file_type)
+        pil = Image.open(self.path)
         width, height = pil.size
 
         if self.file_type == "avatar":
@@ -117,61 +118,41 @@ class UploadHelper(object):
                 new_height = int(new_width * height / width)
                 pil = pil.resize((new_width, new_height), Image.LANCZOS)
 
-        if self.file_type == "thumbnail":
-            max_width = 250
-            if width > max_width:
-                new_width = max_width
-                new_height = int(new_width * height / width)
-                pil = pil.resize((new_width, new_height), Image.LANCZOS)
-
         storage_path = self.storage_dir + storage_file_name
-        tmp_path = self.tmp_dir + storage_file_name
+        tmp_path = self.path + ".jpg"
         pil.save(tmp_path, optimize=True, quality=95)
 
         self.finish(tmp_path, storage_path, storage_file_name)
 
         return self.file
 
-    def upload_video(self):
-        if not self.is_video():
-            response = abort("file", "bad-mime-type")
-            flask_abort(response)
+#     def upload_video(self):
+#         if not self.is_video():
+#             response = abort("file", "bad-mime-type")
+#             flask_abort(response)
 
-        storage_file_name = self.file.name + "." + "mp4"
+#         storage_file_name = self.file.name + "." + "mp4"
 
-        os.makedirs(self.tmp_dir)
-        self.upload.save(self.tmp_dir + self.file.name + "." + self.file_type)
+#         os.makedirs(self.tmp_dir)
+#         self.upload.save(self.tmp_dir + self.file.name + "." + self.file_type)
 
-        storage_path = self.storage_dir + storage_file_name
-        tmp_path = self.tmp_dir + storage_file_name
+#         storage_path = self.storage_dir + storage_file_name
+#         tmp_path = self.tmp_dir + storage_file_name
 
-        self.finish(tmp_path, storage_path, storage_file_name)
+#         self.finish(tmp_path, storage_path, storage_file_name)
 
-        return self.file
+#         return self.file
 
     def finish(self, tmp_path, storage_path, storage_file_name):
         self.fs.put(tmp_path, storage_path)
         self.fs.chmod(storage_path, "public-read")
 
-        self.clean()
-
         self.file.path = f"/{self.branch}/{self.file_type}/{self.folder}/{storage_file_name}"
         self.file.uploaded = True
         self.file.save()
 
-    def clean(self):
-        shutil.rmtree(self.tmp_dir)
-
     def is_image(self):
-        return self.upload.mimetype in supported_images
+        return self.mimetype in supported_images
 
     def is_video(self):
-        return self.upload.mimetype in supported_videos
-
-    def size(self):
-        file_size = 0
-        self.upload.seek(0, os.SEEK_END)
-        file_size = self.upload.tell()
-        self.upload.seek(0, 0)
-
-        return file_size
+        return self.mimetype in supported_videos
