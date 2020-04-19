@@ -53,4 +53,4 @@ def user_permissions():
 def static_data():
     result = {"error": None, "data": {}}
     result["data"]["years"] = AnimeService.years()
-    return result["data"]
+    return result
