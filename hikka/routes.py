@@ -3,6 +3,7 @@ from hikka.modules import comments
 from hikka.modules import statuses
 from hikka.modules import episodes
 from hikka.modules import account
+from hikka.modules import upload
 from hikka.modules import system
 from hikka.modules import anime
 from hikka.modules import teams
@@ -13,62 +14,25 @@ import flask
 def add_resource(app, view, endpoint):
     app.add_url_rule(endpoint, view_func=view.as_view(endpoint))
 
-def init(app):
-    # Auth routes
-    add_resource(app, auth.Join, "/auth/join")
-    add_resource(app, auth.Login, "/auth/login")
-    add_resource(app, auth.Activate, "/auth/activate")
-    add_resource(app, auth.RequestReset, "/auth/reset/request")
-    add_resource(app, auth.PasswordReset, "/auth/reset")
+def init(app, limiter):
+    # App blueprints
+    app.register_blueprint(descriptors.blueprint)
+    app.register_blueprint(comments.blueprint)
+    app.register_blueprint(episodes.blueprint)
+    app.register_blueprint(statuses.blueprint)
+    app.register_blueprint(account.blueprint)
+    app.register_blueprint(system.blueprint)
+    app.register_blueprint(upload.blueprint)
+    app.register_blueprint(teams.blueprint)
+    app.register_blueprint(anime.blueprint)
+    app.register_blueprint(auth.blueprint)
 
-    # Account routes
-    add_resource(app, account.PasswordChange, "/account/password")
-    add_resource(app, account.AccountTeams, "/account/teams")
+    # Limiter exemptions
+    limiter.exempt(upload.blueprint)
 
-    # Team routes
-    add_resource(app, teams.NewTeam, "/teams/new")
-    add_resource(app, teams.EditTeam, "/teams/edit")
-    add_resource(app, teams.GetTeam, "/teams/get/<string:slug>")
-    add_resource(app, teams.AddMember, "/teams/member/add")
-    add_resource(app, teams.RemoveMember, "/teams/member/remove")
-    add_resource(app, teams.TeamUpload, "/teams/upload")
-    add_resource(app, teams.ListTeams, "/teams/list")
-
-    # Descriptor routes
-    add_resource(app, descriptors.NewDescriptor, "/descriptors/new")
-    add_resource(app, descriptors.UpdateDescriptor, "/descriptors/update")
-
-    # Anime routes
-    add_resource(app, anime.NewAnime, "/anime/new")
-    add_resource(app, anime.EditAnime, "/anime/edit")
-    add_resource(app, anime.GetAnime, "/anime/get/<string:slug>")
-    add_resource(app, anime.AnimeUpload, "/anime/upload")
-    add_resource(app, anime.Selected, "/anime/selected")
-    add_resource(app, anime.Search, "/anime/list")
-
-    # Episode routes
-    add_resource(app, episodes.AddEpisode, "/episodes/add")
-    add_resource(app, episodes.UpdateEpisode, "/episodes/update")
-    add_resource(app, episodes.DeleteEpisode, "/episodes/delete")
-    add_resource(app, episodes.EpisodeUpload, "/episodes/upload")
-
-    # System routes
-    add_resource(app, system.ManagePermissions, "/system/permissions/manage")
-    add_resource(app, system.UserPermissions, "/system/permissions/user")
-    add_resource(app, system.SystemUpload, "/system/upload")
-    add_resource(app, system.StaticData, "/system/static")
-
-    # Comment routes
-    add_resource(app, comments.NewComment, "/comments/new")
-    add_resource(app, comments.UpdateComment, "/comments/update")
-    add_resource(app, comments.ListComments, "/comments/list")
-
-    # Voting routes
-    add_resource(app, statuses.Update, "/status")
-    add_resource(app, statuses.Check, "/status/check")
-
+    # Misc routes
     @app.route("/")
-    def root():
+    def docs():
         return flask.render_template("docs.html")
 
     @app.errorhandler(400)

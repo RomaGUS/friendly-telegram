@@ -4,7 +4,6 @@ from hikka.tools.parser import RequestParser
 from hikka.decorators import auth_required
 from datetime import datetime, timedelta
 from flask import request, Blueprint
-from flask.views import MethodView
 from hikka.tools import helpers
 from hikka.errors import abort
 

@@ -19,6 +19,14 @@ image_max_size = 10 * 1024 * 1024
 
 # Lasciate ogni speranza, voi ch'entrate
 
+def get_size(file):
+    file_size = 0
+    file.seek(0, os.SEEK_END)
+    file_size = file.tell()
+    file.seek(0, 0)
+
+    return file_size
+
 class ChunkHelper(object):
     def __init__(self, account, uuid, upload_type):
         self.tmp_dir = f"/tmp/hikka/{account.username}/{upload_type}/"

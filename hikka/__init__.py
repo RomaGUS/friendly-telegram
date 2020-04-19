@@ -6,6 +6,8 @@ from flask import Flask
 import mongoengine
 import config
 
+# from hikka.modules import upload
+
 app = Flask(__name__)
 app.config["SECRET_KEY"] = config.secret
 app.config["JSON_SORT_KEYS"] = False
@@ -29,4 +31,4 @@ mongoengine.register_connection(
     **db_settings
 )
 
-routes.init(app)
+routes.init(app, limiter)
