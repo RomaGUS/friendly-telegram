@@ -1,33 +1,34 @@
 from hikka.services.teams import TeamService
 from hikka.tools.parser import RequestParser
 from hikka.decorators import auth_required
-from flask.views import MethodView
+from flask import request, Blueprint
 from hikka.tools import helpers
 from hikka.auth import hashpwd
-from flask import request
 
-class PasswordChange(MethodView):
-    @auth_required
-    def post(self):
-        result = {"error": None, "data": {}}
+blueprint = Blueprint("account", __name__)
 
-        parser = RequestParser()
-        parser.argument("password", type=helpers.password, required=True)
-        args = parser.parse()
+@blueprint.route("/account/password", methods=["POST"])
+@auth_required
+def password_change():
+    result = {"error": None, "data": {}}
 
-        request.account.password = hashpwd(args["password"])
-        request.account.save()
+    parser = RequestParser()
+    parser.argument("password", type=helpers.password, required=True)
+    args = parser.parse()
 
-        result["data"] = request.account.dict()
-        return result
+    request.account.password = hashpwd(args["password"])
+    request.account.save()
 
-class AccountTeams(MethodView):
-    @auth_required
-    def get(self):
-        result = {"error": None, "data": []}
+    result["data"] = request.account.dict()
+    return result
 
-        teams = TeamService.member_teams(request.account)
-        for team in teams:
-            result["data"].append(team.dict(True))
+@blueprint.route("/account/password", methods=["GET"])
+@auth_required
+def teams():
+    result = {"error": None, "data": []}
 
-        return result
+    teams = TeamService.member_teams(request.account)
+    for team in teams:
+        result["data"].append(team.dict(True))
+
+    return result
