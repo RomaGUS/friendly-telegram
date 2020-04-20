@@ -93,7 +93,7 @@ class UploadHelper(object):
 
         storage_file_name = self.file.name + ".jpg"
 
-        pil = Image.open(self.path)
+        pil = Image.open(self.path).convert("RGB")
         width, height = pil.size
 
         if self.file_type == "avatar":
