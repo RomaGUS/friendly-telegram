@@ -197,6 +197,7 @@ def list_anime():
     parser = RequestParser()
     parser.argument("franchises", type=list, default=[], location="json")
     parser.argument("categories", type=list, default=[], location="json")
+    parser.argument("ordering", type=list, default=[], location="json")
     parser.argument("states", type=list, default=[], location="json")
     parser.argument("genres", type=list, default=[], location="json")
     parser.argument("teams", type=list, default=[], location="json")
@@ -213,6 +214,7 @@ def list_anime():
     query = utils.search_query(args["query"])
     categories = []
     franchises = []
+    ordering = []
     genres = []
     states = []
     teams = []
@@ -237,11 +239,19 @@ def list_anime():
         team = helpers.team(slug)
         teams.append(team)
 
+    for item in args["ordering"]:
+        check = item
+        if item[0] in ["+", "-"]:
+            check = item[1:]
+
+        if check in ("rating"):
+            ordering.append(check)
+
     anime = AnimeService.search(
         query, year_args, categories,
         genres, franchises, states,
-        teams, False, args["page"],
-        account=request.account
+        teams, ordering, False,
+        args["page"], account=request.account
     )
 
     for item in anime:

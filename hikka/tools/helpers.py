@@ -10,7 +10,7 @@ from hikka import static
 import re
 
 def string(data):
-    if not data:
+    if not data or type(data) is not str:
         response = abort("general", "not-found")
         flask_abort(response)
 

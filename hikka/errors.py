@@ -82,6 +82,7 @@ errors = {
         "method-not-allowed": "Method not allowed",
         "too-many-requests": "Too many requests",
         "password-length": "Bad password length",
+        "bad-ordering": "Bad ordering parameter",
         "file-link-down": "File link is down",
         "invalid-email": "Invalid email",
         "empty-string": "Empty string",

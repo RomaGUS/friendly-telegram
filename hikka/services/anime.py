@@ -84,8 +84,8 @@ class AnimeService:
 
     @classmethod
     def search(cls, query, year: dict, categories=[], genres=[],
-                franchises=[], states=[], teams=[], selected=False,
-                page=0, limit=20, account=None) -> List[Anime]:
+                franchises=[], states=[], teams=[], ordering=[],
+                selected=False, page=0, limit=20, account=None) -> List[Anime]:
 
         offset = page * limit
         anime = Anime.objects(search__contains=query)
@@ -113,6 +113,10 @@ class AnimeService:
 
         teams = TeamService.member_teams(account)
         anime = anime.filter(Q(hidden=False) | Q(teams__in=teams))
+
+        if len(ordering) > 0:
+            anime = anime.order_by(*ordering)
+
         anime = anime.limit(limit).skip(offset)
 
         return list(anime)
