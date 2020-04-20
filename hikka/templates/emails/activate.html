@@ -1,0 +1,9 @@
+{% extends "emails/template.html" %}
+
+{% block content %}
+
+<h1>Привіт, {{ username }}!</h1>
+<p>Дякуємо за реєстрацію на нашому сайті, ось посилання для активації вашого акаунту :)</p>
+<a href="{{ url }}/activate/{{ token }}" class="f-fallback button" target="_blank">Активувати</a>
+
+{% endblock %}

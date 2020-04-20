@@ -1,0 +1,9 @@
+{% extends "emails/template.html" %}
+
+{% block content %}
+
+<h1>Привіт, {{ username }}!</h1>
+<p>Шкода що ви забули попередній пароль, ось посилання для встановлення нового :)</p>
+<a href="{{ url }}/reset/{{ token }}" class="f-fallback button" target="_blank">Скинути пароль</a>
+
+{% endblock %}

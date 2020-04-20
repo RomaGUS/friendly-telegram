@@ -1,4 +1,5 @@
 from email.message import EmailMessage
+from flask import render_template
 import smtplib
 import config
 
@@ -15,26 +16,36 @@ class Email(object):
             server.send_message(msg)
             server.quit()
 
-    def account_confirmation(self, address, token):
-        message = f"Ваше посилання для активації акаунту: {config.url}/activate/{token}"
+    def account_confirmation(self, account, token):
+        message = render_template(
+            "emails/activate.html",
+            username=account.username,
+            url=config.url,
+            token=token
+        )
 
         msg = EmailMessage()
-        msg.set_content(message)
+        msg.set_content(message, subtype="html")
 
         msg["Subject"] = "Активація акаунту"
         msg["From"] = self.sender
-        msg["To"] = address
+        msg["To"] = account.email
 
         self.send(msg)
 
-    def password_reset(self, address, token):
-        message = f"Ваше посилання для скидання паролю: {config.url}/reset/{token}"
+    def password_reset(self, account, token):
+        message = render_template(
+            "emails/reset.html",
+            username=account.username,
+            url=config.url,
+            token=token
+        )
 
         msg = EmailMessage()
-        msg.set_content(message)
+        msg.set_content(message, subtype="html")
 
         msg["Subject"] = "Скидання паролю"
         msg["From"] = self.sender
-        msg["To"] = address
+        msg["To"] = account.email
 
         self.send(msg)

@@ -34,7 +34,7 @@ def join():
 
     email = mail.Email()
     activation_token = Token.create("activation", account.username)
-    email.account_confirmation(account.email, activation_token)
+    email.account_confirmation(account, activation_token)
 
     result["data"] = account.dict()
 
@@ -134,7 +134,7 @@ def reset_request():
     email = mail.Email()
     reset_token = Token.create("reset", account.username, delta, account.password)
 
-    email.password_reset(account.email, reset_token)
+    email.password_reset(account, reset_token)
     account.reset = datetime.now()
     account.save()
 
