@@ -152,6 +152,21 @@ def position(data):
 
     return data
 
+def opening(data):
+    valid = False
+
+    if type(data) is list:
+        if len(data) == 2:
+            if type(data[0]) is int and type(data[1]) is int:
+                if data[1] > data[0]:
+                    valid = True
+
+    if not valid:
+        response = abort("episode", "opening-range")
+        flask_abort(response)
+
+    return data
+
 def is_member(account, teams):
     if not check.member(account, teams):
         response = abort("account", "not-team-member")

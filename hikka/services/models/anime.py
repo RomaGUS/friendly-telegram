@@ -23,15 +23,21 @@ class External(mongoengine.EmbeddedDocument):
 class Episode(mongoengine.EmbeddedDocument):
     thumbnail = mongoengine.ReferenceField("File")
     position = mongoengine.IntField(required=True)
+    opening = mongoengine.ListField(max_length=2)
     name = mongoengine.StringField(default=None)
     video = mongoengine.ReferenceField("File")
     views = mongoengine.IntField(default=0)
+    ending = mongoengine.IntField()
 
     def dict(self, link=False):
         data = {
             "position": self.position,
             "views": self.views,
-            "name": self.name
+            "name": self.name,
+            "timecodes": {
+                "opening": self.opening,
+                "ending": self.ending
+            }
         }
 
         if link:

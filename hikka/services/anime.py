@@ -20,8 +20,8 @@ class AnimeService:
         return external
 
     @classmethod
-    def get_episode(cls, name: str, position: int):
-        episode = Episode(name=name, position=position)
+    def get_episode(cls, position: int):
+        episode = Episode(position=position)
         return episode
 
     @classmethod
@@ -53,7 +53,7 @@ class AnimeService:
         anime.save()
 
     @classmethod
-    def position(cls, anime: Anime, position: int):
+    def position_index(cls, anime: Anime, position: int):
         for index, episode in enumerate(anime.episodes):
             if episode.position == position:
                 return index

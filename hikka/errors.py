@@ -60,7 +60,7 @@ errors = {
         "small-image": "Image is way to slow"
     },
     "episode": {
-        "position-exists": "Episode with this number exists",
+        "opening-range": "Bad opening data",
         "not-found": "Episode not found"
     },
     "comment": {

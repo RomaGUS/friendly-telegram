@@ -8,60 +8,38 @@ from hikka.errors import abort
 
 blueprint = Blueprint("episodes", __name__)
 
-@blueprint.route("/episodes/add", methods=["POST"])
+@blueprint.route("/episodes/manage", methods=["POST"])
 @auth_required
 @permission_required("global", "publishing")
 def add_episode():
     result = {"error": None, "data": {}}
 
     parser = RequestParser()
+    parser.argument("opening", type=helpers.opening, location="json")
     parser.argument("position", type=helpers.position, required=True)
     parser.argument("slug", type=helpers.anime, required=True)
+    parser.argument("ending", type=int)
     parser.argument("name", type=str)
     args = parser.parse()
 
     anime = args["slug"]
     helpers.is_member(request.account, anime.teams)
 
-    position = AnimeService.position(anime, args["position"])
-    if position is not None:
-        return abort("episode", "position-exists")
+    index = AnimeService.position_index(anime, args["position"])
+    if index is None:
+        episode = AnimeService.get_episode(args["position"])
+        AnimeService.add_episode(anime, episode)
+    else:
+        episode = anime.episodes[index]
 
-    episode = AnimeService.get_episode(args["name"], args["position"])
-    AnimeService.add_episode(anime, episode)
-    result["data"] = anime.dict(True)
-
-    return result
-
-@blueprint.route("/episodes/update", methods=["POST"])
-@auth_required
-@permission_required("global", "publishing")
-def update_episode():
-    result = {"error": None, "data": {}}
-
-    parser = RequestParser()
-    parser.argument("position", type=helpers.position, required=True)
-    parser.argument("slug", type=helpers.anime, required=True)
-    parser.argument("params", type=dict, default={})
-    args = parser.parse()
-
-    params_parser = RequestParser()
-    params_parser.argument("name", type=helpers.string, location="params")
-    params_args = params_parser.parse(req=args)
-
-    anime = args["slug"]
-    helpers.is_member(request.account, anime.teams)
-
-    position = AnimeService.position(anime, args["position"])
-    if position is None:
-        return abort("episode", "not-found")
-
-    fields = ["name"]
+    fields = ["name", "opening", "ending"]
     for field in fields:
-        if params_args[field]:
-            anime.episodes[position][field] = params_args[field]
+        if args[field]:
+            episode[field] = args[field]
 
+    anime.save()
     result["data"] = anime.dict(True)
+
     return result
 
 @blueprint.route("/episodes/delete", methods=["POST"])
@@ -78,13 +56,13 @@ def delete_episode():
     anime = args["slug"]
     helpers.is_member(request.account, anime.teams)
 
-    position = AnimeService.position(anime, args["position"])
-    if position is None:
+    index = AnimeService.position_index(anime, args["position"])
+    if index is None:
         return abort("episode", "not-found")
 
-    FileService.destroy(anime.episodes[position].video)
-    FileService.destroy(anime.episodes[position].thumbnail)
-    AnimeService.remove_episode(anime, anime.episodes[position])
+    FileService.destroy(anime.episodes[index].video)
+    FileService.destroy(anime.episodes[index].thumbnail)
+    AnimeService.remove_episode(anime, anime.episodes[index])
 
     result["data"] = anime.dict(True)
     return result
