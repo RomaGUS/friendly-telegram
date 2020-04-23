@@ -21,7 +21,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"username\": \"hikka\", \"password\": \"thisispassword\", \"email\": \"example@hikka.io\"}"
+							"raw": "{\"username\": \"testuser2\", \"password\": \"thisispassword\", \"email\": \"volbilnexus@gmail.com\"}"
 						},
 						"url": {
 							"raw": "{{url}}/auth/join",
@@ -79,7 +79,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"token\": \"3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuYpbsSVbHxJnUepd.2E72ScWndShkgPLDPftW1LHkPPLCuRckr8x7YRU1gYmykSDug2xNRkwaQKdNM1LheWUm99YQnN44L4skzoUZnHrt1eVtbo8.Fve66pawu7fK4k8fUYZUJs6umMFuynfCX9FDH9hZb9YvZxsX87rzoqs1n5p7GqDGKzPN5ADRcKxynXDFpBrQc9rBHDwsW\"}"
+							"raw": "{\"token\": \"3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuYpbsSVbHxJnUepd.4egwDo2Nnr4kWRocQnL6qLQYcrTruTfAwrKaW6HgfKMdo5dBkmUEH3ddyJHxcSivUJWrMbj2evdfSqhvZR8o7nrrzwwz.Vsnp3z3k4C5B9Gz1KtVzokS3Y2ESr68JrXnn7or78ZRpvh6hgyUS2zFDU1Kb3THSJ6SjAA7d5mjsDLFiwtcBvuSFyQBC2\"}"
 						},
 						"url": {
 							"raw": "{{url}}/auth/activate",
@@ -188,6 +188,43 @@
 							"path": [
 								"account",
 								"password"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Account Teams",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authentication",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{}"
+						},
+						"url": {
+							"raw": "{{url}}/account/teams",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"account",
+								"teams"
 							]
 						}
 					},
@@ -548,7 +585,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"slug\": \"cey-prekrasniy-svit-blagoslovenniy-bogom-bagryana-legenda-617f4768\", \"params\": {\"season\": 4}}"
+							"raw": "{\"slug\": \"cey-prekrasniy-svit-blagoslovenniy-bogom-bagryana-legenda-10604750\", \"params\": {\"season\": 4}}"
 						},
 						"url": {
 							"raw": "{{url}}/anime/edit",
@@ -582,7 +619,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"query\": \"цей прекрасний\", \"genres\": [\"romance\"], \"teams\": [\"fanvox\"], \"year\": {\"min\": 2015}}"
+							"raw": "{\"ordering\": [\"-rating\"]}"
 						},
 						"url": {
 							"raw": "{{url}}/anime/list",
@@ -622,14 +659,53 @@
 							"raw": "{\"description\": \"Шіномія Каґуя та Шіроґане Міюкі — члени Учнівської ради елітної академії Шючіїн, генії з геніїв. Після часу проведеного разом часу, у них зародилися почуття один до одного. Але, на жаль, але їхня гордість не дозволить зізнатися одне одному про свої почуття. Кохання — це війна, це безжальна битва, метою якої є змусити супротивника освідчитися!\", \"title\": {\"ua\": \"Каґуя-сама, Кохання як війна\", \"jp\": \"TEST\"}, \"slug\": \"kaguya-sama\", \"state\": \"ongoing\", \"genres\": [\"romance\"], \"voiceover\": [\"volbil\"], \"category\": \"tv\", \"team\": \"fanvox\"}"
 						},
 						"url": {
-							"raw": "{{url}}/anime/get/kaguya-sama-kohannya-yak-viyna-8e206e50",
+							"raw": "{{url}}/anime/get/cey-prekrasniy-svit-blagoslovenniy-bogom-bagryana-legenda-10604750",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
 								"anime",
 								"get",
-								"kaguya-sama-kohannya-yak-viyna-8e206e50"
+								"cey-prekrasniy-svit-blagoslovenniy-bogom-bagryana-legenda-10604750"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Watch Anime",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authentication",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"description\": \"Шіномія Каґуя та Шіроґане Міюкі — члени Учнівської ради елітної академії Шючіїн, генії з геніїв. Після часу проведеного разом часу, у них зародилися почуття один до одного. Але, на жаль, але їхня гордість не дозволить зізнатися одне одному про свої почуття. Кохання — це війна, це безжальна битва, метою якої є змусити супротивника освідчитися!\", \"title\": {\"ua\": \"Каґуя-сама, Кохання як війна\", \"jp\": \"TEST\"}, \"slug\": \"kaguya-sama\", \"state\": \"ongoing\", \"genres\": [\"romance\"], \"voiceover\": [\"volbil\"], \"category\": \"tv\", \"team\": \"fanvox\"}"
+						},
+						"url": {
+							"raw": "{{url}}/anime/watch/cey-prekrasniy-svit-blagoslovenniy-bogom-bagryana-legenda-10604750/1",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"anime",
+								"watch",
+								"cey-prekrasniy-svit-blagoslovenniy-bogom-bagryana-legenda-10604750",
+								"1"
 							]
 						}
 					},
@@ -642,7 +718,7 @@
 			"name": "Episodes",
 			"item": [
 				{
-					"name": "Add Episode",
+					"name": "Manage Episode",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -660,50 +736,16 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"video\": null, \"position\": 0, \"team\": \"fanvox\", \"slug\": \"kaguya-sama\", \"name\": \"Перша серія\"}"
+							"raw": "{\"position\": 2, \"slug\": \"cey-prekrasniy-svit-blagoslovenniy-bogom-bagryana-legenda-10604750\", \"name\": \"Перша серія\", \"opening\": [10, 20], \"ending\": 100}"
 						},
 						"url": {
-							"raw": "{{url}}/episodes/add",
+							"raw": "{{url}}/episodes/manage",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
 								"episodes",
-								"add"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Update Episode",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"name": "Content-Type",
-								"type": "text",
-								"value": "application/json"
-							},
-							{
-								"key": "Authentication",
-								"type": "text",
-								"value": "{{token}}"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\"position\": 0, \"team\": \"fanvox\", \"slug\": \"kaguya-sama\", \"params\": {\"name\": \"TEST\", \"video\": \"HUI\"}}"
-						},
-						"url": {
-							"raw": "{{url}}/episodes/update",
-							"host": [
-								"{{url}}"
-							],
-							"path": [
-								"episodes",
-								"update"
+								"manage"
 							]
 						}
 					},
@@ -728,7 +770,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"position\": 0, \"team\": \"fanvox\", \"slug\": \"kaguya-sama\"}"
+							"raw": "{\"position\": 1, \"slug\": \"cey-prekrasniy-svit-blagoslovenniy-bogom-bagryana-legenda-10604750\"}"
 						},
 						"url": {
 							"raw": "{{url}}/episodes/delete",
@@ -768,7 +810,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"subject\": \"anime\", \"text\": \"Тестовий коментар\", \"slug\": \"kaguya-sama-kohannya-yak-viyna-f7549480\"}"
+							"raw": "{\"subject\": \"anime\", \"text\": \"Тестовий коментар\", \"slug\": \"cey-prekrasniy-svit-blagoslovenniy-bogom-bagryana-legenda-b87359ad\"}"
 						},
 						"url": {
 							"raw": "{{url}}/comments/new",
@@ -911,7 +953,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"account\": \"volbil\", \"action\": \"add\", \"scope\": \"test\", \"name\": \"permission\"}"
+							"raw": "{\"account\": \"volbil2\", \"action\": \"add\", \"scope\": \"global\", \"name\": \"publishing\"}"
 						},
 						"url": {
 							"raw": "{{url}}/system/permissions/manage",
@@ -928,9 +970,9 @@
 					"response": []
 				},
 				{
-					"name": "App",
+					"name": "Upload",
 					"request": {
-						"method": "POST",
+						"method": "PUT",
 						"header": [
 							{
 								"key": "Content-Type",
@@ -946,16 +988,16 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"static\": [\"genres\", \"categories\"]}"
+							"raw": "{\"type\": \"poster\", \"uuid\": \"1791bd6f-fc34-4325-bd18-5b701b0b4a65\"}"
 						},
 						"url": {
-							"raw": "{{url}}/system/app",
+							"raw": "{{url}}/system/upload",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
 								"system",
-								"app"
+								"upload"
 							]
 						}
 					},
