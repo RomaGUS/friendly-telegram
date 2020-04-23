@@ -181,6 +181,9 @@ class Anime(mongoengine.Document):
             data["episodes"]["list"] = []
 
             for episode in self.episodes:
+                if not self.episodes.video:
+                    break
+
                 data["episodes"]["list"].append(episode.dict())
 
         return data
