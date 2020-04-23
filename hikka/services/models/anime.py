@@ -34,11 +34,15 @@ class Episode(mongoengine.EmbeddedDocument):
             "position": self.position,
             "views": self.views,
             "name": self.name,
+            "thumbnail": None,
             "timecodes": {
                 "opening": self.opening,
                 "ending": self.ending
             }
         }
+
+        if self.thumbnail:
+            data["thumbnail"] = self.thumbnail.link()
 
         if link:
             data["video"] = None

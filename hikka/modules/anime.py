@@ -269,6 +269,19 @@ def get_anime(slug):
 
     return result
 
+@blueprint.route("/anime/watch/<string:slug>/<int:position>", methods=["GET"])
+@auth_required
+def watch_anime(slug, position):
+    result = {"error": None, "data": {}}
+
+    anime = helpers.anime(slug)
+    index = AnimeService.position_index(anime, position)
+    if index is None:
+        return abort("episode", "not-found")
+
+    result["data"] = anime.episodes[index].dict(True)
+    return result
+
 @blueprint.route("/anime/selected", methods=["GET"])
 @auth_required
 def selected_anime():
