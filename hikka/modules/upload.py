@@ -1,4 +1,6 @@
 from werkzeug.datastructures import FileStorage
+from hikka.services.anime import AnimeService
+from hikka.services.files import FileService
 from hikka.tools.parser import RequestParser
 from hikka.decorators import auth_required
 from flask import Blueprint, request
@@ -12,7 +14,7 @@ blueprint = Blueprint("upload", __name__)
 @auth_required
 def file_upload():
     result = {"error": None, "data": {}}
-    choices = ("account", "anime")
+    choices = ("account", "anime", "episode")
 
     parser = RequestParser()
     parser.argument("subject", type=str, choices=choices, required=True)
@@ -24,6 +26,7 @@ def file_upload():
     parser.argument("total", type=int, required=True)
     parser.argument("size", type=int, required=True)
     parser.argument("slug", type=helpers.string)
+    parser.argument("position", type=int)
     args = parser.parse()
 
     upload_type = args["type"]
@@ -43,23 +46,41 @@ def file_upload():
         subject = helpers.anime(args["slug"])
         folder = subject.slug
 
+    if args["subject"] == "episode":
+        if upload_type not in ("video", "thumbnail"):
+            return abort("file", "bad-upload-type")
+
+        subject = helpers.anime(args["slug"])
+        index = AnimeService.position_index(subject, args["position"])
+        if index is None:
+            return abort("episode", "not-found")
+
+        folder = subject.slug + "/" + str(args["position"])
+
     chunks = upload.ChunkHelper(request.account, folder, args["file"], upload_type, uuid)
     chunks.load(args["size"], args["index"], args["total"], args["offset"])
 
     if args["index"] + 1 == args["total"]:
         helper = upload.UploadHelper(request.account, chunks.blob_file, upload_type)
 
-        if args["subject"] == "account":
+        if args["subject"] in ("account", "anime"):
             file = helper.upload_image()
+            FileService.destroy(subject[upload_type])
+            subject[upload_type] = file
 
-        if args["subject"] == "anime":
-            file = helper.upload_image()
+        if args["subject"] == "episode":
+            if upload_type == "video":
+                file = helper.upload_video()
 
-        subject[upload_type] = file
+            else:
+                file = helper.upload_image()
+
+            FileService.destroy(subject.episodes[index][upload_type])
+            subject.episodes[index][upload_type] = file
+
         subject.save()
-
         result["data"] = subject.dict()
-        chunks.clean()
+        chunks.clean(True)
 
     else:
         result["data"]["chunk"] = True

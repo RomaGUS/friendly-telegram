@@ -1,13 +1,14 @@
-from hikka.services.permissions import PermissionService
 from hikka.services.files import FileService
 from flask import abort as flask_abort
 from hikka.tools import storage
 from hikka.errors import abort
+from hikka.tools import check
 from hikka import utils
 from PIL import Image
 import secrets
 import config
 import shutil
+import ffmpeg
 import magic
 import os
 
@@ -19,7 +20,6 @@ max_size = 10 * 1024 * 1024
 class ChunkHelper(object):
     def __init__(self, account, folder, file, upload_type, uuid):
         self.chunk_size = self.get_size(file)
-        self.account = account
         self.file = file
         self.uuid = uuid
 
@@ -27,16 +27,18 @@ class ChunkHelper(object):
         self.uuid_dir = os.path.join(self.tmp_dir, uuid)
         self.blob_file = os.path.join(self.uuid_dir, "blob")
 
+        self.publisher = check.permission(account, "global", "publishing")
+
     def load(self, size, index, total, offset):
         if size != self.chunk_size:
-            self.clean()
+            self.clean(self.publisher)
             return abort("file", "invalid-size")
 
         if index >= total or index < 0:
-            self.clean()
+            self.clean(self.publisher)
             return abort("file", "invalid-index")
 
-        if not PermissionService.check(self.account, "global", "publishing"):
+        if not self.publisher:
             if self.chunk_size > max_size:
                 return abort("file", "too-big")
 
@@ -50,16 +52,19 @@ class ChunkHelper(object):
         tmp_ls = os.listdir(self.tmp_dir)
 
         if self.uuid not in tmp_ls:
-            self.clean()
-            os.makedirs(self.tmp_dir)
+            if not self.publisher:
+                self.clean()
+                os.makedirs(self.tmp_dir)
+
             os.mkdir(self.uuid_dir)
 
         with open(self.blob_file, "ab") as blob:
             blob.seek(offset)
             blob.write(self.file.stream.read())
 
-    def clean(self):
-        shutil.rmtree(self.tmp_dir)
+    def clean(self, uuid=False):
+        path = self.uuid_dir if uuid else self.tmp_dir
+        shutil.rmtree(path)
 
     def get_size(self, file):
         file_size = 0
@@ -126,22 +131,23 @@ class UploadHelper(object):
 
         return self.file
 
-#     def upload_video(self):
-#         if not self.is_video():
-#             response = abort("file", "bad-mime-type")
-#             flask_abort(response)
+    def upload_video(self):
+        if not self.is_video():
+            response = abort("file", "bad-mime-type")
+            flask_abort(response)
 
-#         storage_file_name = self.file.name + "." + "mp4"
+        if not self.is_h264():
+            response = abort("file", "bad-codec")
+            flask_abort(response)
 
-#         os.makedirs(self.tmp_dir)
-#         self.upload.save(self.tmp_dir + self.file.name + "." + self.file_type)
+        storage_file_name = self.file.name + ".mp4"
 
-#         storage_path = self.storage_dir + storage_file_name
-#         tmp_path = self.tmp_dir + storage_file_name
+        storage_path = self.storage_dir + storage_file_name
+        tmp_path = self.path
 
-#         self.finish(tmp_path, storage_path, storage_file_name)
+        self.finish(tmp_path, storage_path, storage_file_name)
 
-#         return self.file
+        return self.file
 
     def finish(self, tmp_path, storage_path, storage_file_name):
         self.fs.put(tmp_path, storage_path)
@@ -156,3 +162,7 @@ class UploadHelper(object):
 
     def is_video(self):
         return self.mimetype in supported_videos
+
+    def is_h264(self):
+        probe = ffmpeg.probe(filename=self.path)
+        return probe["streams"][0]["codec_name"] == "h264"

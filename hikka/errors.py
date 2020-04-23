@@ -53,6 +53,7 @@ errors = {
         "bad-mime-type": "Unsupported mime type",
         "too-big": "File is larger than allowed",
         "invalid-size": "Provided file size is invalid",
+        "bad-codec": "Unsupported video codec",
         "invalid-index": "Invalid index"
     },
     "image": {
