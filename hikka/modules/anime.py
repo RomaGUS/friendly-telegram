@@ -259,7 +259,7 @@ def list_anime():
 
     return result
 
-@blueprint.route("/anime/get/<string:slug>", methods=["GET"])
+@blueprint.route("/anime/fetch/<string:slug>", methods=["GET"])
 @auth_required
 def get_anime(slug):
     result = {"error": None, "data": {}}
