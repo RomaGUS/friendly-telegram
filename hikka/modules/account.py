@@ -22,7 +22,7 @@ def password_change():
     result["data"] = request.account.dict()
     return result
 
-@blueprint.route("/account/password", methods=["GET"])
+@blueprint.route("/account/teams", methods=["GET"])
 @auth_required
 def teams():
     result = {"error": None, "data": []}
