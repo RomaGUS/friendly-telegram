@@ -24,7 +24,7 @@ def password_change():
 
 @blueprint.route("/account", methods=["GET"])
 @auth_required
-def teams():
+def account():
     result = {"error": None, "data": []}
 
     result["data"] = request.account.dict()
