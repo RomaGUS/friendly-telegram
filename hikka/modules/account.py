@@ -22,13 +22,16 @@ def password_change():
     result["data"] = request.account.dict()
     return result
 
-@blueprint.route("/account/teams", methods=["GET"])
+@blueprint.route("/account", methods=["GET"])
 @auth_required
 def teams():
     result = {"error": None, "data": []}
 
+    result["data"] = request.account.dict()
+    result["data"]["teams"] = []
+
     teams = TeamService.member_teams(request.account)
     for team in teams:
-        result["data"].append(team.dict(True))
+        result["data"]["teams"].append(team.dict(True))
 
     return result
