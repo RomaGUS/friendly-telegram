@@ -194,7 +194,7 @@
 					"response": []
 				},
 				{
-					"name": "Account Teams",
+					"name": "Account Info",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -209,8 +209,8 @@
 							},
 							{
 								"key": "Authentication",
-								"value": "{{token}}",
-								"type": "text"
+								"type": "text",
+								"value": "{{token}}"
 							}
 						],
 						"body": {
@@ -218,13 +218,12 @@
 							"raw": "{}"
 						},
 						"url": {
-							"raw": "{{url}}/account/teams",
+							"raw": "{{url}}/account",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
-								"account",
-								"teams"
+								"account"
 							]
 						}
 					},
@@ -1028,7 +1027,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"rating\": 9, \"subject\": \"anime\", \"slug\": \"cey-prekrasniy-svit-blagoslovenniy-bogom-bagryana-legenda-b87359ad\"}"
+							"raw": "{\"subject\": \"anime\", \"slug\": \"great-teacher-onizuka-a3893031\", \"status\": \"finished\", \"position\": 1, \"rating\": 10, \"time\": 20}"
 						},
 						"url": {
 							"raw": "{{url}}/status",
@@ -1061,7 +1060,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"subject\": \"anime\", \"slug\": \"cey-prekrasniy-svit-blagoslovenniy-bogom-bagryana-legenda-b87359ad\"}"
+							"raw": "{\"subject\": \"anime\", \"slug\": \"great-teacher-onizuka-a3893031\"}"
 						},
 						"url": {
 							"raw": "{{url}}/status/check",
@@ -1071,6 +1070,40 @@
 							"path": [
 								"status",
 								"check"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List statuses",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "Authentication",
+								"type": "text",
+								"value": "{{token}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"subject\": \"anime\", \"slug\": \"cey-prekrasniy-svit-blagoslovenniy-bogom-bagryana-legenda-b87359ad\"}"
+						},
+						"url": {
+							"raw": "{{url}}/status/list",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"status",
+								"list"
 							]
 						}
 					},
