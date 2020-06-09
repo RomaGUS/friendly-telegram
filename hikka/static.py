@@ -19,7 +19,7 @@ static = {
 def key(service, slug):
     if service in static:
         for key in static[service]:
-            if (static[service][key] == slug):
+            if static[service][key] == slug:
                 return key
 
     return None

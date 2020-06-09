@@ -21,8 +21,8 @@ class External(mongoengine.EmbeddedDocument):
         return data
 
 class Episode(mongoengine.EmbeddedDocument):
+    position = mongoengine.IntField(required=True, min_value=1)
     thumbnail = mongoengine.ReferenceField("File")
-    position = mongoengine.IntField(required=True)
     opening = mongoengine.ListField(max_length=2)
     name = mongoengine.StringField(default=None)
     video = mongoengine.ReferenceField("File")
