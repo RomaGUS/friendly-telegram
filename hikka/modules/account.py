@@ -1,37 +1,39 @@
-from hikka.services.teams import TeamService
-from hikka.tools.parser import RequestParser
 from hikka.decorators import auth_required
+from webargs.flaskparser import use_args
+from webargs import fields, validate
 from flask import request, Blueprint
-from hikka.tools import helpers
 from hikka.auth import hashpwd
+from pony import orm
 
 blueprint = Blueprint("account", __name__)
 
-@blueprint.route("/account/password", methods=["POST"])
+password_args = {
+    "password": fields.Str(required=True, validate=validate.Length(min=8))
+}
+
+@blueprint.route("/password", methods=["POST"])
+@use_args(password_args, location="json")
+@orm.db_session
 @auth_required
-def password_change():
+def password_change(args):
     result = {"error": None, "data": {}}
 
-    parser = RequestParser()
-    parser.argument("password", type=helpers.password, required=True)
-    args = parser.parse()
-
     request.account.password = hashpwd(args["password"])
-    request.account.save()
 
-    result["data"] = request.account.dict()
+    result["data"] = {
+        "username": request.account.username
+    }
+
     return result
 
-@blueprint.route("/account", methods=["GET"])
+@blueprint.route("/me", methods=["GET"])
+@orm.db_session
 @auth_required
 def account():
     result = {"error": None, "data": []}
 
-    result["data"] = request.account.dict()
-    result["data"]["teams"] = []
-
-    teams = TeamService.member_teams(request.account)
-    for team in teams:
-        result["data"]["teams"].append(team.dict(True))
+    result["data"] = {
+        "username": request.account.username
+    }
 
     return result

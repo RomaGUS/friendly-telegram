@@ -1,34 +1,47 @@
-from hikka.services.permissions import PermissionService
-from hikka.services.users import UserService
+from hikka.pony_services import UserService
 from hikka.errors import abort
 from datetime import datetime
+from hikka.auth import Token
 from functools import wraps
 from flask import request
 
 def auth_required(view_function):
     @wraps(view_function)
     def decorator(*args, **kwargs):
-        account = UserService.auth(request.headers.get("Authentication"))
-        if account is None:
-            return abort("account", "login-failed")
+        token = request.headers.get("Authentication")
 
-        request.account = account
-        account.login = datetime.utcnow()
-        account.save()
+        valid = Token.validate(token)
+        payload = Token.payload(token)
 
-        return view_function(*args, **kwargs)
+        if valid and payload["action"] == "login":
+            account = UserService.get_by_username(payload["meta"])
 
-    return decorator
+            if account is None:
+                return abort("account", "login-failed")
 
-def permission_required(scope, message):
-    def decorator(view_function):
-        @wraps(view_function)
-        def inner_decorator(*args, **kwargs):
-            if not PermissionService.check(request.account, scope, message):
-                return abort("account", "permission")
+            if not account.activated:
+                return abort("account", "not-activated")
+
+            account.login = datetime.utcnow()
+            request.account = account
 
             return view_function(*args, **kwargs)
 
-        return inner_decorator
+        return abort("account", "login-failed")
 
     return decorator
+
+# ToDo: Implement permissions
+
+# def permission_required(scope, message):
+#     def decorator(view_function):
+#         @wraps(view_function)
+#         def inner_decorator(*args, **kwargs):
+#             if not PermissionService.check(request.account, scope, message):
+#                 return abort("account", "permission")
+
+#             return view_function(*args, **kwargs)
+
+#         return inner_decorator
+
+#     return decorator
