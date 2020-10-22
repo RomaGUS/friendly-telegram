@@ -51,11 +51,11 @@ def update_comment():
     if comment is None:
         return abort("comment", "not-found")
 
-    if datetime.now() - comment.created > timedelta(minutes=20):
+    if datetime.utcnow() - comment.created > timedelta(minutes=20):
         return abort("comment", "not-editable")
 
     comment.text = params_args["text"]
-    comment.updated = datetime.now()
+    comment.updated = datetime.utcnow()
     comment.save()
 
     result["data"] = comment.dict()

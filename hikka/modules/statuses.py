@@ -39,7 +39,7 @@ def update_status():
 
             status[field] = args[field]
 
-    status.updated = datetime.now()
+    status.updated = datetime.utcnow()
     status.save()
 
     result["data"] = status.dict()

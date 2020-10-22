@@ -5,7 +5,7 @@ import config
 class File(mongoengine.Document):
     uploaded = mongoengine.BooleanField(required=True, default=False)
     account = mongoengine.ReferenceField("User", required=True)
-    created = mongoengine.DateTimeField(default=datetime.now)
+    created = mongoengine.DateTimeField(default=datetime.utcnow)
     path = mongoengine.StringField(default=None)
     name = mongoengine.StringField(default=None)
 

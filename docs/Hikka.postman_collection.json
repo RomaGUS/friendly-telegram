@@ -21,7 +21,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"username\": \"testuser2\", \"password\": \"thisispassword\", \"email\": \"volbilnexus@gmail.com\"}"
+							"raw": "{\"username\": \"volbil\", \"password\": \"password\", \"email\": \"volbilnexus@gmail.com\"}"
 						},
 						"url": {
 							"raw": "{{url}}/auth/join",
@@ -79,7 +79,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"token\": \"3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuYpbsSVbHxJnUepd.4egwDo2Nnr4kWRocQnL6qLQYcrTruTfAwrKaW6HgfKMdo5dBkmUEH3ddyJHxcSivUJWrMbj2evdfSqhvZR8o7nrrzwwz.Vsnp3z3k4C5B9Gz1KtVzokS3Y2ESr68JrXnn7or78ZRpvh6hgyUS2zFDU1Kb3THSJ6SjAA7d5mjsDLFiwtcBvuSFyQBC2\"}"
+							"raw": "{\"token\": \"3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuYpbsSVbHxJnUepd.H7MGKU95BMZZ2tUjHy5JkLevZFKZGYfUu6gzsQLe4825QPQiUBLxvJeoSkgTwAmKecWKzhBXuWvpAPGy9bM21xfXTbrwT.2Jjo2TyPn6Bohzr3dPzxjqZ6zbHd7a5JjgsJx4Nbp5QnxrxTLE6G6XffHqRKJSuxETaEEgGHC8rVgtPSXowdZKkLRmCWg\"}"
 						},
 						"url": {
 							"raw": "{{url}}/auth/activate",
@@ -111,14 +111,13 @@
 							"raw": "{\"email\": \"volbilnexus@gmail.com\"}"
 						},
 						"url": {
-							"raw": "{{url}}/auth/reset/request",
+							"raw": "{{url}}/auth/forgot",
 							"host": [
 								"{{url}}"
 							],
 							"path": [
 								"auth",
-								"reset",
-								"request"
+								"forgot"
 							]
 						}
 					},
@@ -138,7 +137,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"token\": \"3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuYpbsSVbHxJnUepd.ZMKC1hNPqdfkmnGBcJz84TZxVL83qS7RFtiTfjccrHTkhcXrVPmrdBoWJr17yQKhVvLKu9KASgN7Gy264bNvKn.DufWeiFaFKzyigT5Gxbzagcmy8f4YyanToyx31eSgZnY1SpMfbnK9h6Fp7MMfPCg7jmu3zJ1DBikoZriciAVaBmqRaU73\", \"password\": \"thisispassword\"}"
+							"raw": "{\"token\": \"3nT8FnbSgJ2jyd4n97uiAp8J4m5o6GHuYpbsSVbHxJnUepd.ZMKC1hNPqdfkmnGBcJz84TZxVL83qS7RFtiTfjccrHTpUwQuXRtc68fRJHYhiHmd7FkmdaB6KhdtGWgDvQpEBd.9mRoUM6w2Z3Cn7srPPYAkep3dzKzLSWnrd9mxeCkTKs16tGcjCapMpHi1u2EGaev914JQKdf6FUgd8yMSTv8rnQGJRbUP\", \"password\": \"thisispassword\"}"
 						},
 						"url": {
 							"raw": "{{url}}/auth/reset",

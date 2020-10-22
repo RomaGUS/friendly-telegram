@@ -70,14 +70,14 @@ class Anime(mongoengine.Document):
     subtitles = mongoengine.ListField(mongoengine.ReferenceField("User"))
     voiceover = mongoengine.ListField(mongoengine.ReferenceField("User"))
     teams = mongoengine.ListField(mongoengine.ReferenceField("Team"))
-    created = mongoengine.DateTimeField(default=datetime.now)
+    created = mongoengine.DateTimeField(default=datetime.utcnow)
     slug = mongoengine.StringField(required=True)
     poster = mongoengine.ReferenceField("File")
     banner = mongoengine.ReferenceField("File")
     views = mongoengine.IntField(default=0)
 
     season = mongoengine.IntField(default=None, min_value=1, max_value=4)
-    year = mongoengine.IntField(default=datetime.now().year)
+    year = mongoengine.IntField(default=datetime.utcnow().year)
     total = mongoengine.IntField(default=None)
 
     franchises = mongoengine.ListField(mongoengine.ReferenceField("Descriptor", reverse_delete_rule=4))

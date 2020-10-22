@@ -13,7 +13,7 @@ def auth_required(view_function):
             return abort("account", "login-failed")
 
         request.account = account
-        account.login = datetime.now()
+        account.login = datetime.utcnow()
         account.save()
 
         return view_function(*args, **kwargs)
