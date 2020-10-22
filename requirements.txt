@@ -60,7 +60,7 @@ monotonic==1.5
 multidict==4.7.5
 pbr==5.4.5
 pep8-naming==0.9.1
-Pillow==7.0.0
+Pillow==7.1.0
 pycodestyle==2.5.0
 pycparser==2.19
 pydocstyle==5.0.2
