@@ -5,6 +5,7 @@ from hikka.modules import comments
 from hikka.modules import statuses
 from hikka.modules import episodes
 from hikka.modules import account
+from hikka.modules import errors
 from hikka.modules import upload
 from hikka.modules import system
 from hikka.modules import anime
@@ -44,6 +45,7 @@ app.register_blueprint(comments.blueprint)
 app.register_blueprint(episodes.blueprint)
 app.register_blueprint(statuses.blueprint)
 app.register_blueprint(account.blueprint)
+app.register_blueprint(errors.blueprint)
 app.register_blueprint(system.blueprint)
 app.register_blueprint(upload.blueprint)
 app.register_blueprint(teams.blueprint)
