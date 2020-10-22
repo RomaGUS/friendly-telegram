@@ -1,8 +1,17 @@
 from flask_limiter.util import get_remote_address
-from flask_limiter import Limiter
+from flask import Flask, render_template
+from hikka.modules import descriptors
+from hikka.modules import comments
+from hikka.modules import statuses
+from hikka.modules import episodes
+from hikka.modules import account
+from hikka.modules import upload
+from hikka.modules import system
+from hikka.modules import anime
+from hikka.modules import teams
+from hikka.modules import auth
 from flask_cors import CORS
-from hikka import routes
-from flask import Flask
+import flask_limiter
 import mongoengine
 import config
 
@@ -11,7 +20,7 @@ app.config["SECRET_KEY"] = config.secret
 app.config["JSON_SORT_KEYS"] = False
 CORS(app)
 
-limiter = Limiter(
+limiter = flask_limiter.Limiter(
     app=app,
     key_func=get_remote_address,
     default_limits=config.limits
@@ -29,4 +38,21 @@ mongoengine.register_connection(
     **db_settings
 )
 
-routes.init(app, limiter)
+# App blueprints
+app.register_blueprint(descriptors.blueprint)
+app.register_blueprint(comments.blueprint)
+app.register_blueprint(episodes.blueprint)
+app.register_blueprint(statuses.blueprint)
+app.register_blueprint(account.blueprint)
+app.register_blueprint(system.blueprint)
+app.register_blueprint(upload.blueprint)
+app.register_blueprint(teams.blueprint)
+app.register_blueprint(anime.blueprint)
+app.register_blueprint(auth.blueprint)
+
+# Limiter exemptions
+limiter.exempt(upload.blueprint)
+
+@app.route("/")
+def docs():
+    return render_template("docs.html")
