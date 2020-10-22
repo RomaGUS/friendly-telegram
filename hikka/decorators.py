@@ -1,4 +1,4 @@
-from hikka.pony_services import UserService
+from hikka.services import UserService
 from hikka.errors import abort
 from datetime import datetime
 from hikka.auth import Token

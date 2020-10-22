@@ -1,6 +1,6 @@
-from hikka.pony_services import UserService
 from webargs.flaskparser import use_args
 from datetime import datetime, timedelta
+from hikka.services import UserService
 from webargs import fields, validate
 from hikka.errors import abort
 from hikka.auth import Token
