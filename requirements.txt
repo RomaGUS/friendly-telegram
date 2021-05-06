@@ -34,7 +34,7 @@ flake8-quotes==2.1.2
 flake8-rst-docstrings==0.0.12
 flake8-string-format==0.2.3
 Flask==1.1.1
-Flask-Cors==3.0.8
+Flask-Cors==3.0.9
 Flask-Limiter==1.1.0
 Flask-SocketIO==4.2.1
 fsspec==0.5.2
